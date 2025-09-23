@@ -12,6 +12,21 @@ public class UserDTO {
     private String joinedClubs;
     private boolean status; 
 
+    public UserDTO() {
+    }
+
+    public UserDTO(int userID, String userName, String email, String passwordHash, int roleID, String role, String managedClub, String joinedClubs, boolean status) {
+        this.userID = userID;
+        this.userName = userName;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.roleID = roleID;
+        this.role = role;
+        this.managedClub = managedClub;
+        this.joinedClubs = joinedClubs;
+        this.status = status;
+    }
+
     public int getUserID() {
         return userID;
     }

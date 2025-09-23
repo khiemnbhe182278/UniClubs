@@ -51,4 +51,10 @@ public class ClubDAO extends DBContext {
 
         return list;
     }
+    public List<Club> getAllClubs() {
+    return getClubs(null); // truyền null để lấy tất cả
+}
+
+
+
 }

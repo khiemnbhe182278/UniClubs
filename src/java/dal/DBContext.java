@@ -20,7 +20,7 @@ public class DBContext {
     {
         try {
             String user = "sa";
-            String pass = "123";
+            String pass = "123456";
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=UniClubs";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
@@ -29,5 +29,13 @@ public class DBContext {
         }
     }
     
-    
+    public static void main(String[] args) {
+    DBContext db = new DBContext();
+    if (db.connection != null) {
+        System.out.println("✅ Kết nối SQL Server thành công!");
+    } else {
+        System.out.println("❌ Kết nối thất bại!");
+    }
+}
+
 }
