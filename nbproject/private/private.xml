@@ -3,12 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/dal/UserDAO.java</file>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/web/admin/createUser.jsp</file>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/dal/RoleDAO.java</file>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/CreateUserServlet.java</file>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/dal/ClubDAO.java</file>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/web/admin/listAccounts.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/web/event/updateEvent.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/model/Event.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/model/News.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/BanUserServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/web/event/createEvent.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/web/news/createNews.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateNewsServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ChangeRoleServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/dal/EventDAO.java</file>
+            <file>file:/C:/Users/admin/UniClubs/web/admin/createUser.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateUserServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/dal/NewsDAO.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateEventServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/model/Club.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/EventDAO.java</file>
+            <file>file:/C:/Users/admin/UniClubs/web/WEB-INF/ConnectDB.properties</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/model/RoleDTO.java</file>
         </group>
     </open-files>
 </project-private>
