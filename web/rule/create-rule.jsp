@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create Rule</title>
-        <!-- Include TinyMCE for rich text editing -->
         <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
         <style>
             * {
@@ -99,12 +98,6 @@
                 border-color: #333333;
             }
 
-            .form-input[readonly] {
-                background-color: #f0f0f0;
-                color: #666666;
-                cursor: not-allowed;
-            }
-
             .actions {
                 padding: 30px 40px;
                 border-top: 1px solid #000000;
@@ -124,6 +117,8 @@
                 transition: all 0.2s ease;
                 letter-spacing: 0.3px;
                 text-transform: uppercase;
+                display: inline-block;
+                text-align: center;
             }
 
             .btn:hover {
@@ -175,7 +170,6 @@
 
                 .btn {
                     width: 100%;
-                    text-align: center;
                 }
             }
         </style>
@@ -191,6 +185,18 @@
 
                 <div class="content">
                     <div class="form-group">
+                        <label class="label" for="title">Rule Title *</label>
+                        <input type="text" 
+                               class="form-input" 
+                               id="title" 
+                               name="title" 
+                               placeholder="Enter rule title..."
+                               maxlength="200"
+                               required>
+                        <p class="helper-text">* Required field - Brief title for the rule</p>
+                    </div>
+
+                    <div class="form-group">
                         <label class="label" for="ruleText">Rule Text *</label>
                         <div class="tinymce-container">
                             <textarea class="form-textarea" 
@@ -204,7 +210,7 @@
 
                 <div class="actions">
                     <button type="submit" class="btn btn-submit">Create Rule</button>
-                    <a href="${pageContext.request.contextPath}/rules?clubID=${clubID}" class="btn btn-cancel">
+                    <a href="${pageContext.request.contextPath}/clubRules?clubID=${clubID}" class="btn btn-cancel">
                         Cancel
                     </a>
                 </div>
@@ -212,7 +218,6 @@
         </div>
 
         <script>
-            // Initialize TinyMCE
             let editorInstance = null;
 
             function initTinyMCE() {
@@ -231,11 +236,6 @@
                     resize: 'vertical',
                     setup: function (editor) {
                         editorInstance = editor;
-                        
-                        // Auto-focus when editor is ready
-                        editor.on('init', function () {
-                            editor.focus();
-                        });
                     },
                     skin: 'oxide',
                     content_css: 'default'
@@ -243,7 +243,20 @@
             }
 
             function validateForm() {
-                // Ensure TinyMCE content is saved to textarea
+                const title = document.getElementById('title').value.trim();
+                
+                if (title === '') {
+                    alert('Please enter the rule title.');
+                    document.getElementById('title').focus();
+                    return false;
+                }
+
+                if (title.length < 3) {
+                    alert('Rule title must be at least 3 characters long.');
+                    document.getElementById('title').focus();
+                    return false;
+                }
+
                 if (editorInstance) {
                     editorInstance.save();
                 }
@@ -252,18 +265,15 @@
 
                 if (ruleText === '' || ruleText === '<p></p>' || ruleText === '<p><br></p>') {
                     alert('Please enter the rule text.');
-                    // Focus on TinyMCE editor instead of hidden textarea
                     if (editorInstance) {
                         editorInstance.focus();
                     }
                     return false;
                 }
 
-                // Remove HTML tags for length validation
                 const textContent = ruleText.replace(/<[^>]*>/g, '').trim();
                 if (textContent.length < 5) {
                     alert('Rule text must be at least 5 characters long.');
-                    // Focus on TinyMCE editor instead of hidden textarea
                     if (editorInstance) {
                         editorInstance.focus();
                     }
@@ -273,22 +283,18 @@
                 return true;
             }
 
-            // Initialize TinyMCE when page loads
             window.onload = function () {
                 setTimeout(initTinyMCE, 100);
             };
 
-            // Handle form submission
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.querySelector('form');
                 form.addEventListener('submit', function(e) {
-                    // Ensure TinyMCE content is saved to textarea before validations
                     if (editorInstance) {
                         editorInstance.save();
                     }
                 });
 
-                // Smooth page load animation
                 const container = document.querySelector('.container');
                 container.style.opacity = '0';
                 container.style.transform = 'translateY(30px)';

@@ -26,13 +26,17 @@ public class RuleUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        request.setCharacterEncoding("UTF-8");
+
         int id = Integer.parseInt(request.getParameter("id"));
         int clubID = Integer.parseInt(request.getParameter("clubID"));
+        String title = request.getParameter("title");
         String ruleText = request.getParameter("ruleText");
 
         Rule rule = new Rule();
         rule.setRuleID(id);
         rule.setClubID(clubID);
+        rule.setTitle(title);
         rule.setRuleText(ruleText);
 
         ruleDAO.updateRule(rule);
