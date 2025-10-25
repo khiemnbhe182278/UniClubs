@@ -1,134 +1,139 @@
 package dal;
 
-import model.UserDTO;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import model.User;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class UserDAO extends DBContext {
 
-    // Lấy danh sách user với phân trang, search, filter
-    public List<UserDTO> getUsers(int page, int pageSize, String search, String roleFilter) {
-        List<UserDTO> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(
-                "SELECT u.UserID, u.UserName, u.Email, u.Status, r.RoleName, "
-                + "clb_lead.ClubName AS ManagedClub, "
-                + "STRING_AGG(clb_mem.ClubName, ', ') AS JoinedClubs "
-                + "FROM Users u "
+    // Hash password using SHA-256
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Login
+    public User login(String email, String password) {
+        String sql = "SELECT u.*, r.RoleName FROM Users u "
                 + "INNER JOIN Roles r ON u.RoleID = r.RoleID "
-                + "LEFT JOIN Clubs clb_lead ON (u.UserID = clb_lead.LeaderID OR u.UserID = clb_lead.FacultyID) "
-                + "LEFT JOIN Members m ON u.UserID = m.UserID "
-                + "LEFT JOIN Clubs clb_mem ON m.ClubID = clb_mem.ClubID "
-                + "WHERE 1=1 "
-        );
+                + "WHERE u.Email = ? AND u.PasswordHash = ? AND u.Status = 1";
 
-        if (search != null && !search.isEmpty()) {
-            sql.append(" AND (u.UserName LIKE ? OR u.Email LIKE ?)");
-        }
-        if (roleFilter != null && !roleFilter.isEmpty()) {
-            sql.append(" AND r.RoleName = ?");
-        }
-
-        sql.append(" GROUP BY u.UserID, u.UserName, u.Email, u.Status, r.RoleName, clb_lead.ClubName ");
-        sql.append(" ORDER BY u.UserName ");
-        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ");
-
-        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-            int idx = 1;
-            if (search != null && !search.isEmpty()) {
-                ps.setString(idx++, "%" + search + "%");
-                ps.setString(idx++, "%" + search + "%");
-            }
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                ps.setString(idx++, roleFilter);
-            }
-            ps.setInt(idx++, (page - 1) * pageSize);
-            ps.setInt(idx, pageSize);
-
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, hashPassword(password));
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                UserDTO u = new UserDTO();
-                u.setUserID(rs.getInt("UserID"));
-                u.setUserName(rs.getString("UserName"));
-                u.setEmail(rs.getString("Email"));
-                u.setRole(rs.getString("RoleName"));
-                u.setManagedClub(rs.getString("ManagedClub"));
-                u.setJoinedClubs(rs.getString("JoinedClubs"));
-                u.setStatus(rs.getBoolean("Status"));
-                list.add(u); 
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 
-    public int countUsers(String search, String roleFilter) {
-        int total = 0;
-        String sql = "SELECT COUNT(*) AS Total FROM Users u INNER JOIN Roles r ON u.RoleID = r.RoleID WHERE 1=1";
-        if (search != null && !search.isEmpty()) {
-            sql += " AND (u.UserName LIKE ? OR u.Email LIKE ?)";
-        }
-        if (roleFilter != null && !roleFilter.isEmpty()) {
-            sql += " AND r.RoleName = ?";
-        }
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            int idx = 1;
-            if (search != null && !search.isEmpty()) {
-                ps.setString(idx++, "%" + search + "%");
-                ps.setString(idx++, "%" + search + "%");
-            }
-            if (roleFilter != null && !roleFilter.isEmpty()) {
-                ps.setString(idx++, roleFilter);
-            }
-
-            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                total = rs.getInt("Total");
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                user.setRoleName(rs.getString("RoleName"));
+                user.setStatus(rs.getBoolean("Status"));
+                user.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return total;
+        return null;
     }
 
-    public boolean createUser(UserDTO user) {
-        String sql = "INSERT INTO Users (UserName, Email, PasswordHash, RoleID, CreatedAt, UpdatedAt) "
-                + "VALUES (?, ?, ?, ?, GETDATE(), GETDATE())";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+    // Register
+    public boolean register(User user, String password) {
+        String sql = "INSERT INTO Users (UserName, Email, PasswordHash, RoleID, Status) "
+                + "VALUES (?, ?, ?, ?, 1)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, user.getUserName());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPasswordHash());
+            ps.setString(3, hashPassword(password));
             ps.setInt(4, user.getRoleID());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
-    public boolean changeRole(int userID, int roleID) {
-        String sql = "UPDATE Users SET RoleID = ? WHERE UserID = ?";
-        try (
-                PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, roleID);
-            ps.setInt(2, userID);
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
+            int result = ps.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean toggleBan(int userID, boolean newStatus) {
-        String sql = "UPDATE Users SET Status = ? WHERE UserID = ?";
-        try (
-                PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setBoolean(1, newStatus);
-            ps.setInt(2, userID);
+    // Check if email exists
+    public boolean emailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM Users WHERE Email = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Get user by ID
+    public User getUserById(int userId) {
+        String sql = "SELECT u.*, r.RoleName FROM Users u "
+                + "INNER JOIN Roles r ON u.RoleID = r.RoleID "
+                + "WHERE u.UserID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                user.setRoleName(rs.getString("RoleName"));
+                user.setStatus(rs.getBoolean("Status"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Update user profile
+    public boolean updateProfile(User user) {
+        String sql = "UPDATE Users SET UserName = ?, Phone = ?, Faculty = ? "
+                + "WHERE UserID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getPhone());
+            ps.setString(3, user.getFaculty());
+            ps.setInt(4, user.getUserID());
+
             return ps.executeUpdate() > 0;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
