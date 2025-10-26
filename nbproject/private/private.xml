@@ -11,11 +11,12 @@
             <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateEventServlet.java</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/controller/RuleViewServlet.java</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/model/Club.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/clubRules.jsp</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/dal/NewsDAO.java</file>
             <file>file:/C:/Users/admin/UniClubs/web/admin/viewRules.jsp</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/dal/ClubDAO.java</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/controller/ChangeRoleServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ClubRuleListServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ViewClubRulesServlet.java</file>
+            <file>file:/C:/Users/admin/UniClubs/web/club_rules.jsp</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/dal/RuleDAO.java</file>
             <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateUserServlet.java</file>
             <file>file:/C:/Users/admin/UniClubs/web/rule/rule-view.jsp</file>
