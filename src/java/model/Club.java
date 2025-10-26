@@ -86,4 +86,37 @@ public class Club {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getFacultyID() {
+        return facultyID;
+    }
+
+    public void setFacultyID(int facultyID) {
+        this.facultyID = facultyID;
+    }
+
+    public int getLeaderID() {
+        return leaderID;
+    }
+
+    public void setLeaderID(int leaderID) {
+        this.leaderID = leaderID;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

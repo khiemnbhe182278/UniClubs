@@ -3,7 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/CreateNewsServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club-manager/clubDetail.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/News.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ClubDetailServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/Club.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/dal/ClubDAO.java</file>
         </group>
     </open-files>
 </project-private>

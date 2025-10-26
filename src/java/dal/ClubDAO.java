@@ -156,7 +156,51 @@ public class ClubDAO extends DBContext {
         return clubs;
     }
 
+    public boolean createClub(Club club) {
+        String sql = "INSERT INTO Clubs (ClubName, Description, FacultyID, LeaderID, Status) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, club.getClubName());
+            ps.setString(2, club.getDescription());
+            ps.setInt(3, club.getFacultyID());
+            ps.setInt(4, club.getLeaderID());
+            ps.setString(5, club.getStatus());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 // Get club by ID
+
+    public List<Club> getUserLeadClubs(int userId) {
+        List<Club> clubs = new ArrayList<>();
+        String sql = "SELECT c.* FROM Clubs c "
+                + "WHERE c.LeaderID = ? AND c.Status = 'Active' "
+                + "ORDER BY c.ClubName";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Club club = new Club();
+                club.setClubID(rs.getInt("ClubID"));
+                club.setClubName(rs.getString("ClubName"));
+                club.setDescription(rs.getString("Description"));
+                club.setStatus(rs.getString("Status"));
+                clubs.add(club);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubs;
+    }
+
     public Club getClubById(int clubId) {
         String sql = "SELECT c.*, COUNT(DISTINCT m.MemberID) as MemberCount "
                 + "FROM Clubs c "
