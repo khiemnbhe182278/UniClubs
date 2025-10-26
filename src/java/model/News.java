@@ -10,18 +10,9 @@ public class News {
     private String content;
     private String status;
     private Timestamp createdAt;
+    private String clubName;
 
     public News() {
-    }
-
-    public News(int newsID, int clubID, String title, String content,
-            String status, Timestamp createdAt) {
-        this.newsID = newsID;
-        this.clubID = clubID;
-        this.title = title;
-        this.content = content;
-        this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getNewsID() {
@@ -70,5 +61,13 @@ public class News {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getClubName() {
+        return clubName;
+    }
+
+    public void setClubName(String clubName) {
+        this.clubName = clubName;
     }
 }

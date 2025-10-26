@@ -1,92 +1,110 @@
 package controller;
 
 import dal.EventDAO;
+import dal.ClubDAO;
+import dal.MemberDAO;
 import model.Event;
-import jakarta.servlet.*;
+import model.Club;
+import model.User;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Date;
 
-@WebServlet("/createEvent")
+@WebServlet(name = "CreateEventServlet", urlPatterns = {"/create-event"})
 public class CreateEventServlet extends HttpServlet {
+
+    private EventDAO eventDAO;
+    private ClubDAO clubDAO;
+    private MemberDAO memberDAO;
+
+    @Override
+    public void init() throws ServletException {
+        eventDAO = new EventDAO();
+        clubDAO = new ClubDAO();
+        memberDAO = new MemberDAO();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Forward to the JSP page
-        request.getRequestDispatcher("/event/createEvent.jsp").forward(request, response);
+
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        User user = (User) session.getAttribute("user");
+
+        // Get user's clubs where they are leader or approved member
+        List<Club> myClubs = clubDAO.getUserLeadClubs(user.getUserID());
+        request.setAttribute("myClubs", myClubs);
+
+        request.getRequestDispatcher("create-event.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String clubIDParam = request.getParameter("clubID");
-        String eventName = request.getParameter("eventName");
-        String description = request.getParameter("description");
-        String eventDateStr = request.getParameter("eventDate");
 
-        // Server-side validation
-        if (clubIDParam == null || eventName == null || eventName.trim().isEmpty()
-                || description == null || description.trim().isEmpty()
-                || eventDateStr == null || eventDateStr.isEmpty()) {
-
-            // Set error message and forward back to form
-            request.setAttribute("errorMessage", "All fields are required. Please fill in all information.");
-
-            // Retain user input
-            request.setAttribute("eventName", eventName);
-            request.setAttribute("description", description);
-            request.setAttribute("eventDate", eventDateStr);
-
-            request.getRequestDispatcher("/event/createEvent.jsp").forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         try {
-            int clubID = Integer.parseInt(clubIDParam);
-            LocalDate eventDate = LocalDate.parse(eventDateStr);
+            int clubId = Integer.parseInt(request.getParameter("clubId"));
+            String eventName = request.getParameter("eventName");
+            String description = request.getParameter("description");
+            String eventDateStr = request.getParameter("eventDate");
+            String eventTimeStr = request.getParameter("eventTime");
 
-            // Validate date: must be today or in the future
-            if (eventDate.isBefore(LocalDate.now())) {
-                request.setAttribute("errorMessage", "The event date cannot be in the past.");
-                request.setAttribute("eventName", eventName);
-                request.setAttribute("description", description);
-                request.setAttribute("eventDate", eventDateStr);
-                request.getRequestDispatcher("/event/createEvent.jsp").forward(request, response);
+            // Validation
+            if (eventName == null || eventName.trim().isEmpty()
+                    || description == null || description.trim().isEmpty()
+                    || eventDateStr == null || eventDateStr.trim().isEmpty()
+                    || eventTimeStr == null || eventTimeStr.trim().isEmpty()) {
+                request.setAttribute("error", "All fields are required");
+                doGet(request, response);
                 return;
             }
 
-            Timestamp eventTimestamp = Timestamp.valueOf(eventDate.atStartOfDay());
+            // Parse date and time
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String dateTimeStr = eventDateStr + " " + eventTimeStr;
+            Date eventDate = sdf.parse(dateTimeStr);
+            Timestamp eventTimestamp = new Timestamp(eventDate.getTime());
 
-            Event e = new Event();
-            e.setClubID(clubID);
-            e.setEventName(eventName);
-            e.setDescription(description);
-            e.setEventDate(eventTimestamp);
-            e.setStatus("Pending");
-            e.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+            Event event = new Event();
+            event.setClubID(clubId);
+            event.setEventName(eventName.trim());
+            event.setDescription(description.trim());
+            event.setEventDate(eventTimestamp);
+            event.setStatus("Pending");
 
-            EventDAO dao = new EventDAO();
-            boolean success = dao.createEvent(e);
+            boolean success = eventDAO.createEvent(event);
 
             if (success) {
-                // Set success message and redirect
-                request.getSession().setAttribute("successMessage", "Event created successfully!");
-                response.sendRedirect("listEvents");
+                request.setAttribute("success", "Event created successfully! Waiting for admin approval.");
             } else {
-                // Set failure message and forward back to form
-                request.setAttribute("errorMessage", "Failed to create event. Please try again.");
-                request.setAttribute("eventName", eventName);
-                request.setAttribute("description", description);
-                request.setAttribute("eventDate", eventDateStr);
-                request.getRequestDispatcher("/event/createEvent.jsp").forward(request, response);
+                request.setAttribute("error", "Failed to create event. Please try again.");
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Invalid Club ID. Please contact support.");
-            request.getRequestDispatcher("/event/createEvent.jsp").forward(request, response);
+
+            doGet(request, response);
+
+        } catch (NumberFormatException | ParseException e) {
+            request.setAttribute("error", "Invalid input data");
+            doGet(request, response);
         }
     }
 }

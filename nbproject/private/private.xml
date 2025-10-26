@@ -3,25 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateNewsServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/rule/create-rule.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/web/admin/listAccounts.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/RuleUpdateServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/RuleDeleteServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateEventServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/RuleViewServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/model/Club.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/dal/NewsDAO.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/admin/viewRules.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/dal/ClubDAO.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ChangeRoleServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ViewClubRulesServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/club_rules.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/dal/RuleDAO.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateUserServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/rule/rule-view.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/RuleCreateServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/model/Rule.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club-manager/clubDetail.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/News.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ClubDetailServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/Club.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/dal/ClubDAO.java</file>
         </group>
     </open-files>
 </project-private>
