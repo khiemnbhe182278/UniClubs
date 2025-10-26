@@ -3,23 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/model/RoleDTO.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/model/UserDTO.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/dal/ClubDAO.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/web/club-manager/clubDetail.jsp</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/dal/UserDAO.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/model/Club.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/BanUserServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/ClubDetailServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/ViewClubsServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/dal/DBContext.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/CreateUserServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/web/admin/listAccounts.jsp</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/UserListServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/dal/RoleDAO.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/src/java/controller/ChangeRoleServlet.java</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/web/club-manager/viewClubs.jsp</file>
-            <file>file:/D:/Zalo%20Data/media/New%20folder%20(3)/Workshop2_Re_Given/Workshop2_Re_Given/UniClubs/web/admin/createUser.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club-manager/clubDetail.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ClubDetailServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/Club.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/dal/ClubDAO.java</file>
         </group>
     </open-files>
 </project-private>
