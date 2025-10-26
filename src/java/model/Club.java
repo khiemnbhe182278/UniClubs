@@ -10,12 +10,27 @@ public class Club {
     private String logo;
     private int facultyID;
     private int leaderID;
-    private String facultyName;
-    private String leaderName;
-    private boolean status;
+    private String status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private int memberCount;
+    private String categoryName;
 
+    // Constructors
+    public Club() {
+    }
+
+    public Club(int clubID, String clubName, String description, String logo,
+            int memberCount, String categoryName) {
+        this.clubID = clubID;
+        this.clubName = clubName;
+        this.description = description;
+        this.logo = logo;
+        this.memberCount = memberCount;
+        this.categoryName = categoryName;
+    }
+
+    // Getters and Setters
     public int getClubID() {
         return clubID;
     }
@@ -48,59 +63,27 @@ public class Club {
         this.logo = logo;
     }
 
-    public int getFacultyID() {
-        return facultyID;
+    public int getMemberCount() {
+        return memberCount;
     }
 
-    public void setFacultyID(int facultyID) {
-        this.facultyID = facultyID;
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
     }
 
-    public int getLeaderID() {
-        return leaderID;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setLeaderID(int leaderID) {
-        this.leaderID = leaderID;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public String getFacultyName() {
-        return facultyName;
-    }
-
-    public void setFacultyName(String facultyName) {
-        this.facultyName = facultyName;
-    }
-
-    public String getLeaderName() {
-        return leaderName;
-    }
-
-    public void setLeaderName(String leaderName) {
-        this.leaderName = leaderName;
-    }
-
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
