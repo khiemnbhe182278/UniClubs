@@ -13,6 +13,43 @@ import model.User;
 
 public class EventDAO extends DBContext {
 
+    public boolean deleteEvent(int eventId) {
+        String sql = "DELETE FROM Events WHERE EventID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateEvent(Event event) {
+        String sql = "UPDATE Events SET EventName = ?, Description = ?, EventDate = ?, "
+                + "Location = ?, MaxParticipants = ? WHERE EventID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, event.getEventName());
+            ps.setString(2, event.getDescription());
+            ps.setTimestamp(3, event.getEventDate());
+            ps.setString(4, event.getLocation());
+            if (event.getMaxParticipants() > 0) {
+                ps.setInt(5, event.getMaxParticipants());
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
+            ps.setInt(6, event.getEventID());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // Get all upcoming events
     public List<Event> getUpcomingEvents() {
         List<Event> events = new ArrayList<>();
@@ -168,6 +205,37 @@ public class EventDAO extends DBContext {
             }
         }
         return event;
+    }
+
+    public int getClubEventCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Events WHERE ClubID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getUpcomingEventCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Events "
+                + "WHERE ClubID = ? AND EventDate >= GETDATE() AND Status = 'Approved'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     // Create event
