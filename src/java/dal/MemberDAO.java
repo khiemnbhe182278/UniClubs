@@ -9,6 +9,61 @@ import java.util.List;
 
 public class MemberDAO extends DBContext {
 
+    public Member getMemberById(int memberId) {
+        String sql = "SELECT m.*, c.ClubName FROM Members m "
+                + "INNER JOIN Clubs c ON m.ClubID = c.ClubID "
+                + "WHERE m.MemberID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Member member = new Member();
+                member.setMemberID(rs.getInt("MemberID"));
+                member.setUserID(rs.getInt("UserID"));
+                member.setClubID(rs.getInt("ClubID"));
+                member.setJoinStatus(rs.getString("JoinStatus"));
+                member.setJoinedAt(rs.getTimestamp("JoinedAt"));
+                member.setClubName(rs.getString("ClubName"));
+                return member;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Member> getPendingMembersByClub(int clubId) {
+        List<Member> members = new ArrayList<>();
+        String sql = "SELECT m.*, u.UserName, u.Email FROM Members m "
+                + "INNER JOIN Users u ON m.UserID = u.UserID "
+                + "WHERE m.ClubID = ? AND m.JoinStatus = 'Pending' "
+                + "ORDER BY m.JoinedAt DESC";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Member member = new Member();
+                member.setMemberID(rs.getInt("MemberID"));
+                member.setUserID(rs.getInt("UserID"));
+                member.setClubID(rs.getInt("ClubID"));
+                member.setJoinStatus(rs.getString("JoinStatus"));
+                member.setJoinedAt(rs.getTimestamp("JoinedAt"));
+                member.setUserName(rs.getString("UserName"));
+                member.setEmail(rs.getString("Email"));
+                members.add(member);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return members;
+    }
+
     // Join club
     public boolean joinClub(int userId, int clubId) {
         String sql = "INSERT INTO Members (UserID, ClubID, JoinStatus) VALUES (?, ?, 'Pending')";

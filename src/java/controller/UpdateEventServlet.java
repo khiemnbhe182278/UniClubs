@@ -48,12 +48,7 @@ public class UpdateEventServlet extends HttpServlet {
             return;
         }
 
-        // Verify user is leader of the club
-        Club club = clubDAO.getClubById(event.getClubID());
-        if (club.getLeaderID() != user.getUserID()) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        
 
         request.setAttribute("event", event);
         request.getRequestDispatcher("/leader-update-event.jsp").forward(request, response);

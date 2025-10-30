@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard - UniClubs</title>
+        <title>Upcoming Events - UniClubs</title>
         <style>
             * {
                 margin: 0;
@@ -15,24 +15,26 @@
             }
 
             body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: #f5f7fa;
-                padding-top: 70px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                padding-top: 80px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                color: #1a1a1a;
             }
 
             header {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                color: white;
-                padding: 1rem 0;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 1.2rem 0;
                 position: fixed;
                 width: 100%;
                 top: 0;
                 z-index: 1000;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             }
 
             nav {
-                max-width: 1200px;
+                max-width: 1400px;
                 margin: 0 auto;
                 display: flex;
                 justify-content: space-between;
@@ -42,242 +44,371 @@
 
             .logo {
                 font-size: 1.8rem;
-                font-weight: bold;
+                font-weight: 800;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
             }
 
             nav ul {
                 list-style: none;
                 display: flex;
-                gap: 2rem;
+                gap: 2.5rem;
             }
 
             nav a {
-                color: white;
+                color: #333;
                 text-decoration: none;
-                font-weight: 500;
+                font-weight: 600;
+                transition: all 0.3s;
+                position: relative;
             }
 
-            .user-menu {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
+            nav a:hover {
+                color: #667eea;
+            }
+
+            nav a::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                transition: width 0.3s;
+            }
+
+            nav a:hover::after {
+                width: 100%;
             }
 
             .container {
-                max-width: 1200px;
-                margin: 2rem auto;
-                padding: 0 2rem;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 3rem 2rem;
             }
 
-            .welcome-banner {
-                background: white;
-                padding: 2rem;
-                border-radius: 15px;
-                margin-bottom: 2rem;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            .page-hero {
+                text-align: center;
+                margin-bottom: 4rem;
+                color: white;
             }
 
-            .welcome-banner h1 {
-                color: #2193b0;
-                margin-bottom: 0.5rem;
+            .page-hero h1 {
+                font-size: 3.5rem;
+                font-weight: 800;
+                margin-bottom: 1rem;
+                text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             }
 
-            .section {
-                background: white;
-                padding: 2rem;
-                border-radius: 15px;
-                margin-bottom: 2rem;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            .page-hero p {
+                font-size: 1.3rem;
+                opacity: 0.95;
+                font-weight: 300;
             }
 
-            .section h2 {
-                color: #333;
-                margin-bottom: 1.5rem;
-                padding-bottom: 1rem;
-                border-bottom: 2px solid #eee;
-            }
-
-            .clubs-grid {
+            .events-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 1.5rem;
+                gap: 2rem;
             }
 
-            .club-card {
-                border: 2px solid #eee;
-                padding: 1.5rem;
-                border-radius: 10px;
-                transition: all 0.3s;
+            .event-card {
+                background: white;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                display: grid;
+                grid-template-columns: 180px 1fr;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                cursor: pointer;
+                position: relative;
             }
 
-            .club-card:hover {
-                border-color: #2193b0;
-                box-shadow: 0 5px 15px rgba(33,147,176,0.2);
+            .event-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 5px;
+                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                transform: scaleX(0);
+                transition: transform 0.3s;
             }
 
-            .club-card h3 {
-                color: #2193b0;
+            .event-card:hover::before {
+                transform: scaleX(1);
+            }
+
+            .event-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            }
+
+            .event-date-box {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                position: relative;
+            }
+
+            .event-date-box::after {
+                content: '';
+                position: absolute;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-left: 20px solid #764ba2;
+                border-top: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+            }
+
+            .event-date-box .month {
+                font-size: 1.1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                opacity: 0.9;
+            }
+
+            .event-date-box .day {
+                font-size: 3.5rem;
+                font-weight: 800;
+                line-height: 1;
+            }
+
+            .event-date-box .year {
+                font-size: 1rem;
+                font-weight: 600;
+                opacity: 0.85;
+            }
+
+            .event-content {
+                padding: 2.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .event-content h3 {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #1a1a1a;
                 margin-bottom: 0.5rem;
             }
 
-            .club-status {
+            .event-club {
                 display: inline-block;
-                padding: 0.3rem 1rem;
+                padding: 0.5rem 1.2rem;
+                background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+                color: #667eea;
+                font-weight: 700;
                 border-radius: 20px;
-                font-size: 0.9rem;
-                font-weight: 500;
+                font-size: 0.95rem;
+                align-self: flex-start;
+            }
+
+            .event-description {
+                color: #666;
+                line-height: 1.7;
+                font-size: 1rem;
+            }
+
+            .event-meta {
+                display: flex;
+                gap: 2rem;
                 margin-top: 0.5rem;
             }
 
-            .status-approved {
-                background: #d4edda;
-                color: #155724;
+            .meta-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
             }
 
-            .status-pending {
-                background: #fff3cd;
-                color: #856404;
+            .meta-label {
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #999;
+                font-weight: 600;
             }
 
-            .status-rejected {
-                background: #f8d7da;
-                color: #721c24;
+            .meta-value {
+                color: #333;
+                font-weight: 600;
+                font-size: 1rem;
             }
 
-            .events-list {
-                list-style: none;
+            .event-actions {
+                display: flex;
+                gap: 1rem;
+                margin-top: 1rem;
             }
 
-            .event-item {
-                padding: 1rem;
-                border-left: 4px solid #2193b0;
-                margin-bottom: 1rem;
-                background: #f9f9f9;
-                border-radius: 5px;
-            }
-
-            .event-item h4 {
-                color: #2193b0;
-                margin-bottom: 0.3rem;
-            }
-
-            .event-date {
-                color: #666;
-                font-size: 0.9rem;
-            }
-
-            .btn {
-                display: inline-block;
-                padding: 0.7rem 1.5rem;
-                background: #2193b0;
+            .btn-view {
+                flex: 1;
+                padding: 1rem 2rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
                 text-decoration: none;
-                border-radius: 10px;
-                font-weight: 500;
-                transition: background 0.3s;
-            }
-
-            .btn:hover {
-                background: #1a7a94;
-            }
-
-            .empty-state {
+                border-radius: 12px;
+                font-weight: 700;
                 text-align: center;
-                padding: 3rem;
-                color: #999;
+                transition: all 0.3s;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             }
 
-            .empty-state .icon {
-                font-size: 4rem;
+            .btn-view:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
+
+            .no-events {
+                text-align: center;
+                padding: 5rem 2rem;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .no-events h2 {
+                font-size: 2rem;
                 margin-bottom: 1rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                font-weight: 800;
+            }
+
+            .no-events p {
+                color: #666;
+                font-size: 1.1rem;
+                line-height: 1.7;
+            }
+
+            @media (max-width: 968px) {
+                .event-card {
+                    grid-template-columns: 140px 1fr;
+                }
+
+                .event-date-box .day {
+                    font-size: 2.8rem;
+                }
+
+                .event-content {
+                    padding: 2rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .page-hero h1 {
+                    font-size: 2.5rem;
+                }
+
+                .event-card {
+                    grid-template-columns: 1fr;
+                }
+
+                .event-date-box {
+                    padding: 1.5rem;
+                    flex-direction: row;
+                    justify-content: center;
+                }
+
+                .event-date-box::after {
+                    display: none;
+                }
+
+                .event-date-box .day {
+                    font-size: 2.5rem;
+                }
+
+                .event-meta {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+
+                nav ul {
+                    gap: 1.5rem;
+                }
             }
         </style>
     </head>
     <body>
-        <header>
-            <nav>
-                <div class="logo">🎓 UniClubs</div>
-                <ul>
-                    <li><a href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
-                    <li><a href="${pageContext.request.contextPath}/clubs">Browse Clubs</a></li>
-                    <li><a href="${pageContext.request.contextPath}/events">Events</a></li>
-                </ul>
-                <div class="user-menu">
-                    <span>Welcome, ${sessionScope.userName}!</span>
-                    <a href="${pageContext.request.contextPath}/profile" class="btn">Profile</a>
-                    <a href="${pageContext.request.contextPath}/logout" class="btn">Logout</a>
-                </div>
-            </nav>
-        </header>
+        <%@ include file="header.jsp" %>
 
         <div class="container">
-            <div class="welcome-banner">
-                <h1>Welcome back, ${sessionScope.userName}!</h1>
-                <p>Here's what's happening with your clubs</p>
+            <div class="page-hero">
+                <h1>Upcoming Events</h1>
+                <p>Don't miss out on exciting club activities and events</p>
             </div>
 
-            <div class="section">
-                <h2>My Clubs</h2>
-                <c:choose>
-                    <c:when test="${not empty myClubs}">
-                        <div class="clubs-grid">
-                            <c:forEach var="membership" items="${myClubs}">
-                                <div class="club-card">
-                                    <h3>${membership.clubName}</h3>
-                                    <p>Joined: <fmt:formatDate value="${membership.joinedAt}" pattern="MMM dd, yyyy"/></p>
-                                    <span class="club-status status-${membership.joinStatus.toLowerCase()}">
-                                        ${membership.joinStatus}
-                                    </span>
-                                    <c:if test="${membership.joinStatus == 'Approved'}">
-                                        <div style="margin-top: 1rem;">
-                                            <a href="${pageContext.request.contextPath}/club-detail?id=${membership.clubID}" 
-                                               class="btn">View Club</a>
-                                        </div>
-                                    </c:if>
+            <c:choose>
+                <c:when test="${not empty events}">
+                    <div class="events-grid">
+                        <c:forEach var="event" items="${events}">
+                            <div class="event-card">
+                                <div class="event-date-box">
+                                    <div class="month">
+                                        <fmt:formatDate value="${event.eventDate}" pattern="MMM"/>
+                                    </div>
+                                    <div class="day">
+                                        <fmt:formatDate value="${event.eventDate}" pattern="dd"/>
+                                    </div>
+                                    <div class="year">
+                                        <fmt:formatDate value="${event.eventDate}" pattern="yyyy"/>
+                                    </div>
                                 </div>
-                            </c:forEach>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state">
-                            <div class="icon">📭</div>
-                            <h3>You haven't joined any clubs yet</h3>
-                            <p>Start exploring and join clubs that interest you!</p>
-                            <a href="${pageContext.request.contextPath}/clubs" class="btn" 
-                               style="margin-top: 1rem;">Browse Clubs</a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                                <div class="event-content">
+                                    <h3>${event.eventName}</h3>
+                                    <span class="event-club">${event.clubName}</span>
+                                    <p class="event-description">${event.description}</p>
 
-            <div class="section">
-                <h2>Upcoming Events</h2>
-                <c:choose>
-                    <c:when test="${not empty upcomingEvents}">
-                        <ul class="events-list">
-                            <c:forEach var="event" items="${upcomingEvents}" end="4">
-                                <li class="event-item">
-                                    <h4>${event.eventName}</h4>
-                                    <p>${event.clubName}</p>
-                                    <p class="event-date">
-                                        📅 <fmt:formatDate value="${event.eventDate}" pattern="EEEE, MMM dd, yyyy 'at' HH:mm"/>
-                                    </p>
-                                    <a href="${pageContext.request.contextPath}/event-detail?id=${event.eventID}" 
-                                       class="btn" style="margin-top: 0.5rem;">View Details</a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                        <a href="${pageContext.request.contextPath}/events" class="btn" 
-                           style="margin-top: 1rem;">View All Events</a>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state">
-                            <div class="icon">📅</div>
-                            <p>No upcoming events at the moment</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                                    <div class="event-meta">
+                                        <div class="meta-item">
+                                            <span class="meta-label">Day</span>
+                                            <span class="meta-value">
+                                                <fmt:formatDate value="${event.eventDate}" pattern="EEEE"/>
+                                            </span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Time</span>
+                                            <span class="meta-value">
+                                                <fmt:formatDate value="${event.eventDate}" pattern="h:mm a"/>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-actions">
+                                        <a href="${pageContext.request.contextPath}/event-detail?id=${event.eventID}" 
+                                           class="btn-view">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="no-events">
+                        <h2>No Upcoming Events</h2>
+                        <p>There are no events scheduled at the moment. Check back later for exciting activities!</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
+        <%@ include file="footer.jsp" %>
     </body>
 </html>
