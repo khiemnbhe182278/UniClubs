@@ -1,95 +1,179 @@
 package dal;
 
-import model.Rule;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Rule;
 
+/**
+ * Data Access Object for Rule entity File name MUST be: RuleDAO.java
+ */
 public class RuleDAO extends DBContext {
 
-    public List<Rule> getRulesByClub(int clubID) {
-        List<Rule> list = new ArrayList<>();
-        String sql = "SELECT RuleID, ClubID, Title, RuleText, CreatedAt "
-                + "FROM Rules WHERE ClubID = ? ORDER BY CreatedAt DESC";
+    /**
+     * Create a new rule
+     */
+    public boolean createRule(Rule rule) {
+        String sql = "INSERT INTO Rules (ClubID, Title, RuleText) VALUES (?, ?, ?)";
 
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, clubID);
-            ResultSet rs = st.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, rule.getClubID());
+            ps.setString(2, rule.getTitle());
+            ps.setString(3, rule.getRuleText());
 
-            while (rs.next()) {
-                Rule r = new Rule();
-                r.setRuleID(rs.getInt("RuleID"));
-                r.setClubID(rs.getInt("ClubID"));
-                r.setTitle(rs.getString("Title"));
-                r.setRuleText(rs.getString("RuleText"));
-                r.setCreatedAt(rs.getTimestamp("CreatedAt"));
-                list.add(r);
-            }
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
         } catch (SQLException e) {
+            System.err.println("Error creating rule: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
-        return list;
     }
 
-    public Rule getRule(int ruleID) {
-        String sql = "SELECT RuleID, ClubID, RuleText, CreatedAt, Title "
-                + "FROM Rules WHERE RuleID = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, ruleID);
-            ResultSet rs = st.executeQuery();
+    /**
+     * Get rule by ID
+     */
+    public Rule getRuleById(int ruleId) {
+        String sql = "SELECT * FROM Rules WHERE RuleID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, ruleId);
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
-                Rule r = new Rule();
-                r.setRuleID(rs.getInt("RuleID"));
-                r.setClubID(rs.getInt("ClubID"));
-                r.setRuleText(rs.getString("RuleText"));
-                r.setCreatedAt(rs.getTimestamp("CreatedAt"));
-                r.setTitle(rs.getString("Title")); 
-                return r;
+                return extractRuleFromResultSet(rs);
             }
+
         } catch (SQLException e) {
+            System.err.println("Error getting rule by ID: " + e.getMessage());
             e.printStackTrace();
         }
+
         return null;
     }
 
-    // Thêm rule mới
-    public boolean insertRule(Rule rule) {
-        String sql = "INSERT INTO Rules (ClubID, RuleText, Title) VALUES (?, ?, ?)";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, rule.getClubID());
-            st.setString(2, rule.getRuleText());
-            st.setString(3, rule.getTitle());
-            return st.executeUpdate() > 0;
+    /**
+     * Get all rules for a club
+     */
+    public List<Rule> getRulesByClubId(int clubId) {
+        List<Rule> rules = new ArrayList<>();
+        String sql = "SELECT * FROM Rules WHERE ClubID = ? ORDER BY RuleID";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                rules.add(extractRuleFromResultSet(rs));
+            }
+
         } catch (SQLException e) {
+            System.err.println("Error getting rules by club ID: " + e.getMessage());
             e.printStackTrace();
         }
-        return false;
+
+        return rules;
     }
 
-    // Cập nhật rule
+    /**
+     * Update an existing rule
+     */
     public boolean updateRule(Rule rule) {
-        String sql = "UPDATE Rules SET ClubID = ?, RuleText = ?, Title = ? WHERE RuleID = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, rule.getClubID());
-            st.setString(2, rule.getRuleText());
-            st.setString(3, rule.getTitle());  // Title cuối
-            st.setInt(4, rule.getRuleID());
-            return st.executeUpdate() > 0;
+        String sql = "UPDATE Rules SET Title = ?, RuleText = ? WHERE RuleID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, rule.getTitle());
+            ps.setString(2, rule.getRuleText());
+            ps.setInt(3, rule.getRuleID());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
         } catch (SQLException e) {
+            System.err.println("Error updating rule: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
-    // Xóa rule
-    public boolean deleteRule(int ruleID) {
+    /**
+     * Delete a rule
+     */
+    public boolean deleteRule(int ruleId) {
         String sql = "DELETE FROM Rules WHERE RuleID = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setInt(1, ruleID);
-            return st.executeUpdate() > 0;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, ruleId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
         } catch (SQLException e) {
+            System.err.println("Error deleting rule: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Delete all rules for a club
+     */
+    public boolean deleteRulesByClubId(int clubId) {
+        String sql = "DELETE FROM Rules WHERE ClubID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting rules by club ID: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Count rules for a club
+     */
+    public int countRulesByClubId(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Rules WHERE ClubID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error counting rules: " + e.getMessage());
             e.printStackTrace();
         }
-        return false;
+
+        return 0;
     }
+
+    /**
+     * Extract Rule object from ResultSet
+     */
+    private Rule extractRuleFromResultSet(ResultSet rs) throws SQLException {
+        Rule rule = new Rule();
+        rule.setRuleID(rs.getInt("RuleID"));
+        rule.setClubID(rs.getInt("ClubID"));
+        rule.setTitle(rs.getString("Title"));
+        rule.setRuleText(rs.getString("RuleText"));
+
+        // If you have CreatedDate column
+        try {
+            rule.setCreatedDate(rs.getTimestamp("CreatedDate"));
+        } catch (SQLException e) {
+            // Column might not exist
+        }
+
+        return rule;
+    }
+
 }

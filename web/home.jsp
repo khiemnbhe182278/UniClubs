@@ -9,425 +9,594 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UniClubs - University Club Management System</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        <!-- AOS Animation -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <!-- Custom CSS -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                line-height: 1.6;
-                color: #333;
-            }
-
-            /* Header */
-            header {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                color: white;
-                padding: 1rem 0;
-                position: fixed;
-                width: 100%;
-                top: 0;
-                z-index: 1000;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            nav {
-                max-width: 1200px;
-                margin: 0 auto;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0 2rem;
-            }
-
-            .logo {
-                font-size: 1.8rem;
-                font-weight: bold;
-            }
-
-            nav ul {
-                list-style: none;
-                display: flex;
-                gap: 2rem;
-            }
-
-            nav a {
-                color: white;
-                text-decoration: none;
-                font-weight: 500;
-                transition: opacity 0.3s;
-            }
-
-            nav a:hover {
-                opacity: 0.8;
-            }
-
-            .btn {
-                background: white;
-                color: #2193b0;
-                padding: 0.6rem 1.5rem;
-                border-radius: 25px;
-                text-decoration: none;
-                font-weight: 600;
-                transition: transform 0.3s;
-            }
-
-            .btn:hover {
-                transform: translateY(-2px);
-            }
-
             /* Hero Section */
-            .hero {
-                margin-top: 70px;
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            .hero-section {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
-                padding: 6rem 2rem;
+                padding: 120px 0 80px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+                background-size: cover;
+                opacity: 0.3;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 1;
                 text-align: center;
             }
 
-            .hero h1 {
-                font-size: 3rem;
-                margin-bottom: 1rem;
+            .hero-content h1 {
+                font-size: 3.5rem;
+                font-weight: 800;
+                margin-bottom: 1.5rem;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+                line-height: 1.2;
             }
 
-            .hero p {
+            .hero-content p {
                 font-size: 1.3rem;
-                margin-bottom: 2rem;
+                margin-bottom: 2.5rem;
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+                opacity: 0.95;
             }
 
-            .cta-buttons {
-                display: flex;
-                gap: 1rem;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .btn-primary {
-                background: white;
-                color: #2193b0;
-                padding: 1rem 2.5rem;
-                border-radius: 30px;
-                text-decoration: none;
-                font-weight: 600;
+            .hero-buttons .btn {
+                padding: 15px 40px;
                 font-size: 1.1rem;
+                font-weight: 600;
+                border-radius: 50px;
+                margin: 0 10px;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
             }
 
-            .btn-secondary {
+            .btn-hero-primary {
+                background: white;
+                color: #667eea;
+                border: 3px solid white;
+            }
+
+            .btn-hero-primary:hover {
                 background: transparent;
                 color: white;
-                padding: 1rem 2.5rem;
-                border: 2px solid white;
-                border-radius: 30px;
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 1.1rem;
+                transform: translateY(-3px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            }
+
+            .btn-hero-secondary {
+                background: transparent;
+                color: white;
+                border: 3px solid white;
+            }
+
+            .btn-hero-secondary:hover {
+                background: white;
+                color: #667eea;
+                transform: translateY(-3px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             }
 
             /* Stats Section */
-            .stats {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                padding: 4rem 2rem;
+            .stats-section {
+                background: #f8f9fa;
+                padding: 60px 0;
+                margin-top: -40px;
+                position: relative;
+                z-index: 2;
             }
 
-            .stats-grid {
-                max-width: 1200px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 2rem;
+            .stat-card {
+                background: white;
+                border-radius: 20px;
+                padding: 40px 20px;
                 text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+                height: 100%;
             }
 
-            .stat-item {
-                padding: 1.5rem;
+            .stat-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            }
+
+            .stat-icon {
+                font-size: 3rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 15px;
             }
 
             .stat-number {
                 font-size: 3rem;
-                font-weight: bold;
-                color: #2193b0;
+                font-weight: 800;
+                color: #667eea;
                 display: block;
+                margin-bottom: 10px;
             }
 
             .stat-label {
                 font-size: 1.1rem;
-                color: #555;
+                color: #6c757d;
+                font-weight: 600;
             }
 
-            /* Clubs Section */
+            /* Featured Clubs Section */
             .clubs-section {
-                padding: 5rem 2rem;
-                max-width: 1200px;
-                margin: 0 auto;
+                padding: 80px 0;
             }
 
             .section-title {
-                text-align: center;
                 font-size: 2.5rem;
-                margin-bottom: 3rem;
-                color: #333;
+                font-weight: 800;
+                text-align: center;
+                margin-bottom: 60px;
+                color: #2d3748;
+                position: relative;
+                padding-bottom: 20px;
             }
 
-            .clubs-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 2rem;
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 4px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 2px;
             }
 
             .club-card {
                 background: white;
-                border-radius: 15px;
+                border-radius: 20px;
                 overflow: hidden;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-                transition: transform 0.3s;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+                transition: all 0.3s ease;
+                height: 100%;
+                border: 2px solid transparent;
             }
 
             .club-card:hover {
                 transform: translateY(-10px);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+                border-color: #667eea;
             }
 
-            .club-header {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                color: white;
-                padding: 2rem;
+            .club-card-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 40px 20px;
                 text-align: center;
-                font-size: 3rem;
+                position: relative;
             }
 
-            .club-body {
-                padding: 1.5rem;
+            .club-logo {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                border: 5px solid white;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                object-fit: cover;
             }
 
-            .club-body h4 {
-                color: #2193b0;
-                margin-bottom: 0.5rem;
-                font-size: 1.3rem;
+            .club-emoji {
+                font-size: 80px;
+                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
             }
 
-            .club-body p {
-                color: #666;
-                margin-bottom: 1rem;
+            .club-card-body {
+                padding: 30px;
+            }
+
+            .club-card-body h4 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #2d3748;
+                margin-bottom: 15px;
+            }
+
+            .club-card-body p {
+                color: #6c757d;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                min-height: 72px;
             }
 
             .club-meta {
                 display: flex;
+                align-items: center;
                 justify-content: space-between;
-                padding-top: 1rem;
-                border-top: 1px solid #eee;
-                font-size: 0.9rem;
-                color: #888;
+                padding: 15px 0;
+                border-top: 2px solid #f1f3f5;
+                margin-bottom: 20px;
             }
 
-            .btn-view {
-                display: inline-block;
-                background: #2193b0;
+            .club-meta-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: #667eea;
+                font-weight: 600;
+            }
+
+            .club-meta-item i {
+                font-size: 1.2rem;
+            }
+
+            .btn-view-club {
+                display: block;
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
-                padding: 0.5rem 1.5rem;
-                border-radius: 20px;
+                text-align: center;
+                border-radius: 50px;
+                font-weight: 600;
                 text-decoration: none;
-                margin-top: 1rem;
-                transition: background 0.3s;
+                transition: all 0.3s ease;
             }
 
-            .btn-view:hover {
-                background: #1a7a94;
+            .btn-view-club:hover {
+                transform: scale(1.05);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+                color: white;
             }
 
             /* CTA Section */
             .cta-section {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
-                padding: 5rem 2rem;
+                padding: 100px 0;
                 text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .cta-section::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+                background-size: 50px 50px;
+                animation: moveBackground 20s linear infinite;
+            }
+
+            @keyframes moveBackground {
+                0% {
+                    transform: translate(0, 0);
+                }
+                100% {
+                    transform: translate(50px, 50px);
+                }
             }
 
             .cta-section h2 {
-                font-size: 2.5rem;
-                margin-bottom: 1rem;
+                font-size: 3rem;
+                font-weight: 800;
+                margin-bottom: 20px;
+                position: relative;
+                z-index: 1;
             }
 
-            /* Footer */
-            footer {
-                background: #2d3748;
-                color: white;
-                padding: 3rem 2rem;
-                text-align: center;
+            .cta-section p {
+                font-size: 1.3rem;
+                margin-bottom: 40px;
+                opacity: 0.95;
+                position: relative;
+                z-index: 1;
             }
 
-            .footer-content {
-                max-width: 1200px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-                text-align: left;
-                margin-bottom: 2rem;
-            }
-
-            .footer-section h3 {
-                margin-bottom: 1rem;
-                color: #6dd5ed;
-            }
-
-            .footer-section ul {
-                list-style: none;
-            }
-
-            .footer-section a {
-                color: #ccc;
+            .btn-cta {
+                padding: 18px 50px;
+                font-size: 1.2rem;
+                font-weight: 700;
+                background: white;
+                color: #667eea;
+                border: 3px solid white;
+                border-radius: 50px;
                 text-decoration: none;
-                line-height: 2;
+                display: inline-block;
+                transition: all 0.3s ease;
+                position: relative;
+                z-index: 1;
             }
 
-            .copyright {
-                border-top: 1px solid #4a5568;
-                padding-top: 2rem;
-                color: #ccc;
+            .btn-cta:hover {
+                background: transparent;
+                color: white;
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.3);
             }
 
+            /* Responsive */
             @media (max-width: 768px) {
-                .hero h1 {
+                .hero-content h1 {
+                    font-size: 2.2rem;
+                }
+
+                .hero-content p {
+                    font-size: 1.1rem;
+                }
+
+                .hero-buttons .btn {
+                    display: block;
+                    margin: 10px auto;
+                    max-width: 300px;
+                }
+
+                .stat-number {
+                    font-size: 2.5rem;
+                }
+
+                .section-title {
                     font-size: 2rem;
                 }
-                nav ul {
-                    display: none;
+
+                .cta-section h2 {
+                    font-size: 2rem;
                 }
+            }
+
+            /* Features Section */
+            .features-section {
+                padding: 80px 0;
+                background: #f8f9fa;
+            }
+
+            .feature-card {
+                text-align: center;
+                padding: 40px 30px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+                transition: all 0.3s ease;
+                height: 100%;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+            }
+
+            .feature-icon {
+                width: 80px;
+                height: 80px;
+                margin: 0 auto 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                color: white;
+            }
+
+            .feature-card h4 {
+                font-size: 1.3rem;
+                font-weight: 700;
+                margin-bottom: 15px;
+                color: #2d3748;
+            }
+
+            .feature-card p {
+                color: #6c757d;
+                line-height: 1.6;
             }
         </style>
     </head>
     <body>
-        <header>
-            <nav>
-                <div class="logo">🎓 UniClubs</div>
-                <ul>
-                    <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/clubs">Clubs</a></li>
-                    <li><a href="${pageContext.request.contextPath}/events">Events</a></li>
-                    <li><a href="${pageContext.request.contextPath}/about">About</a></li>
-                </ul>
-                <a href="${pageContext.request.contextPath}/login" class="btn">Student Portal</a>
-            </nav>
-        </header>
+        <%@ include file="header.jsp" %>
 
-        <section class="hero">
-            <div class="hero-content">
-                <h1>University Club Management System</h1>
-                <p>Empowering university students to discover, join, and manage campus clubs and organizations</p>
-                <div class="cta-buttons">
-                    <a href="${pageContext.request.contextPath}/clubs" class="btn-primary">Explore Clubs</a>
-                    <a href="${pageContext.request.contextPath}/register-club" class="btn-secondary">Register a Club</a>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content" data-aos="fade-up">
+                    <h1>University Club Management System</h1>
+                    <p>Empowering university students to discover, join, and manage campus clubs and organizations</p>
+                    <div class="hero-buttons">
+                        <a href="${pageContext.request.contextPath}/clubs" class="btn btn-hero-primary">
+                            <i class="bi bi-compass"></i> Explore Clubs
+                        </a>
+                        <a href="${pageContext.request.contextPath}/create-club" class="btn btn-hero-secondary">
+                            <i class="bi bi-plus-circle"></i> Register a Club
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="stats">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number">${stats.totalClubs}+</span>
-                    <span class="stat-label">Active Clubs</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number"><fmt:formatNumber value="${stats.totalMembers}" type="number" groupingUsed="true"/>+</span>
-                    <span class="stat-label">Student Members</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">${stats.totalEvents}+</span>
-                    <span class="stat-label">Events This Year</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number"><fmt:formatNumber value="${stats.satisfactionRate}" type="number" maxFractionDigits="0"/>%</span>
-                    <span class="stat-label">Satisfaction Rate</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="clubs-section">
-            <h2 class="section-title">Featured Clubs</h2>
-            <div class="clubs-grid">
-                <c:forEach var="club" items="${featuredClubs}">
-                    <div class="club-card">
-                        <div class="club-header">
-                            <c:choose>
-                                <c:when test="${not empty club.logo}">
-                                    <img src="${pageContext.request.contextPath}/images/clubs/${club.logo}" 
-                                         alt="${club.clubName}" style="width: 80px; height: 80px; border-radius: 50%;">
-                                </c:when>
-                                <c:otherwise>
-                                    🎯
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                        <div class="club-body">
-                            <h4>${club.clubName}</h4>
-                            <p>
-                                <c:choose>
-                                    <c:when test="${fn:length(club.description) > 100}">
-                                        ${fn:substring(club.description, 0, 100)}...
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${club.description}
-                                    </c:otherwise>
-                                </c:choose>
-                            </p>
-                            <div class="club-meta">
-                                <span>👥 ${club.memberCount} Members</span>
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-people-fill"></i>
                             </div>
-                            <a href="${pageContext.request.contextPath}/club-detail?id=${club.clubID}" class="btn-view">View Details</a>
+                            <span class="stat-number">${stats.totalClubs}+</span>
+                            <span class="stat-label">Active Clubs</span>
                         </div>
                     </div>
-                </c:forEach>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-person-check-fill"></i>
+                            </div>
+                            <span class="stat-number"><fmt:formatNumber value="${stats.totalMembers}" type="number" groupingUsed="true"/>+</span>
+                            <span class="stat-label">Student Members</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-calendar-event-fill"></i>
+                            </div>
+                            <span class="stat-number">${stats.totalEvents}+</span>
+                            <span class="stat-label">Events This Year</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-emoji-smile-fill"></i>
+                            </div>
+                            <span class="stat-number"><fmt:formatNumber value="${stats.satisfactionRate}" type="number" maxFractionDigits="0"/>%</span>
+                            <span class="stat-label">Satisfaction Rate</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Featured Clubs Section -->
+        <section class="clubs-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Featured Clubs</h2>
+                <div class="row g-4">
+                    <c:forEach var="club" items="${featuredClubs}" varStatus="status">
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="${status.index * 100}">
+                            <div class="club-card">
+                                <div class="club-card-header">
+                                    <c:choose>
+                                        <c:when test="${not empty club.logo}">
+                                            <img src="${pageContext.request.contextPath}/images/clubs/${club.logo}" 
+                                                 alt="${club.clubName}" class="club-logo">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="club-emoji">🎯</div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="club-card-body">
+                                    <h4>${club.clubName}</h4>
+                                    <p>
+                                        <c:choose>
+                                            <c:when test="${fn:length(club.description) > 100}">
+                                                ${fn:substring(club.description, 0, 100)}...
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${club.description}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
+                                    <div class="club-meta">
+                                        <div class="club-meta-item">
+                                            <i class="bi bi-people-fill"></i>
+                                            <span>${club.memberCount} Members</span>
+                                        </div>
+                                    </div>
+                                    <a href="${pageContext.request.contextPath}/club-detail?id=${club.clubID}" class="btn-view-club">
+                                        <i class="bi bi-arrow-right-circle"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Why Choose UniClubs?</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-search"></i>
+                            </div>
+                            <h4>Easy Discovery</h4>
+                            <p>Find clubs that match your interests with our smart search system</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <h4>Event Management</h4>
+                            <p>Stay updated with upcoming events and activities</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                            <h4>Communication</h4>
+                            <p>Connect and communicate with club members easily</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <h4>Track Progress</h4>
+                            <p>Monitor your involvement and achievements</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
         <section class="cta-section">
-            <h2>Ready to Get Involved?</h2>
-            <p>Join a club today and make the most of your university experience!</p>
-            <a href="${pageContext.request.contextPath}/clubs" class="btn-primary">Browse All Clubs</a>
+            <div class="container">
+                <div data-aos="zoom-in">
+                    <h2>Ready to Get Involved?</h2>
+                    <p>Join a club today and make the most of your university experience!</p>
+                    <a href="${pageContext.request.contextPath}/clubs" class="btn-cta">
+                        <i class="bi bi-rocket-takeoff"></i> Browse All Clubs
+                    </a>
+                </div>
+            </div>
         </section>
 
-        <footer>
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-                        <li><a href="${pageContext.request.contextPath}/clubs">All Clubs</a></li>
-                        <li><a href="${pageContext.request.contextPath}/events">Events</a></li>
-                        <li><a href="${pageContext.request.contextPath}/about">About Us</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>For Students</h3>
-                    <ul>
-                        <li><a href="${pageContext.request.contextPath}/join">Join a Club</a></li>
-                        <li><a href="${pageContext.request.contextPath}/dashboard">My Dashboard</a></li>
-                        <li><a href="${pageContext.request.contextPath}/guidelines">Guidelines</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>For Club Leaders</h3>
-                    <ul>
-                        <li><a href="${pageContext.request.contextPath}/register-club">Register Club</a></li>
-                        <li><a href="${pageContext.request.contextPath}/manage">Manage Members</a></li>
-                        <li><a href="${pageContext.request.contextPath}/resources">Resources</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact</h3>
-                    <ul>
-                        <li><a href="mailto:clubs@university.edu">Email Us</a></li>
-                        <li><a href="${pageContext.request.contextPath}/contact">Contact Form</a></li>
-                        <li><a href="${pageContext.request.contextPath}/feedback">Feedback</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 University Club Management System. All rights reserved.</p>
-            </div>
-        </footer>
+        <%@ include file="footer.jsp" %>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- AOS Animation -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100
+            });
+        </script>
     </body>
 </html>
