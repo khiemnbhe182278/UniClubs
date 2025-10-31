@@ -3,6 +3,7 @@ package controller;
 import dal.EventDAO;
 import dal.ClubDAO;
 import dal.MemberDAO;
+import dal.UserDAO;
 import model.Event;
 import model.Club;
 import model.User;
@@ -25,12 +26,14 @@ public class CreateEventServlet extends HttpServlet {
     private EventDAO eventDAO;
     private ClubDAO clubDAO;
     private MemberDAO memberDAO;
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         eventDAO = new EventDAO();
         clubDAO = new ClubDAO();
         memberDAO = new MemberDAO();
+        userDAO = new UserDAO();
     }
 
     @Override
@@ -49,6 +52,15 @@ public class CreateEventServlet extends HttpServlet {
         List<Club> myClubs = clubDAO.getUserLeadClubs(user.getUserID());
         request.setAttribute("myClubs", myClubs);
 
+        // Truyền thêm clubId nếu user là Leader hoặc Faculty
+        if (user.getRoleID() == 2) { // Leader
+            Integer clubId = userDAO.getLeaderPrimaryClubId(user.getUserID());
+            request.setAttribute("userClubId", clubId);
+        } else if (user.getRoleID() == 3) { // Faculty
+            Integer clubId = userDAO.getFacultyPrimaryClubId(user.getUserID());
+            request.setAttribute("userClubId", clubId);
+        }
+
         request.getRequestDispatcher("create-event.jsp").forward(request, response);
     }
 
@@ -61,6 +73,8 @@ public class CreateEventServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
+        User user = (User) session.getAttribute("user");
 
         try {
             int clubId = Integer.parseInt(request.getParameter("clubId"));
@@ -78,6 +92,10 @@ public class CreateEventServlet extends HttpServlet {
                 doGet(request, response);
                 return;
             }
+
+
+
+
 
             // Parse date and time
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -15,47 +15,41 @@ import java.util.List;
 
 @WebServlet(name = "ManageMembersServlet", urlPatterns = {"/admin/members"})
 public class ManageMembersServlet extends HttpServlet {
-
+    
     private AdminDAO adminDAO;
     private MemberDAO memberDAO;
-
+    
     @Override
     public void init() throws ServletException {
         adminDAO = new AdminDAO();
         memberDAO = new MemberDAO();
     }
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        if (user == null || !"Admin".equals(user.getRoleName())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+        
 
         List<Member> pendingMembers = adminDAO.getPendingMembers();
         request.setAttribute("pendingMembers", pendingMembers);
-
+        
         request.getRequestDispatcher("/admin-members.jsp").forward(request, response);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String action = request.getParameter("action");
         int memberId = Integer.parseInt(request.getParameter("memberId"));
-
+        
         boolean success = false;
         if ("approve".equals(action)) {
             success = memberDAO.approveMember(memberId);
         } else if ("reject".equals(action)) {
             success = memberDAO.rejectMember(memberId);
         }
-
+        
         response.sendRedirect(request.getContextPath() + "/admin/members");
     }
 }
