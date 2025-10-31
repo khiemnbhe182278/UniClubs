@@ -9,7 +9,244 @@ import model.News;
 import model.Stats;
 import model.User;
 
+/**
+ * ClubDAO
+ * ------
+ * VN: Lớp DAO chứa các phương thức truy vấn liên quan đến bảng Clubs cùng các thông tin liên quan
+ * (thành viên, sự kiện, thống kê...).
+ * - Kết nối DB được kế thừa từ DBContext (thuộc tính `connection`).
+ * - Các phương thức trả về model objects (Club, User, Stats...) hoặc primitive values.
+ * - Lưu ý bảo mật: tránh in thông tin nhạy cảm; các phương thức chỉ nên trả dữ liệu cần thiết.
+ *
+ * EN: Data Access Object for club-related database operations.
+ * - Inherits DBContext which provides a `connection` to the database.
+ * - Methods return model objects (Club, User, Stats) or counts/booleans for actions.
+ * - Security note: avoid exposing sensitive fields and let caller handle presentation.
+ */
 public class ClubDAO extends DBContext {
+
+    /**
+     * getClubLeader
+     * ----------------
+     * VN: Trả về đối tượng User đại diện cho leader của CLB (nếu có).
+     * - Input: clubId (ClubID)
+     * - Output: User object của leader hoặc null nếu không tìm thấy
+     * - SQL: join giữa Users và ClubMembers, lọc Role = 'Leader' và Status = 'Approved'
+     *
+     * EN: Returns the User who is the leader of the club.
+     * - Input: clubId
+     * - Output: User for leader, or null if none found
+     * - The query joins Users and ClubMembers, filters Role='Leader' and approved membership.
+     */
+    public User getClubLeader(int clubId) {
+        String sql = "SELECT u.* FROM Users u "
+                + "INNER JOIN ClubMembers cm ON u.UserID = cm.UserID "
+                + "WHERE cm.ClubID = ? AND cm.Role = 'Leader' AND cm.Status = 'Approved'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting club leader: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+// Get club faculty/advisor
+    public User getClubFaculty(int clubId) {
+        String sql = "SELECT u.* FROM Users u "
+                + "INNER JOIN Clubs c ON u.UserID = c.FacultyID "
+                + "WHERE c.ClubID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting club faculty: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public boolean updateClub(Club club) {
+        String sql = "UPDATE Clubs SET ClubName = ?, Description = ?, CategoryID = ?, "
+                + "UpdatedAt = GETDATE() WHERE ClubID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, club.getClubName());
+            ps.setString(2, club.getDescription());
+            if (club.getCategoryID() > 0) {
+                ps.setInt(3, club.getCategoryID());
+            } else {
+                ps.setNull(3, java.sql.Types.INTEGER);
+            }
+            ps.setInt(4, club.getClubID());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getMemberCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Members WHERE ClubID = ? AND JoinStatus = 'Approved'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getNewMembersCount(int clubId, int days) {
+        String sql = "SELECT COUNT(*) FROM Members "
+                + "WHERE ClubID = ? AND JoinStatus = 'Approved' "
+                + "AND JoinedAt >= DATEADD(day, -?, GETDATE())";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ps.setInt(2, days);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getPendingMembersCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Members WHERE ClubID = ? AND JoinStatus = 'Pending'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+// EventDAO.java
+    public int getClubEventCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Events WHERE ClubID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getUpcomingEventCount(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Events "
+                + "WHERE ClubID = ? AND EventDate >= GETDATE() AND Status = 'Approved'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Club> advancedSearch(String keyword, String category, int minMembers, String sortBy) {
+        List<Club> clubs = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT c.ClubID, c.ClubName, c.Description, c.Logo, c.Status, ");
+        sql.append("COUNT(DISTINCT m.MemberID) as MemberCount ");
+        sql.append("FROM Clubs c ");
+        sql.append("LEFT JOIN Members m ON c.ClubID = m.ClubID AND m.JoinStatus = 'Approved' ");
+        sql.append("WHERE c.Status = 'Active' ");
+
+        List<String> params = new ArrayList<>();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append("AND (c.ClubName LIKE ? OR c.Description LIKE ?) ");
+            params.add("%" + keyword + "%");
+            params.add("%" + keyword + "%");
+        }
+
+        sql.append("GROUP BY c.ClubID, c.ClubName, c.Description, c.Logo, c.Status ");
+
+        if (minMembers > 0) {
+            sql.append("HAVING COUNT(DISTINCT m.MemberID) >= ? ");
+            params.add(String.valueOf(minMembers));
+        }
+
+        // Sort
+        if ("members".equals(sortBy)) {
+            sql.append("ORDER BY MemberCount DESC");
+        } else if ("newest".equals(sortBy)) {
+            sql.append("ORDER BY c.CreatedAt DESC");
+        } else {
+            sql.append("ORDER BY c.ClubName ASC");
+        }
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql.toString());
+            for (int i = 0; i < params.size(); i++) {
+                ps.setString(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Club club = new Club();
+                club.setClubID(rs.getInt("ClubID"));
+                club.setClubName(rs.getString("ClubName"));
+                club.setDescription(rs.getString("Description"));
+                club.setLogo(rs.getString("Logo"));
+                club.setStatus(rs.getString("Status"));
+                club.setMemberCount(rs.getInt("MemberCount"));
+                clubs.add(club);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubs;
+    }
 
     public List<Club> getFeaturedClubs(int limit) {
         List<Club> clubs = new ArrayList<>();
@@ -156,7 +393,51 @@ public class ClubDAO extends DBContext {
         return clubs;
     }
 
+    public boolean createClub(Club club) {
+        String sql = "INSERT INTO Clubs (ClubName, Description, FacultyID, LeaderID, Status) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, club.getClubName());
+            ps.setString(2, club.getDescription());
+            ps.setInt(3, club.getFacultyID());
+            ps.setInt(4, club.getLeaderID());
+            ps.setString(5, club.getStatus());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 // Get club by ID
+
+    public List<Club> getUserLeadClubs(int userId) {
+        List<Club> clubs = new ArrayList<>();
+        String sql = "SELECT c.* FROM Clubs c "
+                + "WHERE c.LeaderID = ? AND c.Status = 'Active' "
+                + "ORDER BY c.ClubName";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Club club = new Club();
+                club.setClubID(rs.getInt("ClubID"));
+                club.setClubName(rs.getString("ClubName"));
+                club.setDescription(rs.getString("Description"));
+                club.setStatus(rs.getString("Status"));
+                clubs.add(club);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubs;
+    }
+
     public Club getClubById(int clubId) {
         String sql = "SELECT c.*, COUNT(DISTINCT m.MemberID) as MemberCount "
                 + "FROM Clubs c "

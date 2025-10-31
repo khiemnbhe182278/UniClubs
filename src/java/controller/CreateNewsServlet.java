@@ -1,69 +1,107 @@
 package controller;
 
 import dal.NewsDAO;
+import dal.ClubDAO;
 import model.News;
-import jakarta.servlet.*;
+import model.User;
+import model.Club;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
-@WebServlet("/createNews")
+@WebServlet(name = "CreateNewsServlet", urlPatterns = {"/leader/create-news"})
 public class CreateNewsServlet extends HttpServlet {
+
+    private NewsDAO newsDAO;
+    private ClubDAO clubDAO;
+
+    @Override
+    public void init() throws ServletException {
+        newsDAO = new NewsDAO();
+        clubDAO = new ClubDAO();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/news/createNews.jsp").forward(request, response);
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        try {
+            String clubIdParam = request.getParameter("clubId");
+            if (clubIdParam == null || clubIdParam.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=noclubid");
+                return;
+            }
+
+            int clubId = Integer.parseInt(clubIdParam);
+            Club club = clubDAO.getClubById(clubId);
+
+            if (club == null) {
+                response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=clubnotfound");
+                return;
+            }
+
+            request.setAttribute("club", club);
+            request.getRequestDispatcher("/create-news.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=invalidclubid");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String clubIDParam = request.getParameter("clubID");
-        String title = request.getParameter("title");
-        String content = request.getParameter("content");
+        HttpSession session = request.getSession(false);
 
-        // Server-side validation
-        if (clubIDParam == null || title == null || title.trim().isEmpty()
-                || content == null || content.trim().isEmpty()) {
-
-            request.setAttribute("errorMessage", "All fields are required. Please fill in all information.");
-
-            // Retain user input
-            request.setAttribute("title", title);
-            request.setAttribute("content", content);
-
-            request.getRequestDispatcher("/news/createNews.jsp").forward(request, response);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         try {
-            int clubID = Integer.parseInt(clubIDParam);
+            int clubId = Integer.parseInt(request.getParameter("clubId"));
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            String status = request.getParameter("status");
 
-            News n = new News();
-            n.setClubID(clubID);
-            n.setTitle(title);
-            n.setContent(content);
-            n.setStatus("Published"); // Tin tức thường được công bố ngay lập tức
-            n.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-
-            NewsDAO dao = new NewsDAO();
-            boolean success = dao.createNews(n);
-
-            if (success) {
-                request.getSession().setAttribute("successMessage", "News created successfully!");
-                response.sendRedirect("listNews?clubID=" + clubID); // Chuyển hướng đến trang danh sách tin tức
-            } else {
-                request.setAttribute("errorMessage", "Failed to create news. Please try again.");
-                request.setAttribute("title", title);
-                request.setAttribute("content", content);
-                request.getRequestDispatcher("/news/createNews.jsp").forward(request, response);
+            // Validation
+            if (title == null || title.trim().isEmpty()
+                    || content == null || content.trim().isEmpty()
+                    || status == null || status.trim().isEmpty()) {
+                request.setAttribute("error", "All fields are required");
+                doGet(request, response);
+                return;
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Invalid Club ID. Please contact support.");
-            request.getRequestDispatcher("/news/createNews.jsp").forward(request, response);
+
+            News news = new News();
+            news.setClubID(clubId);
+            news.setTitle(title.trim());
+            news.setContent(content.trim());
+            news.setStatus(status);
+
+            boolean created = newsDAO.createNews(news);
+
+            if (created) {
+                response.sendRedirect(request.getContextPath() + "/leader/news?clubId=" + clubId + "&success=created");
+            } else {
+                request.setAttribute("error", "Failed to create news");
+                doGet(request, response);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error creating news: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/leader/news?error=unexpected");
         }
     }
 }

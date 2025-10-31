@@ -15,6 +15,8 @@ public class Club {
     private Timestamp updatedAt;
     private int memberCount;
     private String categoryName;
+    private int categoryID;
+    private String LeaderName;
 
     // Constructors
     public Club() {
@@ -86,4 +88,53 @@ public class Club {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getFacultyID() {
+        return facultyID;
+    }
+
+    public void setFacultyID(int facultyID) {
+        this.facultyID = facultyID;
+    }
+
+    public int getLeaderID() {
+        return leaderID;
+    }
+
+    public void setLeaderID(int leaderID) {
+        this.leaderID = leaderID;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public String getLeaderName() {
+        return LeaderName;
+    }
+
+    public void setLeaderName(String LeaderName) {
+        this.LeaderName = LeaderName;
+    }
+
 }

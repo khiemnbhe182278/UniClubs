@@ -15,6 +15,8 @@ public class Event {
     private String location;
     private int maxParticipants;
     private int currentParticipants;
+    private Timestamp registrationDeadline;  // NEW FIELD
+    private String eventImage;                // NEW FIELD
 
     public Event() {
     }
@@ -106,5 +108,68 @@ public class Event {
 
     public void setCurrentParticipants(int currentParticipants) {
         this.currentParticipants = currentParticipants;
+    }
+
+    // NEW GETTERS AND SETTERS
+    public Timestamp getRegistrationDeadline() {
+        return registrationDeadline;
+    }
+
+    public void setRegistrationDeadline(Timestamp registrationDeadline) {
+        this.registrationDeadline = registrationDeadline;
+    }
+
+    public String getEventImage() {
+        return eventImage;
+    }
+
+    public void setEventImage(String eventImage) {
+        this.eventImage = eventImage;
+    }
+
+    // HELPER METHODS
+    /**
+     * Check if registration is still open
+     *
+     * @return true if registration deadline hasn't passed
+     */
+    public boolean isRegistrationOpen() {
+        if (registrationDeadline == null) {
+            return true; // No deadline means always open
+        }
+        return new Timestamp(System.currentTimeMillis()).before(registrationDeadline);
+    }
+
+    /**
+     * Check if event is full
+     *
+     * @return true if max participants reached
+     */
+    public boolean isFull() {
+        if (maxParticipants <= 0) {
+            return false; // No limit
+        }
+        return currentParticipants >= maxParticipants;
+    }
+
+    /**
+     * Get available slots
+     *
+     * @return number of slots remaining, or -1 if unlimited
+     */
+    public int getAvailableSlots() {
+        if (maxParticipants <= 0) {
+            return -1; // Unlimited
+        }
+        return maxParticipants - currentParticipants;
+    }
+
+    /**
+     * Check if user can register
+     *
+     * @return true if registration is open and event is not full
+     */
+    public boolean canRegister() {
+        return isRegistrationOpen() && !isFull() && "Approved".equals(status);
     }
 }

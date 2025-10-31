@@ -1,0 +1,143 @@
+create database StudentClubs
+use StudentClubs
+-- ROLES
+CREATE TABLE Roles (
+    RoleID INT PRIMARY KEY IDENTITY(1,1),
+    RoleName NVARCHAR(50) UNIQUE NOT NULL -- Admin, ClubPresident, ClubSupervisor, Member
+);
+
+-- USERS (bỏ PasswordHash)
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENaTITY(1,1),
+    FullName NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID),
+    Status NVARCHAR(20) DEFAULT 'Active' CHECK (Status IN ('Active','Banned')),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- CLUBS
+CREATE TABLE Clubs (
+    ClubID INT PRIMARY KEY IDENTITY(1,1),
+    ClubName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(MAX),
+    PresidentID INT FOREIGN KEY REFERENCES Users(UserID),
+    SupervisorID INT FOREIGN KEY REFERENCES Users(UserID),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- CLUB MEMBERSHIP
+CREATE TABLE ClubMembers (
+    ClubID INT FOREIGN KEY REFERENCES Clubs(ClubID),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    Status NVARCHAR(20) DEFAULT 'Pending' CHECK (Status IN ('Pending','Accepted','Denied')),
+    JoinDate DATETIME DEFAULT GETDATE(),
+    PRIMARY KEY (ClubID, UserID)
+);
+
+-- EVENTS
+CREATE TABLE Events (
+    EventID INT PRIMARY KEY IDENTITY(1,1),
+    ClubID INT FOREIGN KEY REFERENCES Clubs(ClubID),
+    EventName NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(MAX),
+    EventDate DATETIME NOT NULL,
+    Status NVARCHAR(20) DEFAULT 'Draft' CHECK (Status IN ('Draft','Pending','Approved','Rejected','Published')),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- EVENT REGISTRATIONS
+CREATE TABLE EventRegistrations (
+    RegistrationID INT PRIMARY KEY IDENTITY(1,1),
+    EventID INT FOREIGN KEY REFERENCES Events(EventID),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    Status NVARCHAR(20) DEFAULT 'Pending' CHECK (Status IN ('Pending','Approved','Rejected')),
+    RegisteredAt DATETIME DEFAULT GETDATE()
+);
+
+-- NEWS
+CREATE TABLE News (
+    NewsID INT PRIMARY KEY IDENTITY(1,1),
+    ClubID INT FOREIGN KEY REFERENCES Clubs(ClubID),
+    Title NVARCHAR(200) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME NULL
+);
+
+-- RULES
+CREATE TABLE Rules (
+    RuleID INT PRIMARY KEY IDENTITY(1,1),
+    ClubID INT FOREIGN KEY REFERENCES Clubs(ClubID),
+    Title NVARCHAR(200) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- SUPERVISOR REPORTS
+CREATE TABLE SupervisorReports (
+    ReportID INT PRIMARY KEY IDENTITY(1,1),
+    ClubID INT FOREIGN KEY REFERENCES Clubs(ClubID),
+    SupervisorID INT FOREIGN KEY REFERENCES Users(UserID),
+    Content NVARCHAR(MAX) NOT NULL,
+    Response NVARCHAR(MAX) NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    RespondedAt DATETIME NULL
+);
+-- Roles
+INSERT INTO Roles (RoleName) VALUES
+(N'Admin'),
+(N'ClubPresident'),
+(N'ClubSupervisor'),
+(N'Member');
+
+-- Users
+INSERT INTO Users (FullName, Email, RoleID, Status)
+VALUES
+(N'Admin User', 'admin@fpt.edu.vn', 1, 'Active'),
+(N'John President', 'president@fpt.edu.vn', 2, 'Active'),
+(N'Jane Supervisor', 'supervisor@fpt.edu.vn', 3, 'Active'),
+(N'Member One', 'member1@fpt.edu.vn', 4, 'Active'),
+(N'Member Two', 'member2@fpt.edu.vn', 4, 'Active');
+
+-- Clubs
+INSERT INTO Clubs (ClubName, Description, PresidentID, SupervisorID)
+VALUES
+(N'IT Club', N'Information Technology Club', 2, 3),
+(N'Music Club', N'University Music Club', 2, 3);
+
+-- Club Members
+INSERT INTO ClubMembers (ClubID, UserID, Status)
+VALUES
+(1, 4, 'Accepted'),
+(1, 5, 'Pending');
+
+-- Events
+INSERT INTO Events (ClubID, EventName, Description, EventDate, Status)
+VALUES
+(1, N'AI Workshop', N'Introduction to Artificial Intelligence', '2025-10-15', 'Approved'),
+(2, N'Music Festival', N'Annual music performance', '2025-11-01', 'Pending');
+
+-- EventRegistrations
+INSERT INTO EventRegistrations (EventID, UserID, Status)
+VALUES
+(1, 4, 'Approved'),
+(2, 5, 'Pending');
+
+-- News
+INSERT INTO News (ClubID, Title, Content)
+VALUES
+(1, N'Welcome New Members', N'Thank you for joining IT Club!'),
+(2, N'Music Club Weekly Update', N'Rehearsals start next week.');
+
+-- Rules
+INSERT INTO Rules (ClubID, Title, Content)
+VALUES
+(1, N'Code of Conduct', N'Be respectful and collaborative.'),
+(2, N'Discipline Policy', N'Members must attend at least 70% meetings.');
+
+-- Supervisor Reports
+INSERT INTO SupervisorReports (ClubID, SupervisorID, Content, Response)
+VALUES
+(1, 3, N'Please submit financial report.', N'Noted, will submit by next week.'),
+(2, 3, N'Prepare event safety plan.', NULL);
