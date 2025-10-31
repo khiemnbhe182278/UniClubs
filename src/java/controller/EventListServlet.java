@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "EventListServlet", urlPatterns = {"/events", "/leader/events"})
+@WebServlet(name = "EventListServlet", urlPatterns = {"/events"})
 public class EventListServlet extends HttpServlet {
     
     private EventDAO eventDAO;

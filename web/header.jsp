@@ -35,33 +35,6 @@
         transform: translateY(-2px);
     }
 
-    .navbar-custom .dropdown-menu {
-        background: #fff;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        border-radius: 8px;
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-    }
-
-    .navbar-custom .dropdown-item {
-        padding: 0.6rem 1rem;
-        border-radius: 5px;
-        transition: all 0.2s ease;
-        color: #333;
-    }
-
-    .navbar-custom .dropdown-item:hover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #fff;
-        transform: translateX(5px);
-    }
-
-    .navbar-custom .dropdown-item i {
-        width: 20px;
-        margin-right: 8px;
-    }
-
     .btn-custom {
         background: #fff;
         color: #667eea;
@@ -89,13 +62,6 @@
         margin-right: 0.5rem;
     }
 
-    .club-badge {
-        display: block;
-        font-size: 0.7rem;
-        opacity: 0.85;
-        margin-top: 0.2rem;
-    }
-
     .navbar-toggler {
         border-color: rgba(255,255,255,0.5);
     }
@@ -112,6 +78,12 @@
         .user-greeting {
             margin: 0.5rem 0;
             display: inline-block;
+        }
+
+        .btn-custom {
+            margin: 0.3rem 0;
+            display: block;
+            width: 100%;
         }
     }
 </style>
@@ -155,109 +127,17 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <!-- Admin Menu -->
-                <c:if test="${not empty sessionScope.user and sessionScope.user.roleID == 1}">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-shield-check"></i> Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/users">
-                                    <i class="bi bi-person-lines-fill"></i> Manage Accounts
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/create-account">
-                                    <i class="bi bi-person-plus"></i> Create Account
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/clubs">
-                                    <i class="bi bi-diagram-3"></i> Manage Clubs
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/events">
-                                    <i class="bi bi-calendar-check"></i> Manage Events
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/members">
-                                    <i class="bi bi-people-fill"></i> Manage Members
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin-reports.jsp">
-                                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
-                                </a></li>
-                        </ul>
-                    </li>
-                </c:if>
-
-                <!-- Leader Menu - UPDATED WITH CLUBID -->
-                <c:if test="${not empty sessionScope.user and (sessionScope.user.roleID == 2 or sessionScope.user.roleID == 4 or sessionScope.user.roleID == 1)}">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-star"></i> Leader
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <c:set var="clubParamBoth" value="${not empty sessionScope.currentClubId ? '?clubId='.concat(sessionScope.currentClubId).concat('&clubID=').concat(sessionScope.currentClubId) : ''}" />
-
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/leader/dashboard${clubParamBoth}">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a></li>
-                            <li><hr class="dropdown-divider"></li>
-
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/club/members${clubParamBoth}">
-                                    <i class="bi bi-people"></i> Members
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/leader/create-news${clubParamBoth}">
-                                    <i class="bi bi-newspaper"></i> News
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/create-event${clubParamBoth}">
-                                    <i class="bi bi-calendar-plus"></i> Create Event
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/leader/rules?clubId=${sessionScope.currentClubId}">
-                                    <i class="bi bi-file-text"></i> Rules
-                                </a></li>
-
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/leader/payments${clubParamBoth}">
-                                    <i class="bi bi-credit-card"></i> Payments
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/leader/statistics${clubParamBoth}">
-                                    <i class="bi bi-graph-up"></i> Statistics
-                                </a></li>
-                        </ul>
-                    </li>
-                </c:if>
-
-                <!-- Faculty Menu - UPDATED WITH CLUBID -->
-                <c:if test="${not empty sessionScope.user and sessionScope.user.roleID == 3}">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-workspace"></i> Faculty
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <c:set var="clubParamBoth" value="${not empty sessionScope.currentClubId ? '?clubId='.concat(sessionScope.currentClubId).concat('&clubID=').concat(sessionScope.currentClubId) : ''}" />
-
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/faculty/dashboard${clubParamBoth}">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/faculty/notifications${clubParamBoth}">
-                                    <i class="bi bi-bell"></i> Notifications
-                                </a></li>
-                        </ul>
-                    </li>
-                </c:if>
-            </ul>
-
             <div class="d-flex align-items-center">
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <span class="user-greeting">
                             <i class="bi bi-person-circle"></i> Hi, ${sessionScope.user.userName}
-                            <!-- Display current club name if available -->
-                            <c:if test="${not empty sessionScope.currentClub}">
-                                <span class="club-badge">
-                                    <i class="bi bi-building"></i> ${sessionScope.currentClub.clubName}
-                                </span>
-                            </c:if>
                         </span>
+
+                        <a class="nav-link" href="${pageContext.request.contextPath}/dashboard">
+                            <i class="bi bi-envelope"></i> Dashboard
+                        </a>
+
                         <a class="btn btn-custom btn-sm" href="${pageContext.request.contextPath}/profile">
                             <i class="bi bi-person"></i> Profile
                         </a>
@@ -267,7 +147,7 @@
                     </c:when>
                     <c:otherwise>
                         <a class="btn btn-custom" href="${pageContext.request.contextPath}/login">
-                            <i class="bi bi-box-arrow-in-right"></i> Student Portal
+                            <i class="bi bi-box-arrow-in-right"></i> Login
                         </a>
                     </c:otherwise>
                 </c:choose>

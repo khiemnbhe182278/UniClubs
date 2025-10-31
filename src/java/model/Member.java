@@ -12,6 +12,9 @@ public class Member {
     private String userName;
     private String email;
     private String clubName;
+    private String fullName;
+    private String studentID;
+    private String faculty;
 
     public Member() {
     }
@@ -79,5 +82,29 @@ public class Member {
 
     public void setClubName(String clubName) {
         this.clubName = clubName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
     }
 }

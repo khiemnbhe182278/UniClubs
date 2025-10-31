@@ -9,7 +9,85 @@ import model.News;
 import model.Stats;
 import model.User;
 
+/**
+ * ClubDAO
+ * ------
+ * VN: Lớp DAO chứa các phương thức truy vấn liên quan đến bảng Clubs cùng các thông tin liên quan
+ * (thành viên, sự kiện, thống kê...).
+ * - Kết nối DB được kế thừa từ DBContext (thuộc tính `connection`).
+ * - Các phương thức trả về model objects (Club, User, Stats...) hoặc primitive values.
+ * - Lưu ý bảo mật: tránh in thông tin nhạy cảm; các phương thức chỉ nên trả dữ liệu cần thiết.
+ *
+ * EN: Data Access Object for club-related database operations.
+ * - Inherits DBContext which provides a `connection` to the database.
+ * - Methods return model objects (Club, User, Stats) or counts/booleans for actions.
+ * - Security note: avoid exposing sensitive fields and let caller handle presentation.
+ */
 public class ClubDAO extends DBContext {
+
+    /**
+     * getClubLeader
+     * ----------------
+     * VN: Trả về đối tượng User đại diện cho leader của CLB (nếu có).
+     * - Input: clubId (ClubID)
+     * - Output: User object của leader hoặc null nếu không tìm thấy
+     * - SQL: join giữa Users và ClubMembers, lọc Role = 'Leader' và Status = 'Approved'
+     *
+     * EN: Returns the User who is the leader of the club.
+     * - Input: clubId
+     * - Output: User for leader, or null if none found
+     * - The query joins Users and ClubMembers, filters Role='Leader' and approved membership.
+     */
+    public User getClubLeader(int clubId) {
+        String sql = "SELECT u.* FROM Users u "
+                + "INNER JOIN ClubMembers cm ON u.UserID = cm.UserID "
+                + "WHERE cm.ClubID = ? AND cm.Role = 'Leader' AND cm.Status = 'Approved'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting club leader: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+// Get club faculty/advisor
+    public User getClubFaculty(int clubId) {
+        String sql = "SELECT u.* FROM Users u "
+                + "INNER JOIN Clubs c ON u.UserID = c.FacultyID "
+                + "WHERE c.ClubID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
+                user.setEmail(rs.getString("Email"));
+                user.setRoleID(rs.getInt("RoleID"));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting club faculty: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     public boolean updateClub(Club club) {
         String sql = "UPDATE Clubs SET ClubName = ?, Description = ?, CategoryID = ?, "

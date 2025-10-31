@@ -13,6 +13,19 @@ import java.io.IOException;
 
 @WebServlet(name = "CreateClubServlet", urlPatterns = {"/create-club"})
 public class CreateClubServlet extends HttpServlet {
+    /*
+     * CreateClubServlet
+     * (Tiếng Việt)
+     * Mục đích: Cho phép người dùng đã đăng nhập tạo một CLB mới. CLB mới ban đầu có trạng thái "Pending"
+     * để chờ admin duyệt.
+     * - Input (doPost): form fields - "clubName", "description". Session chứa "user".
+     * - Xử lý:
+     *   + Kiểm tra đã đăng nhập, validate các trường bắt buộc.
+     *   + Tạo đối tượng Club, gán leaderID = userID hiện tại, facultyID tạm thời cũng gán userID.
+     *   + Gọi ClubDAO.createClub(club) để lưu vào DB.
+     * - Output: Hiển thị thông báo thành công (chờ duyệt) hoặc lỗi nếu tạo thất bại.
+     * - Ghi chú: Việc gán FacultyID = userID là tạm thời trong mã nguồn này và nên thay bằng lựa chọn chính xác.
+     */
 
     private ClubDAO clubDAO;
 
@@ -25,6 +38,7 @@ public class CreateClubServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Chỉ cho phép truy cập trang tạo CLB khi đã đăng nhập
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -49,7 +63,7 @@ public class CreateClubServlet extends HttpServlet {
         String clubName = request.getParameter("clubName");
         String description = request.getParameter("description");
 
-        // Validation
+        // Validate các trường bắt buộc
         if (clubName == null || clubName.trim().isEmpty()
                 || description == null || description.trim().isEmpty()) {
             request.setAttribute("error", "All fields are required");
@@ -61,7 +75,7 @@ public class CreateClubServlet extends HttpServlet {
         club.setClubName(clubName.trim());
         club.setDescription(description.trim());
         club.setLeaderID(user.getUserID());
-        club.setFacultyID(user.getUserID()); // Temporary, should select faculty
+        club.setFacultyID(user.getUserID()); // Tạm gán, nên có lựa chọn faculty thực tế
         club.setStatus("Pending");
 
         boolean success = clubDAO.createClub(club);

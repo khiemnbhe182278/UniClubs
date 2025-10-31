@@ -182,4 +182,67 @@ public class MemberDAO extends DBContext {
         }
         return false;
     }
+    // Thêm các methods này vào MemberDAO.java
+
+// Get member count by club ID (only approved members)
+    public int getMemberCountByClubId(int clubId) {
+        String sql = "SELECT COUNT(*) FROM Members "
+                + "WHERE ClubID = ? AND JoinStatus = 'Approved'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting member count: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+// Check if user is a member of club
+    public boolean checkMember(int clubId, int userId) {
+        String sql = "SELECT COUNT(*) FROM ClubMembers "
+                + "WHERE ClubID = ? AND UserID = ? AND Status = 'Approved'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking if user is member: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+// Check if user has pending membership request
+    public boolean isPendingMember(int clubId, int userId) {
+        String sql = "SELECT COUNT(*) FROM ClubMembers "
+                + "WHERE ClubID = ? AND UserID = ? AND Status = 'Pending'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking pending membership: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

@@ -20,6 +20,28 @@ import java.util.List;
 
 @WebServlet(name = "ClubLeaderDashboardServlet", urlPatterns = {"/leader/dashboard"})
 public class ClubLeaderDashboardServlet extends HttpServlet {
+    /*
+     * ClubLeaderDashboardServlet
+     * (Tiếng Việt)
+     * Mục đích: Hiển thị dashboard dành cho vai trò Club Leader (ban chủ nhiệm CLB).
+     * - Input:
+     *   + Session chứa "user" (User). Nếu không có -> redirect /login.
+     *   + Optional request param: "clubId" để chọn CLB hiện hành.
+     * - Bảo mật/Quyền truy cập:
+     *   + Kiểm tra roleID để đảm bảo user là Leader/Manager/Admin (roleID 2/4/1 trong app này).
+     *   + Nếu user không có quyền truy cập CLB được yêu cầu -> trả về 403.
+     * - Xử lý chính:
+     *   + Lấy danh sách CLB mà user là leader (myClubs).
+     *   + Quyết định clubId hiện hành theo thứ tự: param > session > first club trong myClubs.
+     *   + Lưu clubId và club object vào session (currentClubId, currentClub) để các trang con dùng.
+     *   + Lấy dữ liệu thống kê liên quan: members, events, payments, pendingMembers, totalRevenue.
+     * - Output: Đặt nhiều attribute trên request (club, myClubs, members, events, payments, pendingMembers, totalRevenue, ...) và forward tới `/leader-dashboard.jsp`.
+     * - Lỗi: nếu user không là leader của CLB nào -> forward tới `error-no-club.jsp` với thông báo.
+     *
+     * Ghi chú:
+     * - Việc lưu clubId vào session giúp giữ trạng thái giữa các trang leader (sử dụng trong header/menus).
+     * - Các DAO nên trả dữ liệu đã lọc (ví dụ: chỉ trả payments liên quan đến clubId).
+     */
 
     private ClubDAO clubDAO;
     private MemberDAO memberDAO;
@@ -46,24 +68,24 @@ public class ClubLeaderDashboardServlet extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
 
-        // Check if user has permission (Leader, Admin, or specific role)
+        // Kiểm tra quyền: chỉ cho leader/admin/manager
         if (user.getRoleID() != 2 && user.getRoleID() != 4 && user.getRoleID() != 1) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
             return;
         }
 
-        // Get clubs where user is leader
+        // Lấy danh sách CLB do user quản lý
         List<Club> myClubs = clubDAO.getUserLeadClubs(user.getUserID());
 
         if (myClubs.isEmpty()) {
-            // User is not a leader of any club
+            // Nếu user không là leader của CLB nào -> thông báo và forward tới trang lỗi chuyên biệt
             request.setAttribute("errorMessage",
                     "You are not assigned as a leader of any club. Please contact the administrator.");
             request.getRequestDispatcher("/error-no-club.jsp").forward(request, response);
             return;
         }
 
-        // Get clubId from parameter or use first club
+        // Xác định clubId hiện hành: ưu tiên param > session > first club
         String clubIdParam = request.getParameter("clubId");
         int clubId = 0;
         Club club = null;
@@ -73,7 +95,7 @@ public class ClubLeaderDashboardServlet extends HttpServlet {
                 clubId = Integer.parseInt(clubIdParam);
                 club = clubDAO.getClubById(clubId);
 
-                // Verify user is leader of this club
+                // Xác nhận user là leader của club này (trừ khi user là Admin roleID==1)
                 boolean isLeaderOfClub = false;
                 for (Club c : myClubs) {
                     if (c.getClubID() == clubId) {
@@ -93,10 +115,8 @@ public class ClubLeaderDashboardServlet extends HttpServlet {
                 club = myClubs.get(0);
             }
         } else {
-            // Check if clubId exists in session
             Integer sessionClubId = (Integer) session.getAttribute("currentClubId");
             if (sessionClubId != null) {
-                // Verify this clubId is still valid for this user
                 boolean found = false;
                 for (Club c : myClubs) {
                     if (c.getClubID() == sessionClubId) {
@@ -111,27 +131,25 @@ public class ClubLeaderDashboardServlet extends HttpServlet {
                     club = myClubs.get(0);
                 }
             } else {
-                // Use first club
                 club = myClubs.get(0);
                 clubId = club.getClubID();
             }
         }
 
-        // SAVE CLUB ID TO SESSION - THIS IS IMPORTANT!
+        // Lưu club hiện hành vào session để các trang khác dùng lại
         session.setAttribute("currentClubId", clubId);
         session.setAttribute("currentClub", club);
 
         try {
-            // Get club statistics
+            // Lấy dữ liệu liên quan tới CLB
             List<Member> members = memberDAO.getClubMembers(clubId);
             List<Event> events = eventDAO.getEventsByClub(clubId);
             List<Payment> payments = paymentDAO.getClubPayments(clubId);
             double totalRevenue = paymentDAO.getTotalRevenue(clubId);
 
-            // Get pending members
             List<Member> pendingMembers = memberDAO.getPendingMembersByClub(clubId);
 
-            // Set attributes
+            // Đặt attribute cho JSP
             request.setAttribute("club", club);
             request.setAttribute("myClubs", myClubs);
             request.setAttribute("members", members);
@@ -141,7 +159,7 @@ public class ClubLeaderDashboardServlet extends HttpServlet {
             request.setAttribute("totalRevenue", totalRevenue);
             request.setAttribute("clubId", clubId);
 
-            // Additional statistics
+            // Thống kê nhanh
             request.setAttribute("totalMembers", members.size());
             request.setAttribute("pendingMembersCount", pendingMembers.size());
             request.setAttribute("upcomingEvents", events.size());

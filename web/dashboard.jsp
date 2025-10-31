@@ -263,7 +263,7 @@
                                         </span>
                                     </div>
                                     <c:if test="${membership.joinStatus == 'Approved'}">
-                                        <a href="${pageContext.request.contextPath}/club-detail?id=${membership.clubID}" 
+                                        <a href="${pageContext.request.contextPath}/member-club-detail?id=${membership.clubID}" 
                                            class="btn btn-primary-custom w-100">
                                             View Details
                                         </a>
