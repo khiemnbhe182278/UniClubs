@@ -10,6 +10,35 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Role;
 
+/**
+ * DAO (Data Access Object) là gì và cách hoạt động
+ * =============================================
+ * 
+ * 1. Mục đích của DAO
+ *    - DAO là "cầu nối" giữa ứng dụng web và cơ sở dữ liệu
+ *    - Giống như "thủ kho" chuyên quản lý và xử lý dữ liệu
+ * 
+ * 2. UserDAO làm những gì?
+ *    - Xử lý mọi thao tác liên quan đến dữ liệu người dùng:
+ *      + Đăng ký tài khoản mới
+ *      + Đăng nhập và xác thực
+ *      + Cập nhật thông tin cá nhân
+ *      + Tìm kiếm người dùng
+ * 
+ * 3. Cách UserDAO hoạt động
+ *    - Khi Servlet cần thông tin người dùng:
+ *      + Servlet gọi phương thức của UserDAO
+ *      + UserDAO kết nối với database
+ *      + Thực hiện câu lệnh SQL cần thiết
+ *      + Trả kết quả về cho Servlet
+ * 
+ * 4. Ví dụ thực tế
+ *    - Giống như thủ thư trong thư viện:
+ *      + Biết chính xác sách để ở đâu
+ *      + Có quyền truy cập vào kho sách
+ *      + Giúp tìm và lấy sách theo yêu cầu
+ *      + Cập nhật thông tin sách khi cần
+ */
 public class UserDAO extends DBContext {
 
     public List<Integer> getLeaderClubIds(int userId) {

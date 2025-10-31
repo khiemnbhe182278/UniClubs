@@ -8,6 +8,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
 
+/**
+ * NewsDAO - Trung Tâm Quản Lý Tin Tức
+ * ================================
+ * 
+ * 1. Vai Trò của NewsDAO
+ *    - Như "tòa soạn báo điện tử":
+ *      + Quản lý tin tức của các CLB
+ *      + Đảm bảo thông tin chính xác
+ *      + Phân phối tin tức đến người đọc
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý Nội Dung:
+ *       - Đăng tin tức mới
+ *       - Cập nhật tin đã có
+ *       - Xóa tin không còn phù hợp
+ * 
+ *    b. Tổ Chức Thông Tin:
+ *       - Phân loại theo CLB
+ *       - Sắp xếp theo thời gian
+ *       - Tìm kiếm tin tức
+ * 
+ *    c. Kiểm Soát Chất Lượng:
+ *       - Kiểm tra nội dung
+ *       - Đảm bảo định dạng
+ *       - Quản lý phiên bản
+ * 
+ * 3. Cách Hoạt Động
+ *    - Như "hệ thống báo điện tử":
+ *      + Lưu trữ có tổ chức
+ *      + Cập nhật thời gian thực
+ *      + Phân phối đa kênh
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống trang tin tức online:
+ *      + Đăng bài viết mới
+ *      + Cập nhật tin nóng
+ *      + Lưu trữ tin cũ
+ *      + Tìm kiếm nhanh chóng
+ * 
+ * 5. Tính Năng Đặc Biệt
+ *    - Như "hệ thống báo chí hiện đại":
+ *      + Hỗ trợ nhiều định dạng
+ *      + Tự động sắp xếp
+ *      + Thống kê lượt xem
+ */
 public class NewsDAO extends DBContext {
 
     // Phương thức tạo tin tức mới

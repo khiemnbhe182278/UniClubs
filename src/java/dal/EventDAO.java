@@ -11,6 +11,43 @@ import model.Club;
 import model.Member;
 import model.User;
 
+/**
+ * EventDAO - Người Quản Lý Sự Kiện
+ * ===============================
+ * 
+ * 1. Nhiệm vụ của EventDAO
+ *    - Là "người quản lý" mọi thông tin về sự kiện trong hệ thống
+ *    - Giống như một "cuốn sổ" ghi chép mọi hoạt động của câu lạc bộ
+ * 
+ * 2. Các công việc chính
+ *    - Tạo sự kiện mới:
+ *      + Lưu thông tin chi tiết (tên, thời gian, địa điểm)
+ *      + Kiểm tra tính hợp lệ của sự kiện
+ *    
+ *    - Quản lý sự kiện:
+ *      + Cập nhật thông tin
+ *      + Xóa sự kiện
+ *      + Lấy danh sách sự kiện theo nhiều tiêu chí
+ *    
+ *    - Quản lý người tham gia:
+ *      + Ghi nhận đăng ký tham gia
+ *      + Thống kê số người tham gia
+ *      + Kiểm tra tư cách thành viên
+ * 
+ * 3. Ví dụ thực tế:
+ *    - Giống như người quản lý sự kiện trong công ty tổ chức tiệc:
+ *      + Ghi nhận yêu cầu đặt tiệc
+ *      + Kiểm tra lịch và phòng trống
+ *      + Quản lý danh sách khách mời
+ *      + Theo dõi và cập nhật thay đổi
+ * 
+ * 4. Cách làm việc với Database
+ *    - Sử dụng các câu lệnh SQL để:
+ *      + Thêm sự kiện mới (INSERT)
+ *      + Cập nhật thông tin (UPDATE)
+ *      + Xóa sự kiện (DELETE)
+ *      + Tìm kiếm và lọc (SELECT)
+ */
 public class EventDAO extends DBContext {
 
     public boolean deleteEvent(int eventId) {
