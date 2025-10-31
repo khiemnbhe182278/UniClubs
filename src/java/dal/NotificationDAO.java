@@ -7,6 +7,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * NotificationDAO - Hệ Thống Thông Báo Thông Minh
+ * ==========================================
+ * 
+ * 1. Vai Trò của NotificationDAO
+ *    - Như "trung tâm thông báo" của toàn bộ hệ thống:
+ *      + Gửi thông báo đến người dùng
+ *      + Quản lý trạng thái đã đọc/chưa đọc
+ *      + Lưu trữ lịch sử thông báo
+ * 
+ * 2. Các Loại Thông Báo
+ *    a. Thông Báo Sự Kiện:
+ *       - Sự kiện mới được tạo
+ *       - Nhắc nhở sự kiện sắp diễn ra
+ *       - Cập nhật thông tin sự kiện
+ * 
+ *    b. Thông Báo Thành Viên:
+ *       - Chấp nhận/từ chối đơn đăng ký
+ *       - Thay đổi vai trò trong CLB
+ *       - Nhắc nhở nhiệm vụ
+ * 
+ *    c. Thông Báo Hệ Thống:
+ *       - Bảo trì hệ thống
+ *       - Cập nhật quy định
+ *       - Thông báo chung
+ * 
+ * 3. Cách Hoạt Động
+ *    - Giống như "hệ thống báo động thông minh":
+ *      + Tự động gửi thông báo khi có sự kiện
+ *      + Theo dõi trạng thái đã đọc
+ *      + Lưu trữ có tổ chức trong database
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Như hệ thống thông báo trong mạng xã hội:
+ *      + Thông báo khi có bài viết mới
+ *      + Nhắc về sự kiện sắp tới
+ *      + Đánh dấu đã đọc/chưa đọc
+ * 
+ * 5. Tối Ưu Hóa
+ *    - Như "bộ lọc thư":
+ *      + Sắp xếp theo độ ưu tiên
+ *      + Gom nhóm thông báo liên quan
+ *      + Xóa thông báo cũ tự động
+ */
 public class NotificationDAO extends DBContext {
 
     // Create notification

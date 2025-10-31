@@ -12,12 +12,45 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * AdminDashboardServlet - Servlet xử lý trang dashboard của Admin
- * ============================================================
- * Chức năng chính:
- * - Hiển thị thống kê tổng quan về hệ thống cho Admin
- * - Kiểm tra quyền truy cập (chỉ Admin mới được phép vào trang này)
- * - Lấy dữ liệu thống kê từ AdminDAO và truyền cho trang JSP
+ * Trang Quản Trị - Cách Hoạt Động của Admin Dashboard
+ * ================================================
+ * 
+ * 1. Tổng Quan
+ *    - Đây là "Trung tâm điều khiển" của người quản trị (Admin)
+ *    - Giống như "phòng giám sát" trong một tòa nhà lớn
+ * 
+ * 2. Quy Trình Làm Việc
+ *    a. Kiểm Tra An Ninh:
+ *       - Như bảo vệ kiểm tra thẻ ra vào
+ *       - Chỉ Admin mới được phép truy cập
+ *       - Người dùng khác sẽ bị từ chối
+ * 
+ *    b. Thu Thập Thông Tin:
+ *       - AdminDAO làm việc như "người thu thập báo cáo":
+ *         + Đếm số lượng câu lạc bộ
+ *         + Thống kê số thành viên
+ *         + Kiểm tra các sự kiện
+ *         + Tổng hợp phản hồi
+ * 
+ *    c. Hiển Thị Dashboard:
+ *       - Như "bảng điều khiển máy bay":
+ *         + Hiển thị các số liệu quan trọng
+ *         + Cảnh báo vấn đề cần chú ý
+ *         + Công cụ quản lý nhanh
+ * 
+ * 3. Vai Trò của AdminDAO
+ *    - Là "người đứng sau" thu thập mọi thông tin:
+ *      + Truy vấn nhiều bảng dữ liệu
+ *      + Tính toán thống kê
+ *      + Tổng hợp báo cáo
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống như trung tâm điều hành của một siêu thị:
+ *      + Màn hình hiển thị doanh số
+ *      + Theo dõi lượng khách
+ *      + Quản lý nhân viên
+ *      + Xử lý vấn đề phát sinh
+ *
  * 
  * URL Pattern: /admin/dashboard
  * 

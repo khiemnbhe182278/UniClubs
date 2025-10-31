@@ -7,6 +7,45 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MemberDAO - Người Quản Lý Thành Viên CLB
+ * =====================================
+ * 
+ * 1. Vai Trò Chính
+ *    - Như "quản lý nhân sự" của câu lạc bộ:
+ *      + Quản lý hồ sơ thành viên
+ *      + Theo dõi hoạt động tham gia
+ *      + Cập nhật trạng thái thành viên
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý Thông Tin:
+ *       - Thêm thành viên mới
+ *       - Cập nhật thông tin cá nhân
+ *       - Tìm kiếm thành viên
+ * 
+ *    b. Theo Dõi Tham Gia:
+ *       - Ghi nhận tham gia sự kiện
+ *       - Thống kê hoạt động
+ *       - Đánh giá mức độ tích cực
+ * 
+ *    c. Phân Quyền:
+ *       - Phân công vai trò
+ *       - Kiểm tra quyền hạn
+ *       - Quản lý chức vụ
+ * 
+ * 3. Cách Hoạt Động
+ *    - Như "hệ thống quản lý nhân viên":
+ *      + Lưu hồ sơ trong bảng Members
+ *      + Liên kết với bảng Users
+ *      + Kết nối với bảng Clubs
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống phòng nhân sự công ty:
+ *      + Quản lý hồ sơ nhân viên
+ *      + Theo dõi chấm công
+ *      + Đánh giá hiệu quả
+ *      + Phân công nhiệm vụ
+ */
 public class MemberDAO extends DBContext {
 
     public Member getMemberById(int memberId) {

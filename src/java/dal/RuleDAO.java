@@ -6,7 +6,48 @@ import java.util.List;
 import model.Rule;
 
 /**
- * Data Access Object for Rule entity File name MUST be: RuleDAO.java
+ * RuleDAO - Người Quản Lý Nội Quy và Quy Định
+ * =======================================
+ * 
+ * 1. Vai Trò Chính
+ *    - Như "ban pháp chế" của tổ chức:
+ *      + Quản lý nội quy, quy định
+ *      + Đảm bảo tuân thủ quy tắc
+ *      + Cập nhật và duy trì quy định
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý Quy Định:
+ *       - Thêm quy định mới
+ *       - Cập nhật quy định cũ
+ *       - Xóa quy định không còn phù hợp
+ * 
+ *    b. Kiểm Soát Nội Quy:
+ *       - Phân loại theo CLB
+ *       - Kiểm tra tính hợp lệ
+ *       - Đảm bảo tính nhất quán
+ * 
+ *    c. Hỗ Trợ Tra Cứu:
+ *       - Tìm kiếm quy định
+ *       - Xem lịch sử thay đổi
+ *       - Thống kê áp dụng
+ * 
+ * 3. Cách Hoạt Động
+ *    - Như "sổ tay nội quy điện tử":
+ *      + Lưu trữ có hệ thống
+ *      + Dễ dàng cập nhật
+ *      + Tra cứu nhanh chóng
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống văn phòng luật sư:
+ *      + Soạn thảo quy định
+ *      + Kiểm tra tính pháp lý
+ *      + Lưu trữ và quản lý
+ * 
+ * 5. Tầm Quan Trọng
+ *    - Như "nền tảng kỷ luật":
+ *      + Đảm bảo trật tự hoạt động
+ *      + Tạo môi trường công bằng
+ *      + Hướng dẫn hành vi chuẩn mực
  */
 public class RuleDAO extends DBContext {
 

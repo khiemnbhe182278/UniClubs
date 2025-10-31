@@ -10,13 +10,51 @@ import model.Stats;
 import model.User;
 
 /**
- * ClubDAO
- * ------
- * VN: Lớp DAO chứa các phương thức truy vấn liên quan đến bảng Clubs cùng các thông tin liên quan
- * (thành viên, sự kiện, thống kê...).
- * - Kết nối DB được kế thừa từ DBContext (thuộc tính `connection`).
- * - Các phương thức trả về model objects (Club, User, Stats...) hoặc primitive values.
- * - Lưu ý bảo mật: tránh in thông tin nhạy cảm; các phương thức chỉ nên trả dữ liệu cần thiết.
+ * ClubDAO - Người Quản Lý Câu Lạc Bộ
+ * ================================
+ * 
+ * 1. Nhiệm Vụ Chính
+ *    - Là "thủ quỹ và thư ký" của tất cả câu lạc bộ:
+ *      + Lưu trữ thông tin câu lạc bộ
+ *      + Quản lý danh sách thành viên
+ *      + Theo dõi hoạt động và sự kiện
+ *      + Thống kê và báo cáo
+ * 
+ * 2. Các Công Việc Hàng Ngày
+ *    a. Quản Lý Thông Tin CLB:
+ *       - Tạo câu lạc bộ mới
+ *       - Cập nhật thông tin
+ *       - Kiểm tra trạng thái hoạt động
+ * 
+ *    b. Quản Lý Thành Viên:
+ *       - Thêm thành viên mới
+ *       - Cập nhật vai trò
+ *       - Kiểm tra tư cách thành viên
+ * 
+ *    c. Theo Dõi Hoạt Động:
+ *       - Lưu trữ lịch sự kiện
+ *       - Ghi nhận tin tức, thông báo
+ *       - Thống kê tham gia
+ * 
+ * 3. Cách Làm Việc
+ *    - Giống như một "hệ thống quản lý văn phòng":
+ *      + Hồ sơ câu lạc bộ: lưu trong bảng Clubs
+ *      + Danh sách thành viên: bảng Members
+ *      + Lịch sự kiện: bảng Events
+ *      + Tin tức: bảng News
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Như văn phòng quản lý của trường học:
+ *      + Lưu hồ sơ các lớp học
+ *      + Quản lý danh sách học sinh
+ *      + Theo dõi các hoạt động
+ *      + Lập báo cáo định kỳ
+ * 
+ * 5. Bảo Mật
+ *    - Như "két sắt" bảo vệ thông tin:
+ *      + Mã hóa thông tin nhạy cảm
+ *      + Kiểm tra quyền truy cập
+ *      + Chỉ chia sẻ thông tin cần thiết
  *
  * EN: Data Access Object for club-related database operations.
  * - Inherits DBContext which provides a `connection` to the database.
