@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/CreateNewsServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/DashboardServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/ProfileServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/RegisterServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/filter/AuthFilter.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/LoginServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/dal/DBContext.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/dal/EventDAO.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/JoinClubServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/ViewClubsServlet.java</file>
+            <file>file:/D:/SWP-Fall-2025/UniClubs/src/java/controller/HomeServlet.java</file>
         </group>
     </open-files>
 </project-private>
