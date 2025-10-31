@@ -71,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
         User user = new User();
         user.setUserName(userName.trim());
         user.setEmail(email.trim().toLowerCase());
-        user.setRoleID(4); // Default: Member role
+        user.setRoleID(5); // Default: Member role
         
         boolean success = userDAO.register(user, password);
         

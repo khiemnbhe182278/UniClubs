@@ -6,8 +6,124 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Role;
 
 public class UserDAO extends DBContext {
+
+    public List<Integer> getLeaderClubIds(int userId) {
+        List<Integer> clubIds = new ArrayList<>();
+        String sql = "SELECT ClubID FROM Clubs WHERE LeaderID = ? AND Status = 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                clubIds.add(rs.getInt("ClubID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return clubIds;
+    }
+
+    /**
+     * Lấy danh sách ClubID mà user là Faculty Advisor
+     */
+    public List<Integer> getFacultyClubIds(int userId) {
+        List<Integer> clubIds = new ArrayList<>();
+        String sql = "SELECT ClubID FROM Clubs WHERE FacultyID = ? AND Status = 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                clubIds.add(rs.getInt("ClubID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return clubIds;
+    }
+
+    /**
+     * Lấy ClubID đầu tiên của Leader (nếu chỉ quản lý 1 club)
+     */
+    public Integer getLeaderPrimaryClubId(int userId) {
+        List<Integer> clubIds = getLeaderClubIds(userId);
+        return clubIds.isEmpty() ? null : clubIds.get(0);
+    }
+
+    /**
+     * Lấy ClubID đầu tiên của Faculty (nếu chỉ cố vấn 1 club)
+     */
+    public Integer getFacultyPrimaryClubId(int userId) {
+        List<Integer> clubIds = getFacultyClubIds(userId);
+        return clubIds.isEmpty() ? null : clubIds.get(0);
+    }
+
+    /**
+     * Load đầy đủ thông tin user kèm clubId
+     */
+    public User getUserWithClubInfo(int userId) {
+        User user = getUserById(userId); // Giả sử đã có method này
+
+        if (user != null) {
+            // Nếu là Leader (roleID = 2)
+            if (user.getRoleID() == 2) {
+                List<Integer> clubIds = getLeaderClubIds(userId);
+                user.setClubIds(clubIds);
+                user.setClubId(clubIds.isEmpty() ? null : clubIds.get(0));
+            } // Nếu là Faculty (roleID = 3)
+            else if (user.getRoleID() == 3) {
+                List<Integer> clubIds = getFacultyClubIds(userId);
+                user.setClubIds(clubIds);
+                user.setClubId(clubIds.isEmpty() ? null : clubIds.get(0));
+            }
+        }
+
+        return user;
+    }
+
+    public boolean updateUserRole(int userId, int roleId) {
+        String sql = "UPDATE Users SET RoleID = ?, UpdatedAt = GETDATE() WHERE UserID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, roleId);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Role> getAllRoles() {
+        List<Role> roles = new ArrayList<>();
+        String sql = "SELECT * FROM Roles ORDER BY RoleName";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Role role = new Role();
+                role.setRoleID(rs.getInt("RoleID"));
+                role.setRoleName(rs.getString("RoleName"));
+                role.setDescription(rs.getString("Description"));
+                roles.add(role);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roles;
+    }
 
     // Hash password using SHA-256
     private String hashPassword(String password) {
@@ -118,6 +234,27 @@ public class UserDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean createUserByAdmin(User user, String password) {
+        String sql = "INSERT INTO Users (UserName, Email, PasswordHash, RoleID, FullName, Phone, Status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, hashPassword(password));
+            ps.setInt(4, user.getRoleID());
+            ps.setString(5, user.getFullName());
+            ps.setString(6, user.getPhone());
+            ps.setBoolean(7, user.isStatus());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // Update user profile

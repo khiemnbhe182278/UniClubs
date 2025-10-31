@@ -1,15 +1,35 @@
 package model;
 
 import java.sql.Timestamp;
+import java.io.Serializable;
 
-public class Rule {
+public class Rule implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int ruleID;
     private int clubID;
     private String title;
     private String ruleText;
-    private Timestamp createdAt;
+    private Timestamp createdDate;
 
+    public Rule() {
+    }
+
+    public Rule(int ruleID, int clubID, String title, String ruleText) {
+        this.ruleID = ruleID;
+        this.clubID = clubID;
+        this.title = title;
+        this.ruleText = ruleText;
+    }
+
+    public Rule(int clubID, String title, String ruleText) {
+        this.clubID = clubID;
+        this.title = title;
+        this.ruleText = ruleText;
+    }
+
+    // Getters and Setters
     public int getRuleID() {
         return ruleID;
     }
@@ -42,11 +62,12 @@ public class Rule {
         this.ruleText = ruleText;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
+
 }

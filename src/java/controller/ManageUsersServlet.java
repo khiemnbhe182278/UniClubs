@@ -25,12 +25,7 @@ public class ManageUsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        if (user == null || !"Admin".equals(user.getRoleName())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
+
 
         List<User> users = adminDAO.getAllUsers();
         request.setAttribute("users", users);

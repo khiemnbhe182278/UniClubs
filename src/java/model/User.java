@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class User {
 
@@ -18,6 +19,8 @@ public class User {
     private String phone;
     private String faculty;
     private String avatar;
+    private Integer clubId;  // ClubID mà user là leader hoặc faculty advisor
+    private List<Integer> clubIds;
 
     public User() {
     }
@@ -125,5 +128,21 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Integer getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(Integer clubId) {
+        this.clubId = clubId;
+    }
+
+    public List<Integer> getClubIds() {
+        return clubIds;
+    }
+
+    public void setClubIds(List<Integer> clubIds) {
+        this.clubIds = clubIds;
     }
 }

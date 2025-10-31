@@ -3,6 +3,7 @@ package controller;
 import dal.EventDAO;
 import dal.ClubDAO;
 import dal.MemberDAO;
+import dal.UserDAO;
 import model.Event;
 import model.Club;
 import model.User;
@@ -22,15 +23,37 @@ import java.util.Date;
 @WebServlet(name = "CreateEventServlet", urlPatterns = {"/create-event"})
 public class CreateEventServlet extends HttpServlet {
 
+    /*
+     * CreateEventServlet
+     * (Tiếng Việt)
+     * Mục đích: Cho phép người dùng có quyền (Leader/Faculty/Manager...) tạo sự kiện cho một CLB.
+     * - Input:
+     *   + GET: hiển thị form tạo sự kiện, yêu cầu user đã đăng nhập; truyền `myClubs` để chọn CLB.
+     *   + POST: form fields - "clubId", "eventName", "description", "eventDate", "eventTime".
+     * - Xử lý:
+     *   + Kiểm tra session (phải đăng nhập).
+     *   + Validate các trường bắt buộc.
+     *   + Parse chuỗi ngày/giờ thành Timestamp.
+     *   + Tạo Event với trạng thái "Pending" và gọi EventDAO.createEvent(event) để lưu.
+     * - Output: Trả về thông báo thành công (chờ admin duyệt) hoặc lỗi (Invalid input / tạo thất bại).
+     * - Lỗi: Bắt và xử lý NumberFormatException/ParseException, trả về thông báo lỗi và hiển thị lại form.
+     *
+     * Ghi chú:
+     * - Date/time format expected: yyyy-MM-dd and HH:mm (kết hợp trước khi parse).
+     * - Quyền tạo sự kiện có thể phụ thuộc vào role; ở đây controller dựa vào danh sách CLB trả về từ DAO.
+     */
+
     private EventDAO eventDAO;
     private ClubDAO clubDAO;
     private MemberDAO memberDAO;
+    private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         eventDAO = new EventDAO();
         clubDAO = new ClubDAO();
         memberDAO = new MemberDAO();
+        userDAO = new UserDAO();
     }
 
     @Override
@@ -49,6 +72,15 @@ public class CreateEventServlet extends HttpServlet {
         List<Club> myClubs = clubDAO.getUserLeadClubs(user.getUserID());
         request.setAttribute("myClubs", myClubs);
 
+        // Truyền thêm clubId nếu user là Leader hoặc Faculty
+        if (user.getRoleID() == 2) { // Leader
+            Integer clubId = userDAO.getLeaderPrimaryClubId(user.getUserID());
+            request.setAttribute("userClubId", clubId);
+        } else if (user.getRoleID() == 3) { // Faculty
+            Integer clubId = userDAO.getFacultyPrimaryClubId(user.getUserID());
+            request.setAttribute("userClubId", clubId);
+        }
+
         request.getRequestDispatcher("create-event.jsp").forward(request, response);
     }
 
@@ -61,6 +93,8 @@ public class CreateEventServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
+        User user = (User) session.getAttribute("user");
 
         try {
             int clubId = Integer.parseInt(request.getParameter("clubId"));
@@ -78,6 +112,10 @@ public class CreateEventServlet extends HttpServlet {
                 doGet(request, response);
                 return;
             }
+
+
+
+
 
             // Parse date and time
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

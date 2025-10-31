@@ -15,6 +15,8 @@ public class Club {
     private Timestamp updatedAt;
     private int memberCount;
     private String categoryName;
+    private int categoryID;
+    private String LeaderName;
 
     // Constructors
     public Club() {
@@ -117,6 +119,22 @@ public class Club {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public String getLeaderName() {
+        return LeaderName;
+    }
+
+    public void setLeaderName(String LeaderName) {
+        this.LeaderName = LeaderName;
     }
 
 }
