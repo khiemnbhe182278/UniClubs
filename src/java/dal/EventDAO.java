@@ -26,6 +26,87 @@ public class EventDAO extends DBContext {
         return false;
     }
 
+    public List<Event> getUpcomingEventsByClubId(int clubId) {
+        List<Event> events = new ArrayList<>();
+        String sql = "SELECT e.*, c.ClubName, "
+                + "(SELECT COUNT(*) FROM EventParticipants ep "
+                + "WHERE ep.EventID = e.EventID) as CurrentParticipants "
+                + "FROM Events e "
+                + "LEFT JOIN Clubs c ON e.ClubID = c.ClubID "
+                + "WHERE e.ClubID = ? "
+                + "AND e.Status = 'Approved' "
+                + "AND e.EventDate >= GETDATE() "
+                + "ORDER BY e.EventDate ASC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clubId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Event event = mapResultSetToEvent(rs);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting upcoming events by club ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public Event getEventById(int eventId) {
+        String sql = "SELECT e.*, c.ClubName, "
+                + "(SELECT COUNT(*) FROM EventParticipants ep "
+                + "WHERE ep.EventID = e.EventID) as CurrentParticipants "
+                + "FROM Events e "
+                + "LEFT JOIN Clubs c ON e.ClubID = c.ClubID "
+                + "WHERE e.EventID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, eventId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToEvent(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting event by ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Event mapResultSetToEvent(ResultSet rs) throws SQLException {
+        Event event = new Event();
+        event.setEventID(rs.getInt("EventID"));
+        event.setClubID(rs.getInt("ClubID"));
+        event.setEventName(rs.getString("EventName"));
+        event.setDescription(rs.getString("Description"));
+        event.setEventDate(rs.getTimestamp("EventDate"));
+        event.setStatus(rs.getString("Status"));
+        event.setCreatedAt(rs.getTimestamp("CreatedAt"));
+        event.setLocation(rs.getString("Location"));
+        event.setMaxParticipants(rs.getInt("MaxParticipants"));
+        event.setRegistrationDeadline(rs.getTimestamp("RegistrationDeadline"));
+        event.setEventImage(rs.getString("EventImage"));
+        event.setClubName(rs.getString("ClubName"));
+        event.setCurrentParticipants(rs.getInt("CurrentParticipants"));
+        return event;
+    }
+
+    // Helper method to close resources
+    private void closeResources(ResultSet rs, PreparedStatement ps) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public boolean updateEvent(Event event) {
         String sql = "UPDATE Events SET EventName = ?, Description = ?, EventDate = ?, "
                 + "Location = ?, MaxParticipants = ? WHERE EventID = ?";
@@ -157,7 +238,7 @@ public class EventDAO extends DBContext {
         return events;
     }
 
-    public Event getEventById(int eventId) {
+    public Event getEventId(int eventId) {
         Event event = null;
         String sql = "SELECT e.EventID, e.ClubID, e.EventName, e.Description, e.EventDate, "
                 + "e.Status, e.CreatedAt, e.Location, e.MaxParticipants, "

@@ -80,14 +80,7 @@ public class AuthFilter implements Filter {
         }
 
         // Leader/Manager paths (allow Admin as well)
-        if (path.startsWith("/leader") || path.equals("/create-event") || path.equals("/create-club") || path.equals("/createNews") || path.startsWith("/leader/")) {
-            if (roleID == 1 || roleID == 2 || roleID == 4) {
-                chain.doFilter(request, response);
-            } else {
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "You don't have permission to access this page.");
-            }
-            return;
-        }
+
 
         // Other pages that require login (profile, dashboard, join)
         if (path.equals("/profile") || path.equals("/dashboard") || path.equals("/join-club") || path.equals("/register-event")) {

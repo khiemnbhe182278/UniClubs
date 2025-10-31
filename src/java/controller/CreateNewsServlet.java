@@ -1,115 +1,107 @@
 package controller;
 
 import dal.NewsDAO;
-import dal.UserDAO;
 import dal.ClubDAO;
 import model.News;
 import model.User;
-import jakarta.servlet.*;
+import model.Club;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
 
-@WebServlet(urlPatterns = {"/createNews", "/leader/create-news"})
+@WebServlet(name = "CreateNewsServlet", urlPatterns = {"/leader/create-news"})
 public class CreateNewsServlet extends HttpServlet {
 
-    private UserDAO userDAO;
+    private NewsDAO newsDAO;
     private ClubDAO clubDAO;
 
     @Override
     public void init() throws ServletException {
-        userDAO = new UserDAO();
+        newsDAO = new NewsDAO();
         clubDAO = new ClubDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        
-        if (user != null) {
-            // Truyền clubId vào request
-            if (user.getRoleID() == 2) { // Leader
-                Integer clubId = userDAO.getLeaderPrimaryClubId(user.getUserID());
-                List<Integer> clubIds = userDAO.getLeaderClubIds(user.getUserID());
-                request.setAttribute("userClubId", clubId);
-                request.setAttribute("userClubIds", clubIds);
-            } else if (user.getRoleID() == 3) { // Faculty
-                Integer clubId = userDAO.getFacultyPrimaryClubId(user.getUserID());
-                List<Integer> clubIds = userDAO.getFacultyClubIds(user.getUserID());
-                request.setAttribute("userClubId", clubId);
-                request.setAttribute("userClubIds", clubIds);
-            }
+
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
 
-        if (request.getServletPath() != null && request.getServletPath().startsWith("/leader")) {
-            request.getRequestDispatcher("/leader-create-news.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("/news/createNews.jsp").forward(request, response);
+        try {
+            String clubIdParam = request.getParameter("clubId");
+            if (clubIdParam == null || clubIdParam.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=noclubid");
+                return;
+            }
+
+            int clubId = Integer.parseInt(clubIdParam);
+            Club club = clubDAO.getClubById(clubId);
+
+            if (club == null) {
+                response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=clubnotfound");
+                return;
+            }
+
+            request.setAttribute("club", club);
+            request.getRequestDispatcher("/create-news.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/leader/dashboard?error=invalidclubid");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
 
-        String clubIDParam = request.getParameter("clubID");
-        if (clubIDParam == null) {
-            clubIDParam = request.getParameter("clubId");
-        }
-        // fallback to session-stored currentClubId if available
-        if (clubIDParam == null && session != null && session.getAttribute("currentClubId") != null) {
-            clubIDParam = String.valueOf(session.getAttribute("currentClubId"));
-        }
-        String title = request.getParameter("title");
-        String content = request.getParameter("content");
-
-        if (clubIDParam == null || title == null || title.trim().isEmpty()
-                || content == null || content.trim().isEmpty()) {
-            request.setAttribute("errorMessage", "All fields are required.");
-            request.setAttribute("title", title);
-            request.setAttribute("content", content);
-            doGet(request, response);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         try {
-            int clubID = Integer.parseInt(clubIDParam);
+            int clubId = Integer.parseInt(request.getParameter("clubId"));
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            String status = request.getParameter("status");
 
+            // Validation
+            if (title == null || title.trim().isEmpty()
+                    || content == null || content.trim().isEmpty()
+                    || status == null || status.trim().isEmpty()) {
+                request.setAttribute("error", "All fields are required");
+                doGet(request, response);
+                return;
+            }
 
+            News news = new News();
+            news.setClubID(clubId);
+            news.setTitle(title.trim());
+            news.setContent(content.trim());
+            news.setStatus(status);
 
-            News n = new News();
-            n.setClubID(clubID);
-            n.setTitle(title);
-            n.setContent(content);
-            n.setStatus("Published");
-            n.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+            boolean created = newsDAO.createNews(news);
 
-            NewsDAO dao = new NewsDAO();
-            boolean success = dao.createNews(n);
-
-            if (success) {
-                request.getSession().setAttribute("successMessage", "News created successfully!");
-                if (request.getServletPath() != null && request.getServletPath().startsWith("/leader")) {
-                    response.sendRedirect(request.getContextPath() + "/leader/dashboard?success=news_created");
-                } else {
-                    response.sendRedirect("listNews?clubID=" + clubID);
-                }
+            if (created) {
+                response.sendRedirect(request.getContextPath() + "/leader/news?clubId=" + clubId + "&success=created");
             } else {
-                request.setAttribute("errorMessage", "Failed to create news. Please try again.");
+                request.setAttribute("error", "Failed to create news");
                 doGet(request, response);
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Invalid Club ID.");
-            doGet(request, response);
+
+        } catch (Exception e) {
+            System.err.println("Error creating news: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/leader/news?error=unexpected");
         }
     }
 }
