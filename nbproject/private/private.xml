@@ -3,17 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/UniClubs/UniClubs/web/club-manager/clubDetail.jsp</file>
-            <file>file:/D:/UniClubs/UniClubs/web/club_rules.jsp</file>
-            <file>file:/D:/UniClubs/UniClubs/src/java/model/News.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/dashboard.jsp</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/controller/ClubDetailServlet.java</file>
-            <file>file:/D:/UniClubs/UniClubs/src/java/controller/AdminDashboardServlet.java</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/controller/CreateClubServlet.java</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/controller/CreateEventServlet.java</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/model/Club.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ManageMembersServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club_rules.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/NewClass.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/model/News.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/events.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/AdminDashboardServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club-members.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/DashboardServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/club-advanced.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ClubMembersServlet.java</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/controller/LoginServlet.java</file>
             <file>file:/D:/UniClubs/UniClubs/src/java/dal/ClubDAO.java</file>
-            <file>file:/D:/UniClubs/UniClubs/src/java/controller/ManageMembersServlet.java</file>
         </group>
     </open-files>
 </project-private>
