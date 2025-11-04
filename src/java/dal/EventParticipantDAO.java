@@ -7,6 +7,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * EventParticipantDAO - Quản Lý Người Tham Gia Sự Kiện
+ * ==============================================
+ * 
+ * 1. Vai Trò Chính
+ *    - Như "người điều phối sự kiện":
+ *      + Quản lý danh sách tham gia
+ *      + Theo dõi số lượng người tham dự
+ *      + Kiểm soát đăng ký/hủy đăng ký
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý Đăng Ký:
+ *       - Ghi nhận người đăng ký mới
+ *       - Xử lý hủy đăng ký
+ *       - Kiểm tra trạng thái đăng ký
+ * 
+ *    b. Thống Kê Tham Gia:
+ *       - Đếm số người tham dự
+ *       - Thống kê theo CLB
+ *       - Báo cáo tỷ lệ tham gia
+ * 
+ *    c. Kiểm Soát Sức Chứa:
+ *       - Kiểm tra giới hạn người tham gia
+ *       - Quản lý danh sách chờ
+ *       - Thông báo hết chỗ
+ * 
+ * 3. Cách Hoạt Động
+ *    - Như "hệ thống đặt vé sự kiện":
+ *      + Kiểm tra còn chỗ không
+ *      + Ghi nhận thông tin người đặt
+ *      + Cập nhật số lượng còn lại
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống quản lý vé concert:
+ *      + Bán vé (đăng ký tham gia)
+ *      + Kiểm tra số ghế trống
+ *      + Xử lý hoàn vé (hủy đăng ký)
+ * 
+ * 5. Đặc Điểm Nổi Bật
+ *    - Như "hệ thống booking thông minh":
+ *      + Xử lý nhiều yêu cầu cùng lúc
+ *      + Đảm bảo công bằng khi đăng ký
+ *      + Thống kê chi tiết
+ */
 public class EventParticipantDAO extends DBContext {
 
     public int getTotalParticipants(int clubId) {

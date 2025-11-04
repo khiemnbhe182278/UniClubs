@@ -4,6 +4,50 @@ import model.*;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * FacultyDAO - Người Quản Lý Khoa/Ban
+ * ================================
+ * 
+ * 1. Vai Trò Chính
+ *    - Như "ban quản lý khoa" trong trường:
+ *      + Quản lý thông tin các khoa
+ *      + Giám sát CLB trực thuộc
+ *      + Phối hợp giữa khoa và CLB
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý CLB:
+ *       - Theo dõi CLB thuộc khoa
+ *       - Phê duyệt hoạt động
+ *       - Đánh giá hiệu quả
+ * 
+ *    b. Quản Lý Giảng Viên:
+ *       - Phân công cố vấn CLB
+ *       - Theo dõi hoạt động
+ *       - Đánh giá đóng góp
+ * 
+ *    c. Báo Cáo và Thống Kê:
+ *       - Thống kê hoạt động CLB
+ *       - Báo cáo định kỳ
+ *       - Đánh giá tác động
+ * 
+ * 3. Cách Hoạt Động
+ *    - Như "cầu nối" giữa:
+ *      + Khoa và các CLB
+ *      + Giảng viên và sinh viên
+ *      + Ban lãnh đạo và hoạt động
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống văn phòng khoa:
+ *      + Quản lý sinh viên
+ *      + Điều phối hoạt động
+ *      + Hỗ trợ phát triển
+ * 
+ * 5. Vai Trò Đặc Biệt
+ *    - Như "người cố vấn":
+ *      + Định hướng phát triển
+ *      + Đảm bảo chất lượng
+ *      + Hỗ trợ chuyên môn
+ */
 public class FacultyDAO extends DBContext {
 
     // ===== EXISTING METHODS (giữ nguyên) =====

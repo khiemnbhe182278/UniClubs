@@ -12,49 +12,57 @@ import java.util.List;
 import model.AdminStats;
 
 /**
- * AdminDAO - Lớp xử lý dữ liệu liên quan đến Admin
- * ==============================================
- * Lớp này chứa các phương thức thao tác với CSDL phục vụ cho các chức năng của Admin:
- * 1. Quản lý câu lạc bộ (CLB)
- *    - Duyệt/từ chối CLB mới
- *    - Xem danh sách CLB chờ duyệt
- * 
- * 2. Quản lý thành viên
- *    - Xem danh sách thành viên chờ duyệt
- *    - Duyệt/từ chối thành viên
- * 
- * 3. Quản lý sự kiện
- *    - Xem danh sách sự kiện chờ duyệt
- *    - Duyệt/từ chối sự kiện
- * 
- * 4. Quản lý người dùng
- *    - Xem danh sách người dùng
- *    - Kích hoạt/vô hiệu hóa tài khoản
- * 
- * 5. Thống kê tổng quan
- *    - Số liệu về CLB, thành viên, sự kiện
- *    - Số lượng đang chờ duyệt
- *    - Tổng số người dùng
+ * AdminDAO - Trung Tâm Điều Hành Hệ Thống ====================================
+ *
+ * 1. Vai Trò của AdminDAO - Như "tổng giám đốc điều hành": + Quản lý toàn bộ hệ
+ * thống + Ra quyết định quan trọng + Giám sát mọi hoạt động
+ *
+ * 2. Các Nhiệm Vụ Chính a. Quản Lý Tổ Chức: - Duyệt thành lập CLB mới - Phân
+ * công người quản lý - Ban hành quy định chung
+ *
+ * b. Giám Sát Hoạt Động: - Theo dõi các CLB - Kiểm tra sự kiện - Xử lý báo cáo
+ * vi phạm
+ *
+ * c. Quản Lý Người Dùng: - Cấp quyền admin/quản lý - Khóa/mở tài khoản - Xử lý
+ * khiếu nại
+ *
+ * 3. Quy Trình Làm Việc - Như "hội đồng quản trị": + Nhận yêu cầu xét duyệt +
+ * Đánh giá tính khả thi + Ra quyết định + Giám sát thực hiện
+ *
+ * 4. Ví Dụ Thực Tế - Giống ban giám hiệu trường học: + Duyệt thành lập các câu
+ * lạc bộ + Giám sát hoạt động + Xử lý vấn đề phát sinh + Ban hành nội quy
+ *
+ * 5. Đảm Bảo An Toàn - Như "hệ thống an ninh cao cấp": + Kiểm tra kỹ lưỡng mọi
+ * yêu cầu + Ghi nhận đầy đủ thao tác + Phân quyền chặt chẽ
+ *
+ *
+ * 2. Quản lý thành viên - Xem danh sách thành viên chờ duyệt - Duyệt/từ chối
+ * thành viên
+ *
+ * 3. Quản lý sự kiện - Xem danh sách sự kiện chờ duyệt - Duyệt/từ chối sự kiện
+ *
+ * 4. Quản lý người dùng - Xem danh sách người dùng - Kích hoạt/vô hiệu hóa tài
+ * khoản
+ *
+ * 5. Thống kê tổng quan - Số liệu về CLB, thành viên, sự kiện - Số lượng đang
+ * chờ duyệt - Tổng số người dùng
  */
 public class AdminDAO extends DBContext {
 
     /**
      * Lấy danh sách câu lạc bộ đang chờ duyệt
-     * =======================================
-     * Input: Không có
-     * 
-     * Output: 
-     * - List<Club>: Danh sách các CLB có status = 'Pending'
-     * - Mỗi Club chứa thông tin cơ bản: ID, tên, mô tả, ngày tạo
-     * - Bao gồm cả tên người tạo (từ bảng Users)
-     * 
-     * SQL:
-     * - Join bảng Clubs với Users để lấy tên người tạo
-     * - Sắp xếp theo thời gian tạo giảm dần (mới nhất lên đầu)
+     * ======================================= Input: Không có
+     *
+     * Output: - List<Club>: Danh sách các CLB có status = 'Pending' - Mỗi Club
+     * chứa thông tin cơ bản: ID, tên, mô tả, ngày tạo - Bao gồm cả tên người
+     * tạo (từ bảng Users)
+     *
+     * SQL: - Join bảng Clubs với Users để lấy tên người tạo - Sắp xếp theo thời
+     * gian tạo giảm dần (mới nhất lên đầu)
      */
     public List<Club> getPendingClubs() {
         List<Club> clubs = new ArrayList<>();
-        
+
         // Câu lệnh SQL:
         // - Lấy tất cả thông tin từ bảng Clubs (c.*)
         // - Kèm theo tên người tạo từ bảng Users (u.UserName)
@@ -90,18 +98,12 @@ public class AdminDAO extends DBContext {
     }
 
     /**
-     * Duyệt câu lạc bộ
-     * ===============
-     * Input:
-     * - clubId: Mã của CLB cần duyệt
-     * 
-     * Output:
-     * - true: Nếu duyệt thành công
-     * - false: Nếu có lỗi xảy ra
-     * 
-     * Xử lý:
-     * - Cập nhật trạng thái CLB thành "Active"
-     * - Cập nhật thời gian cập nhật (UpdatedAt)
+     * Duyệt câu lạc bộ =============== Input: - clubId: Mã của CLB cần duyệt
+     *
+     * Output: - true: Nếu duyệt thành công - false: Nếu có lỗi xảy ra
+     *
+     * Xử lý: - Cập nhật trạng thái CLB thành "Active" - Cập nhật thời gian cập
+     * nhật (UpdatedAt)
      */
     public boolean approveClub(int clubId) {
         // Câu lệnh SQL:
@@ -109,16 +111,16 @@ public class AdminDAO extends DBContext {
         // - Cập nhật thời gian sửa đổi bằng GETDATE() (thời điểm hiện tại)
         // - Chỉ cập nhật CLB có ID tương ứng
         String sql = "UPDATE Clubs SET Status = 'Active', UpdatedAt = GETDATE() WHERE ClubID = ?";
-        
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, clubId);  // Gán giá trị cho tham số clubId
-            
+
             // Thực thi câu lệnh và kiểm tra kết quả
             // ps.executeUpdate() trả về số dòng bị ảnh hưởng
             // > 0 nghĩa là có ít nhất 1 dòng được cập nhật
             return ps.executeUpdate() > 0;
-            
+
         } catch (SQLException e) {
             e.printStackTrace(); // In lỗi nếu có
         }
@@ -126,18 +128,13 @@ public class AdminDAO extends DBContext {
     }
 
     /**
-     * Từ chối câu lạc bộ
-     * ================
-     * Input:
-     * - clubId: Mã của CLB cần từ chối
-     * 
-     * Output:
-     * - true: Nếu từ chối thành công
-     * - false: Nếu có lỗi xảy ra
-     * 
-     * Xử lý:
-     * - Cập nhật trạng thái CLB thành "Rejected"
-     * - Cập nhật thời gian cập nhật (UpdatedAt)
+     * Từ chối câu lạc bộ ================ Input: - clubId: Mã của CLB cần từ
+     * chối
+     *
+     * Output: - true: Nếu từ chối thành công - false: Nếu có lỗi xảy ra
+     *
+     * Xử lý: - Cập nhật trạng thái CLB thành "Rejected" - Cập nhật thời gian
+     * cập nhật (UpdatedAt)
      */
     public boolean rejectClub(int clubId) {
         // Câu lệnh SQL:
@@ -145,12 +142,12 @@ public class AdminDAO extends DBContext {
         // - Cập nhật thời gian sửa đổi
         // - Chỉ cập nhật CLB có ID tương ứng
         String sql = "UPDATE Clubs SET Status = 'Rejected', UpdatedAt = GETDATE() WHERE ClubID = ?";
-        
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, clubId);  // Gán giá trị cho tham số clubId
             return ps.executeUpdate() > 0;  // Trả về true nếu cập nhật thành công
-            
+
         } catch (SQLException e) {
             e.printStackTrace();  // In lỗi nếu có
         }
@@ -159,24 +156,18 @@ public class AdminDAO extends DBContext {
 
     /**
      * Lấy danh sách thành viên đang chờ duyệt
-     * ====================================
-     * Input: Không có
-     * 
-     * Output:
-     * - List<Member>: Danh sách các thành viên đang chờ duyệt
-     * - Mỗi Member chứa:
-     *   + Thông tin thành viên (ID, trạng thái, ngày tham gia)
-     *   + Thông tin người dùng (tên, email)
-     *   + Thông tin CLB (tên CLB)
-     * 
-     * SQL:
-     * - Join 3 bảng: Members, Users, Clubs
-     * - Lọc theo trạng thái "Pending"
+     * ==================================== Input: Không có
+     *
+     * Output: - List<Member>: Danh sách các thành viên đang chờ duyệt - Mỗi
+     * Member chứa: + Thông tin thành viên (ID, trạng thái, ngày tham gia) +
+     * Thông tin người dùng (tên, email) + Thông tin CLB (tên CLB)
+     *
+     * SQL: - Join 3 bảng: Members, Users, Clubs - Lọc theo trạng thái "Pending"
      * - Sắp xếp theo thời gian tham gia mới nhất
      */
     public List<Member> getPendingMembers() {
         List<Member> members = new ArrayList<>();
-        
+
         // Câu lệnh SQL:
         // - Lấy tất cả thông tin từ Members (m.*)
         // - Kèm theo thông tin người dùng (tên, email)
@@ -217,24 +208,19 @@ public class AdminDAO extends DBContext {
     }
 
     /**
-     * Lấy danh sách sự kiện đang chờ duyệt
-     * =================================
+     * Lấy danh sách sự kiện đang chờ duyệt =================================
      * Input: Không có
-     * 
-     * Output:
-     * - List<Event>: Danh sách các sự kiện đang chờ duyệt
-     * - Mỗi Event chứa:
-     *   + Thông tin sự kiện (ID, tên, mô tả, thời gian...)
-     *   + Thông tin CLB tổ chức (tên CLB)
-     * 
-     * SQL:
-     * - Join bảng Events với Clubs
-     * - Lọc theo trạng thái "Pending"
-     * - Sắp xếp theo thời gian tạo mới nhất
+     *
+     * Output: - List<Event>: Danh sách các sự kiện đang chờ duyệt - Mỗi Event
+     * chứa: + Thông tin sự kiện (ID, tên, mô tả, thời gian...) + Thông tin CLB
+     * tổ chức (tên CLB)
+     *
+     * SQL: - Join bảng Events với Clubs - Lọc theo trạng thái "Pending" - Sắp
+     * xếp theo thời gian tạo mới nhất
      */
     public List<Event> getPendingEvents() {
         List<Event> events = new ArrayList<>();
-        
+
         // Câu lệnh SQL:
         // - Lấy tất cả thông tin từ Events (e.*)
         // - Kèm theo tên CLB từ bảng Clubs
@@ -271,17 +257,11 @@ public class AdminDAO extends DBContext {
     }
 
     /**
-     * Duyệt sự kiện
-     * ===========
-     * Input:
-     * - eventId: Mã sự kiện cần duyệt
-     * 
-     * Output:
-     * - true: Nếu duyệt thành công
-     * - false: Nếu có lỗi xảy ra
-     * 
-     * Xử lý:
-     * - Cập nhật trạng thái sự kiện thành "Approved"
+     * Duyệt sự kiện =========== Input: - eventId: Mã sự kiện cần duyệt
+     *
+     * Output: - true: Nếu duyệt thành công - false: Nếu có lỗi xảy ra
+     *
+     * Xử lý: - Cập nhật trạng thái sự kiện thành "Approved"
      */
     public boolean approveEvent(int eventId) {
         String sql = "UPDATE Events SET Status = 'Approved' WHERE EventID = ?";
@@ -351,20 +331,14 @@ public class AdminDAO extends DBContext {
 
     /**
      * Lấy thống kê tổng quan cho Admin Dashboard
-     * =====================================
-     * Input: Không có
-     * 
-     * Output:
-     * - AdminStats object chứa các thống kê:
-     *   + Số CLB đang chờ duyệt
-     *   + Số thành viên đang chờ duyệt
-     *   + Số sự kiện đang chờ duyệt
-     *   + Tổng số người dùng đang hoạt động
-     * 
-     * SQL:
-     * - 4 câu query riêng biệt để đếm số lượng
-     * - Mỗi query tập trung vào 1 khía cạnh cụ thể
-     * - Kết quả được tổng hợp vào đối tượng AdminStats
+     * ===================================== Input: Không có
+     *
+     * Output: - AdminStats object chứa các thống kê: + Số CLB đang chờ duyệt +
+     * Số thành viên đang chờ duyệt + Số sự kiện đang chờ duyệt + Tổng số người
+     * dùng đang hoạt động
+     *
+     * SQL: - 4 câu query riêng biệt để đếm số lượng - Mỗi query tập trung vào 1
+     * khía cạnh cụ thể - Kết quả được tổng hợp vào đối tượng AdminStats
      */
     public AdminStats getAdminStats() {
         AdminStats stats = new AdminStats();

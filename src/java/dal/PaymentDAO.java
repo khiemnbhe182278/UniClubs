@@ -7,6 +7,51 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PaymentDAO - Trung Tâm Quản Lý Tài Chính
+ * ====================================
+ * 
+ * 1. Vai Trò Chính
+ *    - Như "phòng kế toán" của hệ thống:
+ *      + Quản lý mọi giao dịch tài chính
+ *      + Theo dõi các khoản thu chi
+ *      + Đảm bảo minh bạch tài chính
+ * 
+ * 2. Các Chức Năng Chính
+ *    a. Quản Lý Giao Dịch:
+ *       - Ghi nhận khoản thu
+ *       - Xử lý hoàn tiền
+ *       - Kiểm tra trạng thái thanh toán
+ * 
+ *    b. Theo Dõi Ngân Sách:
+ *       - Thống kê thu chi
+ *       - Báo cáo tài chính
+ *       - Cảnh báo vượt ngân sách
+ * 
+ *    c. Xử Lý Đặc Biệt:
+ *       - Thanh toán định kỳ
+ *       - Xử lý thanh toán trễ
+ *       - Ghi nhận phí phạt
+ * 
+ * 3. Quy Trình Làm Việc
+ *    - Như "ngân hàng mini":
+ *      + Kiểm tra thông tin giao dịch
+ *      + Xác nhận số tiền
+ *      + Cập nhật trạng thái
+ *      + Ghi log giao dịch
+ * 
+ * 4. Ví Dụ Thực Tế
+ *    - Giống phòng kế toán công ty:
+ *      + Thu phí thành viên
+ *      + Chi phí tổ chức sự kiện
+ *      + Hoàn trả khi hủy đăng ký
+ * 
+ * 5. Tính Năng An Toàn
+ *    - Như "két sắt điện tử":
+ *      + Kiểm tra kỹ lưỡng mọi giao dịch
+ *      + Lưu trữ lịch sử chi tiết
+ *      + Bảo vệ thông tin tài chính
+ */
 public class PaymentDAO extends DBContext {
 
     public int getPendingPaymentsCount(int clubId) {
