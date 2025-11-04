@@ -17,400 +17,182 @@
         <!-- AOS Animation -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
         <style>
-            /* Hero Section */
             .hero-section {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 120px 0 80px;
-                position: relative;
-                overflow: hidden;
+                padding: 5rem 0;
+                background: var(--primary-gradient);
+                margin-bottom: 2rem;
             }
-
-            .hero-section::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-                background-size: cover;
-                opacity: 0.3;
-            }
-
+            
             .hero-content {
-                position: relative;
-                z-index: 1;
                 text-align: center;
+                color: white;
             }
-
+            
             .hero-content h1 {
-                font-size: 3.5rem;
-                font-weight: 800;
-                margin-bottom: 1.5rem;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-                line-height: 1.2;
-            }
-
-            .hero-content p {
-                font-size: 1.3rem;
-                margin-bottom: 2.5rem;
-                max-width: 700px;
-                margin-left: auto;
-                margin-right: auto;
-                opacity: 0.95;
-            }
-
-            .hero-buttons .btn {
-                padding: 15px 40px;
-                font-size: 1.1rem;
-                font-weight: 600;
-                border-radius: 50px;
-                margin: 0 10px;
-                transition: all 0.3s ease;
-                text-decoration: none;
-                display: inline-block;
-            }
-
-            .btn-hero-primary {
-                background: white;
-                color: #667eea;
-                border: 3px solid white;
-            }
-
-            .btn-hero-primary:hover {
-                background: transparent;
-                color: white;
-                transform: translateY(-3px);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-
-            .btn-hero-secondary {
-                background: transparent;
-                color: white;
-                border: 3px solid white;
-            }
-
-            .btn-hero-secondary:hover {
-                background: white;
-                color: #667eea;
-                transform: translateY(-3px);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
-
-            /* Stats Section */
-            .stats-section {
-                background: #f8f9fa;
-                padding: 60px 0;
-                margin-top: -40px;
-                position: relative;
-                z-index: 2;
-            }
-
-            .stat-card {
-                background: white;
-                border-radius: 20px;
-                padding: 40px 20px;
-                text-align: center;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                transition: all 0.3s ease;
-                height: 100%;
-            }
-
-            .stat-card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
-            }
-
-            .stat-icon {
-                font-size: 3rem;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 15px;
-            }
-
-            .stat-number {
-                font-size: 3rem;
-                font-weight: 800;
-                color: #667eea;
-                display: block;
-                margin-bottom: 10px;
-            }
-
-            .stat-label {
-                font-size: 1.1rem;
-                color: #6c757d;
-                font-weight: 600;
-            }
-
-            /* Featured Clubs Section */
-            .clubs-section {
-                padding: 80px 0;
-            }
-
-            .section-title {
                 font-size: 2.5rem;
-                font-weight: 800;
-                text-align: center;
-                margin-bottom: 60px;
-                color: #2d3748;
-                position: relative;
-                padding-bottom: 20px;
-            }
-
-            .section-title::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100px;
-                height: 4px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 2px;
-            }
-
-            .club-card {
-                background: white;
-                border-radius: 20px;
-                overflow: hidden;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-                transition: all 0.3s ease;
-                height: 100%;
-                border: 2px solid transparent;
-            }
-
-            .club-card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
-                border-color: #667eea;
-            }
-
-            .club-card-header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                padding: 40px 20px;
-                text-align: center;
-                position: relative;
-            }
-
-            .club-logo {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-                border: 5px solid white;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-                object-fit: cover;
-            }
-
-            .club-emoji {
-                font-size: 80px;
-                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-            }
-
-            .club-card-body {
-                padding: 30px;
-            }
-
-            .club-card-body h4 {
-                font-size: 1.5rem;
-                font-weight: 700;
-                color: #2d3748;
-                margin-bottom: 15px;
-            }
-
-            .club-card-body p {
-                color: #6c757d;
-                line-height: 1.6;
-                margin-bottom: 20px;
-                min-height: 72px;
-            }
-
-            .club-meta {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 15px 0;
-                border-top: 2px solid #f1f3f5;
-                margin-bottom: 20px;
-            }
-
-            .club-meta-item {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                color: #667eea;
+                margin-bottom: 1rem;
                 font-weight: 600;
             }
-
-            .club-meta-item i {
+            
+            .hero-content p {
                 font-size: 1.2rem;
+                margin-bottom: 2rem;
+                opacity: 0.9;
             }
-
-            .btn-view-club {
+            
+            .hero-buttons .btn {
+                margin: 0.5rem;
+                padding: 0.75rem 2rem;
+                border-radius: var(--border-radius);
+                transition: var(--transition);
+            }
+            
+            .stats-section {
+                padding: 4rem 0;
+                background: var(--bg-light);
+            }
+            
+            .stat-card {
+                text-align: center;
+                padding: 2rem;
+                background: white;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-sm);
+                transition: var(--transition);
+            }
+            
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-md);
+            }
+            
+            .stat-number {
                 display: block;
-                width: 100%;
-                padding: 12px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                text-align: center;
-                border-radius: 50px;
+                font-size: 2.5rem;
                 font-weight: 600;
-                text-decoration: none;
-                transition: all 0.3s ease;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
             }
-
-            .btn-view-club:hover {
-                transform: scale(1.05);
-                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-                color: white;
+            
+            .stat-label {
+                color: var(--text-muted);
+                font-size: 1.1rem;
             }
-
-            /* CTA Section */
-            .cta-section {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 100px 0;
-                text-align: center;
-                position: relative;
-                overflow: hidden;
+            
+            .clubs-section {
+                padding: 4rem 0;
             }
-
-            .cta-section::before {
-                content: '';
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-                background-size: 50px 50px;
-                animation: moveBackground 20s linear infinite;
+            
+            .club-card {
+                height: 100%;
+                transition: var(--transition);
+                border: none;
+                box-shadow: var(--shadow-sm);
             }
-
-            @keyframes moveBackground {
-                0% {
-                    transform: translate(0, 0);
-                }
-                100% {
-                    transform: translate(50px, 50px);
-                }
+            
+            .club-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-md);
             }
-
-            .cta-section h2 {
+            
+            .club-emoji {
                 font-size: 3rem;
-                font-weight: 800;
-                margin-bottom: 20px;
-                position: relative;
-                z-index: 1;
+                text-align: center;
+                padding: 1.5rem;
+                background: var(--bg-light);
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
             }
-
-            .cta-section p {
-                font-size: 1.3rem;
-                margin-bottom: 40px;
-                opacity: 0.95;
-                position: relative;
-                z-index: 1;
+            
+            .club-logo {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
             }
-
-            .btn-cta {
-                padding: 18px 50px;
-                font-size: 1.2rem;
-                font-weight: 700;
-                background: white;
-                color: #667eea;
-                border: 3px solid white;
-                border-radius: 50px;
-                text-decoration: none;
-                display: inline-block;
-                transition: all 0.3s ease;
-                position: relative;
-                z-index: 1;
+            
+            .club-meta {
+                margin: 1rem 0;
+                color: var(--text-muted);
+                font-size: 0.9rem;
             }
-
-            .btn-cta:hover {
-                background: transparent;
-                color: white;
-                transform: translateY(-5px) scale(1.05);
-                box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            }
-
-            /* Responsive */
-            @media (max-width: 768px) {
-                .hero-content h1 {
-                    font-size: 2.2rem;
-                }
-
-                .hero-content p {
-                    font-size: 1.1rem;
-                }
-
-                .hero-buttons .btn {
-                    display: block;
-                    margin: 10px auto;
-                    max-width: 300px;
-                }
-
-                .stat-number {
-                    font-size: 2.5rem;
-                }
-
-                .section-title {
-                    font-size: 2rem;
-                }
-
-                .cta-section h2 {
-                    font-size: 2rem;
-                }
-            }
-
-            /* Features Section */
+            
             .features-section {
-                padding: 80px 0;
-                background: #f8f9fa;
+                padding: 4rem 0;
+                background: var(--bg-light);
             }
-
+            
             .feature-card {
                 text-align: center;
-                padding: 40px 30px;
+                padding: 2rem;
                 background: white;
-                border-radius: 20px;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-                transition: all 0.3s ease;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-sm);
                 height: 100%;
+                transition: var(--transition);
             }
-
+            
             .feature-card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-md);
             }
-
+            
             .feature-icon {
-                width: 80px;
-                height: 80px;
-                margin: 0 auto 20px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2rem;
-                color: white;
+                font-size: 2.5rem;
+                color: var(--primary);
+                margin-bottom: 1rem;
             }
-
+            
             .feature-card h4 {
-                font-size: 1.3rem;
-                font-weight: 700;
-                margin-bottom: 15px;
-                color: #2d3748;
+                margin-bottom: 1rem;
+                color: var(--heading);
             }
-
+            
             .feature-card p {
-                color: #6c757d;
-                line-height: 1.6;
+                color: var(--text-muted);
+                font-size: 0.95rem;
+                margin-bottom: 0;
+            }
+            
+            .cta-section {
+                padding: 5rem 0;
+                text-align: center;
+                background: var(--bg-light);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .cta-section h2 {
+                font-size: 2.5rem;
+                font-weight: 600;
+                color: var(--primary);
+            }
+            
+            .cta-section .lead {
+                font-size: 1.25rem;
+                color: var(--text);
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .btn-cta {
+                padding: 1rem 2.5rem;
+                font-size: 1.1rem;
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .btn-cta:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+            }
+            
+            .section-title {
+                text-align: center;
+                margin-bottom: 3rem;
+                color: var(--heading);
+                font-weight: 600;
             }
         </style>
     </head>
@@ -420,15 +202,15 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="container">
-                <div class="hero-content" data-aos="fade-up">
+                    <div class="hero-content" data-aos="fade-up">
                     <h1>University Club Management System</h1>
                     <p>Empowering university students to discover, join, and manage campus clubs and organizations</p>
                     <div class="hero-buttons">
-                        <a href="${pageContext.request.contextPath}/clubs" class="btn btn-hero-primary">
-                            <i class="bi bi-compass"></i> Explore Clubs
+                        <a href="${pageContext.request.contextPath}/clubs" class="btn btn-primary">
+                            Explore Clubs
                         </a>
-                        <a href="${pageContext.request.contextPath}/create-club" class="btn btn-hero-secondary">
-                            <i class="bi bi-plus-circle"></i> Register a Club
+                        <a href="${pageContext.request.contextPath}/create-club" class="btn btn-outline-primary">
+                            Register a Club
                         </a>
                     </div>
                 </div>
@@ -441,36 +223,24 @@
                 <div class="row g-4">
                     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="bi bi-people-fill"></i>
-                            </div>
                             <span class="stat-number">${stats.totalClubs}+</span>
                             <span class="stat-label">Active Clubs</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="bi bi-person-check-fill"></i>
-                            </div>
                             <span class="stat-number"><fmt:formatNumber value="${stats.totalMembers}" type="number" groupingUsed="true"/>+</span>
                             <span class="stat-label">Student Members</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="bi bi-calendar-event-fill"></i>
-                            </div>
                             <span class="stat-number">${stats.totalEvents}+</span>
                             <span class="stat-label">Events This Year</span>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="bi bi-emoji-smile-fill"></i>
-                            </div>
                             <span class="stat-number"><fmt:formatNumber value="${stats.satisfactionRate}" type="number" maxFractionDigits="0"/>%</span>
                             <span class="stat-label">Satisfaction Rate</span>
                         </div>
@@ -486,7 +256,7 @@
                 <div class="row g-4">
                     <c:forEach var="club" items="${featuredClubs}" varStatus="status">
                         <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="${status.index * 100}">
-                            <div class="club-card">
+                            <div class="club-card card">
                                 <div class="club-card-header">
                                     <c:choose>
                                         <c:when test="${not empty club.logo}">
@@ -494,7 +264,7 @@
                                                  alt="${club.clubName}" class="club-logo">
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="club-emoji">🎯</div>
+                                                <div class="club-emoji">�</div>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -512,12 +282,11 @@
                                     </p>
                                     <div class="club-meta">
                                         <div class="club-meta-item">
-                                            <i class="bi bi-people-fill"></i>
                                             <span>${club.memberCount} Members</span>
                                         </div>
                                     </div>
-                                    <a href="${pageContext.request.contextPath}/club-detail?id=${club.clubID}" class="btn-view-club">
-                                        <i class="bi bi-arrow-right-circle"></i> View Details
+                                    <a href="${pageContext.request.contextPath}/club-detail?id=${club.clubID}" class="btn btn-primary" style="display:block; width:100%">
+                                        View Details
                                     </a>
                                 </div>
                             </div>
@@ -576,10 +345,10 @@
         <section class="cta-section">
             <div class="container">
                 <div data-aos="zoom-in">
-                    <h2>Ready to Get Involved?</h2>
-                    <p>Join a club today and make the most of your university experience!</p>
-                    <a href="${pageContext.request.contextPath}/clubs" class="btn-cta">
-                        <i class="bi bi-rocket-takeoff"></i> Browse All Clubs
+                    <h2 class="mb-3">Ready to Get Involved?</h2>
+                    <p class="lead mb-4">Join a club today and make the most of your university experience!</p>
+                    <a href="${pageContext.request.contextPath}/clubs" class="btn btn-primary btn-lg btn-cta">
+                        <i class="bi bi-rocket-takeoff me-2"></i> Browse All Clubs
                     </a>
                 </div>
             </div>

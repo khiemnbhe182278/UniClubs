@@ -16,9 +16,10 @@
 
             body {
                 font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #f6f8fb;
                 min-height: 100vh;
                 display: flex;
+                color: #1f2937;
             }
 
             /* Sidebar */
@@ -35,8 +36,8 @@
             }
 
             .sidebar-header {
-                padding: 30px 20px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                background: #2b6cb0;
                 color: white;
             }
 
@@ -71,10 +72,9 @@
             }
 
             .sidebar-menu a:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                background: #eef2ff;
+                color: #2b6cb0;
+                transform: translateX(4px);
             }
 
             /* Main Content */
@@ -86,14 +86,15 @@
             }
 
             .page-header {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-                margin-bottom: 30px;
-                position: relative;
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+                margin-bottom: 20px;
                 overflow: hidden;
             }
+
+            /* Logout is provided by header.jsp - no per-page logout styling */
 
             .page-header::before {
                 content: "";
@@ -123,11 +124,10 @@
 
             /* Form Container */
             .form-container {
-                background: white;
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-                animation: fadeIn 0.6s ease;
+                background: #ffffff;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.04);
             }
 
             .form-header {
@@ -290,13 +290,13 @@
 
             .btn {
                 flex: 1;
-                padding: 16px 24px;
+                padding: 12px 18px;
                 border: none;
-                border-radius: 12px;
-                font-size: 15px;
+                border-radius: 8px;
+                font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: all 0.3s ease;
+                transition: transform 0.15s ease;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -305,20 +305,16 @@
             }
 
             .btn-submit {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #2b6cb0;
                 color: white;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             }
 
-            .btn-submit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
-            }
+            .btn-submit:hover { transform: translateY(-2px); }
 
             .btn-cancel {
-                background: #f7fafc;
-                color: #4a5568;
-                border: 2px solid #e2e8f0;
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e6eef6;
             }
 
             .btn-cancel:hover {
@@ -410,7 +406,6 @@
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admin/dashboard">📊 Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clubs">🏛️ Manage Clubs</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/members">👥 Manage Members</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/events">📅 Manage Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/users">👤 Manage Users</a></li>
             </ul>

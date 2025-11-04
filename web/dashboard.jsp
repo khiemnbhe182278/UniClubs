@@ -8,195 +8,239 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - UniClubs</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load baseline CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
     
     <style>
-        :root {
-            --primary-color: #2193b0;
-            --primary-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-            --border-radius: 12px;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8f9fa;
+            background: var(--bg);
             padding-top: 76px;
         }
 
         /* Header Styles */
         header {
-            background: var(--primary-gradient);
-            box-shadow: var(--shadow-md);
+            background: var(--panel-bg);
+            box-shadow: var(--shadow-sm);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1030;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .navbar-brand {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: white !important;
-            letter-spacing: -0.5px;
+            color: var(--heading) !important;
+            letter-spacing: -0.01em;
+            transition: all 0.2s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary) !important;
         }
 
         .navbar-nav .nav-link {
-            color: rgba(255,255,255,0.9) !important;
+            color: var(--text) !important;
             font-weight: 500;
-            padding: 0.5rem 1rem !important;
-            transition: all 0.3s;
+            padding: 0.75rem 1rem !important;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
         }
 
         .navbar-nav .nav-link:hover {
-            color: white !important;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
+            color: var(--primary) !important;
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
         }
 
         /* Welcome Banner */
         .welcome-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 2.5rem;
+            background: var(--panel-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem 2rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
         }
 
         .welcome-banner h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--heading);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
         .welcome-banner p {
             font-size: 1.1rem;
-            opacity: 0.95;
+            color: var(--text);
+            opacity: 0.9;
             margin: 0;
+            line-height: 1.6;
         }
 
         /* Section Cards */
         .section-card {
-            background: white;
+            background: var(--panel-bg);
             border-radius: var(--border-radius);
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .section-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-md);
         }
 
         .section-title {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: #212529;
+            font-weight: 600;
+            color: var(--heading);
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 3px solid #e9ecef;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         /* Club Cards */
         .club-card {
-            background: white;
-            border: 2px solid #e9ecef;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            padding: 1.5rem;
+            padding: 1.75rem;
             height: 100%;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .club-card:hover {
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+            background: var(--bg);
         }
 
         .club-card h3 {
-            color: var(--primary-color);
+            color: var(--heading);
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 1rem;
+            letter-spacing: -0.01em;
         }
 
         .club-info {
-            color: #6c757d;
+            color: var(--text);
             font-size: 0.95rem;
             margin-bottom: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
         }
 
         /* Status Badges */
         .badge-status {
             padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
+            border-radius: var(--border-radius);
+            font-weight: 500;
             font-size: 0.875rem;
             text-transform: capitalize;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
         }
 
         .badge-approved {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(16, 185, 129, 0.1);
+            color: rgb(6, 95, 70);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .badge-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(245, 158, 11, 0.1);
+            color: rgb(146, 64, 14);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .badge-rejected {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(239, 68, 68, 0.1);
+            color: rgb(153, 27, 27);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         /* Event Items */
         .event-item {
-            background: #f8f9fa;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 8px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary);
+            border-radius: var(--border-radius);
             padding: 1.25rem;
             margin-bottom: 1rem;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
 
         .event-item:hover {
-            background: white;
-            box-shadow: var(--shadow-sm);
+            background: var(--bg);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent);
+            transform: translateX(4px);
         }
 
         .event-item h4 {
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            font-weight: 700;
+            color: var(--heading);
+            font-size: 1.05rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
         }
 
         .event-club-name {
-            color: #495057;
+            color: var(--heading);
             font-weight: 500;
             margin-bottom: 0.5rem;
+            opacity: 0.9;
         }
 
         .event-date {
-            color: #6c757d;
-            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
         /* Buttons */
         .btn-primary-custom {
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
             border: none;
             color: white;
-            padding: 0.625rem 1.5rem;
-            border-radius: 8px;
+            padding: 0.875rem 1.5rem;
+            border-radius: var(--border-radius);
             font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(33,147,176,0.4);
+            box-shadow: var(--shadow-md);
+            filter: brightness(1.05);
             color: white;
         }
 
@@ -204,32 +248,45 @@
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
-            color: #6c757d;
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--border-color);
         }
 
         .empty-state h3 {
-            color: #495057;
+            color: var(--heading);
             font-weight: 600;
             margin-bottom: 0.75rem;
+            font-size: 1.25rem;
         }
 
         .empty-state p {
-            color: #6c757d;
+            color: var(--text);
             margin-bottom: 1.5rem;
+            opacity: 0.9;
+            font-size: 1rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            body {
+                padding-top: 64px;
+            }
+            
             .welcome-banner {
-                padding: 1.5rem;
+                padding: 1.75rem;
             }
             
             .welcome-banner h1 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
             
             .section-card {
                 padding: 1.5rem;
+            }
+
+            .club-card, .event-item {
+                margin-bottom: 1rem;
             }
         }
     </style>
@@ -255,7 +312,7 @@
                                 <div class="club-card">
                                     <h3>${membership.clubName}</h3>
                                     <p class="club-info">
-                                        Joined: <fmt:formatDate value="${membership.joinedAt}" pattern="MMM dd, yyyy"/>
+                                        Joined: <fmt:setLocale value="en_US"/><fmt:formatDate value="${membership.joinedAt}" pattern="MMM dd, yyyy"/>
                                     </p>
                                     <div class="mb-3">
                                         <span class="badge-status badge-${membership.joinStatus.toLowerCase()}">
@@ -287,7 +344,7 @@
 
         <!-- Upcoming Events Section -->
         <div class="section-card">
-            <h2 class="section-title">Sự kiện sắp diễn ra</h2>
+            <h2 class="section-title">Upcoming Events</h2>
             <c:choose>
                 <c:when test="${not empty upcomingEvents}">
                     <div class="mb-3">
@@ -296,25 +353,25 @@
                                 <h4>${event.eventName}</h4>
                                 <p class="event-club-name">${event.clubName}</p>
                                 <p class="event-date mb-3">
-                                    Thời gian: <fmt:formatDate value="${event.eventDate}" pattern="EEEE, dd/MM/yyyy 'lúc' HH:mm"/>
+                                    Time: <fmt:setLocale value="en_US"/><fmt:formatDate value="${event.eventDate}" pattern="EEEE, dd/MM/yyyy 'at' HH:mm"/>
                                 </p>
                                 <a href="${pageContext.request.contextPath}/event-detail?id=${event.eventID}" 
                                    class="btn btn-primary-custom btn-sm">
-                                    Xem chi tiết
+                                    View Details
                                 </a>
                             </div>
                         </c:forEach>
                     </div>
                     <div class="text-center">
                         <a href="${pageContext.request.contextPath}/events" class="btn btn-primary-custom">
-                            Xem tất cả sự kiện
+                            View All Events
                         </a>
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div class="empty-state">
-                        <h3>Chưa có sự kiện sắp tới</h3>
-                        <p>Các sự kiện mới sẽ được cập nhật sớm</p>
+                        <h3>No Upcoming Events</h3>
+                        <p>New events will be updated soon</p>
                     </div>
                 </c:otherwise>
             </c:choose>

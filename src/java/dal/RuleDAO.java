@@ -52,7 +52,22 @@ import model.Rule;
 public class RuleDAO extends DBContext {
 
     /**
-     * Create a new rule
+     * Tạo một quy định mới cho câu lạc bộ.
+     *
+     * Mô tả (dành cho người không biết code):
+     * - Hàm này nhận một đối tượng `Rule` chứa thông tin quy định (mã CLB, tiêu đề, nội dung)
+     *   và lưu nó vào cơ sở dữ liệu.
+     *
+     * Tham số:
+     * - rule: đối tượng Rule đã được điền các trường cần thiết (clubId, title, ruleText).
+     *
+     * Giá trị trả về:
+     * - true: nếu thao tác ghi vào CSDL thành công (đã thêm 1 dòng)
+     * - false: nếu có lỗi trong quá trình thêm (ví dụ lỗi kết nối hoặc ràng buộc dữ liệu)
+     *
+     * Ví dụ ngắn:
+     * Rule r = new Rule(); r.setClubID(3); r.setTitle("Nội quy"); r.setRuleText("...");
+     * createRule(r) -> true nếu thêm thành công.
      */
     public boolean createRule(Rule rule) {
         String sql = "INSERT INTO Rules (ClubID, Title, RuleText) VALUES (?, ?, ?)";
@@ -73,7 +88,18 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Get rule by ID
+     * Lấy một quy định theo mã (RuleID).
+     *
+     * Mô tả:
+     * - Trả về một đối tượng Rule nếu tìm thấy theo ruleId.
+     * - Trả về null nếu không tìm thấy hoặc có lỗi.
+     *
+     * Tham số:
+     * - ruleId: mã quy định (số nguyên)
+     *
+     * Giá trị trả về:
+     * - Rule object: khi tìm thấy
+     * - null: khi không tìm thấy hoặc gặp lỗi
      */
     public Rule getRuleById(int ruleId) {
         String sql = "SELECT * FROM Rules WHERE RuleID = ?";
@@ -95,7 +121,17 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Get all rules for a club
+     * Lấy tất cả quy định thuộc về một câu lạc bộ.
+     *
+     * Mô tả:
+     * - Trả về danh sách (List) các Rule cho clubId được cho.
+     * - Nếu không có quy định nào sẽ trả về danh sách rỗng.
+     *
+     * Tham số:
+     * - clubId: mã câu lạc bộ
+     *
+     * Giá trị trả về:
+     * - List<Rule>: danh sách quy định (có thể rỗng)
      */
     public List<Rule> getRulesByClubId(int clubId) {
         List<Rule> rules = new ArrayList<>();
@@ -118,7 +154,18 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Update an existing rule
+     * Cập nhật một quy định đã tồn tại.
+     *
+     * Mô tả:
+     * - Dựa theo rule.getRuleID() để xác định bản ghi cần cập nhật.
+     * - Cập nhật các trường Title và RuleText.
+     *
+     * Tham số:
+     * - rule: đối tượng Rule chứa ruleID và các giá trị mới cho title, ruleText.
+     *
+     * Giá trị trả về:
+     * - true: nếu cập nhật thành công (>=1 hàng bị ảnh hưởng)
+     * - false: nếu không thành công hoặc có lỗi
      */
     public boolean updateRule(Rule rule) {
         String sql = "UPDATE Rules SET Title = ?, RuleText = ? WHERE RuleID = ?";
@@ -139,7 +186,18 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Delete a rule
+     * Xóa một quy định theo mã.
+     *
+     * Mô tả:
+     * - Thực hiện xóa bản ghi trong bảng Rules theo ruleId.
+     * - Trước khi gọi hàm này, phía caller nên đảm bảo quyền (rule thuộc CLB của user).
+     *
+     * Tham số:
+     * - ruleId: mã của quy định cần xóa
+     *
+     * Giá trị trả về:
+     * - true: nếu xóa thành công
+     * - false: nếu có lỗi
      */
     public boolean deleteRule(int ruleId) {
         String sql = "DELETE FROM Rules WHERE RuleID = ?";
@@ -158,7 +216,18 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Delete all rules for a club
+     * Xóa toàn bộ quy định của một câu lạc bộ.
+     *
+     * Mô tả:
+     * - Hành động này sẽ xóa mọi bản ghi Rules có ClubID = clubId.
+     * - Thận trọng: đây là thao tác mạnh, thường dùng khi xoá CLB hoặc reset dữ liệu.
+     *
+     * Tham số:
+     * - clubId: mã câu lạc bộ
+     *
+     * Giá trị trả về:
+     * - true: nếu thao tác thực thi thành công
+     * - false: nếu có lỗi xảy ra
      */
     public boolean deleteRulesByClubId(int clubId) {
         String sql = "DELETE FROM Rules WHERE ClubID = ?";
@@ -176,7 +245,13 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Count rules for a club
+     * Đếm số lượng quy định thuộc về một câu lạc bộ.
+     *
+     * Tham số:
+     * - clubId: mã câu lạc bộ
+     *
+     * Giá trị trả về:
+     * - Số nguyên >=0: số lượng quy định
      */
     public int countRulesByClubId(int clubId) {
         String sql = "SELECT COUNT(*) FROM Rules WHERE ClubID = ?";
@@ -198,7 +273,17 @@ public class RuleDAO extends DBContext {
     }
 
     /**
-     * Extract Rule object from ResultSet
+     * Chuyển một hàng (row) trong ResultSet thành đối tượng Rule.
+     *
+     * Giải thích:
+     * - Khi chạy truy vấn SELECT, ResultSet chứa nhiều hàng. Hàm này lấy dữ liệu ở hàng hiện tại
+     *   và gán vào một đối tượng Rule để sử dụng dễ dàng trong Java.
+     *
+     * Tham số:
+     * - rs: ResultSet đang trỏ tới hàng cần chuyển
+     *
+     * Trả về:
+     * - Rule: đối tượng chứa dữ liệu được lấy từ ResultSet
      */
     private Rule extractRuleFromResultSet(ResultSet rs) throws SQLException {
         Rule rule = new Rule();

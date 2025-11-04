@@ -17,9 +17,10 @@
 
             body {
                 font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #f6f8fb;
                 min-height: 100vh;
                 display: flex;
+                color: #1f2937;
             }
 
             /* Sidebar Styles */
@@ -36,8 +37,8 @@
             }
 
             .sidebar-header {
-                padding: 30px 20px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                background: #2b6cb0;
                 color: white;
             }
 
@@ -72,10 +73,9 @@
             }
 
             .sidebar-menu a:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                background: #eef2ff;
+                color: #2b6cb0;
+                transform: translateX(4px);
             }
 
             /* Main Content */
@@ -87,40 +87,27 @@
             }
 
             .page-header {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-                margin-bottom: 30px;
-                position: relative;
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+                margin-bottom: 20px;
                 overflow: hidden;
             }
 
-            .page-header::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            }
-
             .page-header h1 {
-                color: #2d3748;
-                font-size: 32px;
+                color: #1f2937;
+                font-size: 28px;
                 font-weight: 700;
-                margin-bottom: 8px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                margin-bottom: 6px;
             }
 
             .page-header p {
                 color: #718096;
                 font-size: 16px;
             }
+
+            /* Logout is handled in header.jsp; per-page logout styles removed for minimal UI */
 
             /* Stats Cards */
             .stats-container {
@@ -604,7 +591,6 @@
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admin/dashboard">📊 Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clubs">🏛️ Manage Clubs</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/members">👥 Manage Members</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/events">📅 Manage Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/users">👤 Manage Users</a></li>
             </ul>
