@@ -1,14 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Manage Events - ${club.clubName}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
         <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #34495e;
+                --accent-color: #3498db;
+                --background-color: #f5f6fa;
+                --surface-color: #ffffff;
+                --text-primary: #2c3e50;
+                --text-secondary: #666666;
+                --border-color: #e1e4e8;
+                --sidebar-width: 250px;
+                --success-color: #2ecc71;
+                --warning-color: #f1c40f;
+                --danger-color: #e74c3c;
+            }
+
             * {
                 margin: 0;
                 padding: 0;
@@ -16,35 +34,103 @@
             }
 
             body {
-                font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                background: var(--background-color);
+                color: var(--text-primary);
                 min-height: 100vh;
-                padding: 40px 20px;
+                display: flex;
             }
 
-            .container {
+            /* Sidebar */
+            .sidebar {
+                width: var(--sidebar-width);
+                background: var(--surface-color);
+                border-right: 1px solid var(--border-color);
+                position: fixed;
+                height: 100vh;
+                overflow-y: auto;
+                transition: all 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar-header {
+                padding: 24px 20px;
+                background: var(--surface-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .sidebar-header h2 {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 4px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .sidebar-header p {
+                font-size: 0.875rem;
+                color: var(--text-secondary);
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 12px 0;
+            }
+
+            .sidebar-menu li {
+                margin: 2px 12px;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 12px 16px;
+                color: var(--text-secondary);
+                text-decoration: none;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+
+            .sidebar-menu a:hover {
+                background: var(--background-color);
+                color: var(--text-primary);
+            }
+
+            .sidebar-menu a.active {
+                background: var(--background-color);
+                color: var(--accent-color);
+                font-weight: 600;
+            }
+
+            /* Main Content */
+            .main-content {
+                flex: 1;
+                margin-left: var(--sidebar-width);
+                padding: 32px;
                 max-width: 1400px;
-                margin: 0 auto;
             }
 
+            /* Top Bar */
             .header {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                background: var(--surface-color);
+                padding: 24px;
+                border-radius: 8px;
+                margin-bottom: 32px;
+                border: 1px solid var(--border-color);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
 
             .header h1 {
-                font-size: 28px;
-                font-weight: 700;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--text-primary);
             }
 
             .header-actions {
@@ -53,66 +139,62 @@
             }
 
             .btn {
-                padding: 12px 24px;
-                border: none;
-                border-radius: 12px;
-                font-weight: 600;
-                font-size: 14px;
+                padding: 8px 16px;
+                border: 1px solid transparent;
+                border-radius: 6px;
+                font-weight: 500;
+                font-size: 0.875rem;
                 cursor: pointer;
-                transition: all 0.3s ease;
-                text-decoration: none;
+                transition: all 0.2s ease;
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
+                text-decoration: none;
             }
 
             .btn-primary {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: var(--accent-color);
                 color: white;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                border-color: var(--accent-color);
             }
 
             .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+                opacity: 0.9;
             }
 
             .btn-back {
-                background: #f7fafc;
-                color: #2d3748;
-                border: 2px solid #e2e8f0;
+                background: var(--background-color);
+                color: var(--text-primary);
+                border-color: var(--border-color);
             }
 
             .btn-back:hover {
-                background: #edf2f7;
-                transform: translateY(-2px);
+                background: var(--background-color);
+                border-color: var(--accent-color);
             }
 
             .events-section {
-                background: white;
-                border-radius: 20px;
-                padding: 35px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                background: var(--surface-color);
+                border-radius: 8px;
+                padding: 24px;
+                border: 1px solid var(--border-color);
             }
 
             table {
                 width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-
-            thead {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-top: 16px;
             }
 
             thead th {
-                padding: 16px 18px;
+                padding: 12px 24px;
                 text-align: left;
-                color: white;
-                font-weight: 600;
-                font-size: 13px;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
+                color: var(--text-secondary);
+                font-weight: 500;
+                font-size: 0.875rem;
+                background: var(--background-color);
+                border-bottom: 1px solid var(--border-color);
             }
 
             thead th:first-child {
@@ -164,33 +246,37 @@
             }
 
             .badge {
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
-                display: inline-block;
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                line-height: 1;
             }
 
             .badge-pending {
-                background: #fef5e7;
-                color: #f39c12;
+                background: #fff3e0;
+                color: #f57c00;
+                border: 1px solid #ffe0b2;
             }
 
             .badge-approved {
-                background: #d4f4dd;
-                color: #22543d;
+                background: #e8f5e9;
+                color: #2e7d32;
+                border: 1px solid #a5d6a7;
             }
 
             .badge-completed {
-                background: #e0e7ff;
-                color: #4c51bf;
+                background: #e3f2fd;
+                color: #1976d2;
+                border: 1px solid #90caf9;
             }
 
             .badge-cancelled {
-                background: #fee;
-                color: #c53030;
+                background: #ffebee;
+                color: #c62828;
+                border: 1px solid #ef9a9a;
             }
 
             .action-buttons {
@@ -200,38 +286,38 @@
             }
 
             .btn-sm {
-                padding: 8px 16px;
-                font-size: 13px;
+                padding: 6px 12px;
+                font-size: 0.8125rem;
             }
 
             .btn-info {
-                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-                color: white;
+                background: #e3f2fd;
+                color: #1976d2;
+                border-color: #90caf9;
             }
 
             .btn-info:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+                background: #bbdefb;
             }
 
             .btn-warning {
-                background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-                color: white;
+                background: #fff3e0;
+                color: #f57c00;
+                border-color: #ffe0b2;
             }
 
             .btn-warning:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+                background: #ffe0b2;
             }
 
             .btn-danger {
-                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-                color: white;
+                background: #ffebee;
+                color: #c62828;
+                border-color: #ef9a9a;
             }
 
             .btn-danger:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+                background: #ffcdd2;
             }
 
             .participants-info {
@@ -296,8 +382,50 @@
             }
 
             @media (max-width: 1200px) {
+                .main-content {
+                    max-width: 100%;
+                }
+            }
+
+            @media (max-width: 1024px) {
+                .sidebar {
+                    width: 240px;
+                }
+                .main-content {
+                    margin-left: 240px;
+                    padding: 20px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    transform: translateX(-100%);
+                    position: fixed;
+                }
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+                .main-content {
+                    margin-left: 0;
+                    padding: 16px;
+                }
+                .header {
+                    flex-direction: column;
+                    gap: 16px;
+                    text-align: center;
+                }
+                .header-actions {
+                    justify-content: center;
+                }
+                .action-buttons {
+                    flex-direction: column;
+                }
+                .btn {
+                    width: 100%;
+                    justify-content: center;
+                }
                 table {
-                    font-size: 13px;
+                    font-size: 0.8125rem;
                 }
 
                 thead th,
@@ -354,7 +482,46 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="bi bi-person-badge"></i> Leader Dashboard</h2>
+                <p>${club.clubName}</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/dashboard?clubId=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/dashboard')}">class="active"</c:if>>
+                        <i class="bi bi-speedometer2"></i> Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/club/members?clubId=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/members')}">class="active"</c:if>>
+                        <i class="bi bi-people"></i> Members
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/events?clubId=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/events')}">class="active"</c:if>>
+                        <i class="bi bi-calendar3"></i> Events
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/rules?clubId=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/rules')}">class="active"</c:if>>
+                        <i class="bi bi-file-text"></i> Rules
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/news?clubId=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/news')}">class="active"</c:if>>
+                        <i class="bi bi-newspaper"></i> News
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
             <div class="header">
                 <div>
                     <h1>📅 Manage Events</h1>

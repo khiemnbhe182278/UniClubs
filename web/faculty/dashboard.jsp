@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,24 +9,85 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Faculty Dashboard - UniClubs</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <style>
-            :root {
-                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                --success-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                --warning-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                --info-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            }
-
             body {
-                background: #f5f7fa;
+                background-color: #f8f9fa;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
+            
+            /* Sidebar Styles */
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 260px;
+                background-color: #fff;
+                padding: 1rem;
+                overflow-y: auto;
+                z-index: 1000;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
-            /* Top Navigation */
-            .navbar {
-                background: var(--primary-gradient) !important;
-                box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            .sidebar-header {
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 1rem;
+            }
+
+            .sidebar-header h2 {
+                font-size: 1.25rem;
+                margin-bottom: 0.5rem;
+                color: #333;
+            }
+
+            .sidebar-header p {
+                font-size: 0.9rem;
+                color: #666;
+                margin: 0;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar-menu li {
+                margin-bottom: 0.5rem;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                color: #333;
+                text-decoration: none;
+                border-radius: 0.5rem;
+                transition: all 0.3s;
+            }
+
+            .sidebar-menu a:hover {
+                background-color: #f8f9fa;
+                color: #007bff;
+            }
+
+            .sidebar-menu a.active {
+                background-color: #e7f1ff;
+                color: #007bff;
+            }
+
+            .sidebar-menu i {
+                margin-right: 0.5rem;
+                font-size: 1.1rem;
+            }
+
+            /* Main Content */
+            .main-content {
+                margin-left: 260px;
+                padding: 2rem;
+                min-height: 100vh;
             }
 
             .navbar-brand {
@@ -56,73 +118,55 @@
             /* Statistics Cards */
             .stat-card {
                 background: white;
-                border-radius: 15px;
+                border-radius: 0.5rem;
                 padding: 1.5rem;
                 height: 100%;
-                transition: all 0.3s ease;
-                border: none;
-                box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+                border: 1px solid #e9ecef;
                 position: relative;
-                overflow: hidden;
             }
 
-            .stat-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 4px;
-                height: 100%;
-                background: var(--gradient);
+            .stat-card.primary {
+                border-left: 4px solid #007bff;
             }
-
-            .stat-card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            .stat-card.success {
+                border-left: 4px solid #28a745;
             }
-
-            .stat-card.primary::before {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            .stat-card.warning {
+                border-left: 4px solid #ffc107;
             }
-            .stat-card.success::before {
-                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-            }
-            .stat-card.warning::before {
-                background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-            }
-            .stat-card.info::before {
-                background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            .stat-card.info {
+                border-left: 4px solid #17a2b8;
             }
 
             .stat-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 12px;
+                width: 48px;
+                height: 48px;
+                border-radius: 0.5rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.8rem;
+                font-size: 1.5rem;
                 margin-bottom: 1rem;
             }
 
             .stat-card.primary .stat-icon {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
+                background-color: #e7f1ff;
+                color: #007bff;
             }
 
             .stat-card.success .stat-icon {
-                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-                color: white;
+                background-color: #d4edda;
+                color: #28a745;
             }
 
             .stat-card.warning .stat-icon {
-                background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-                color: white;
+                background-color: #fff3cd;
+                color: #ffc107;
             }
 
             .stat-card.info .stat-icon {
-                background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-                color: white;
+                background-color: #d1ecf1;
+                color: #17a2b8;
             }
 
             .stat-number {
@@ -143,19 +187,18 @@
             /* Content Cards */
             .content-card {
                 background: white;
-                border-radius: 15px;
-                box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-                border: none;
+                border-radius: 0.5rem;
+                border: 1px solid #e9ecef;
                 height: 100%;
             }
 
             .content-card .card-header {
-                background: var(--primary-gradient);
-                color: white;
-                border: none;
-                border-radius: 15px 15px 0 0 !important;
-                padding: 1.25rem 1.5rem;
-                font-weight: 600;
+                background: #f8f9fa;
+                color: #333;
+                border-bottom: 1px solid #e9ecef;
+                padding: 1rem 1.5rem;
+                font-weight: 500;
+                border-radius: 0.5rem 0.5rem 0 0;
             }
 
             .content-card .card-body {
@@ -164,86 +207,77 @@
 
             /* Modern Table */
             .modern-table {
-                border-collapse: separate;
-                border-spacing: 0;
+                width: 100%;
+                margin-bottom: 1rem;
             }
 
             .modern-table thead th {
-                background: #f7fafc;
-                color: #4a5568;
-                font-weight: 600;
-                text-transform: uppercase;
-                font-size: 0.75rem;
-                letter-spacing: 0.5px;
-                padding: 1rem;
-                border: none;
-            }
-
-            .modern-table tbody tr {
-                transition: all 0.2s;
+                background: #f8f9fa;
+                color: #495057;
+                font-weight: 500;
+                padding: 0.75rem;
+                border-bottom: 2px solid #dee2e6;
             }
 
             .modern-table tbody tr:hover {
-                background: #f7fafc;
-                transform: scale(1.01);
+                background-color: #f8f9fa;
             }
 
             .modern-table tbody td {
-                padding: 1rem;
+                padding: 0.75rem;
                 vertical-align: middle;
-                border-bottom: 1px solid #e2e8f0;
+                border-bottom: 1px solid #dee2e6;
             }
 
             /* Badges */
             .badge-modern {
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
+                padding: 0.4rem 0.8rem;
+                border-radius: 0.25rem;
                 font-weight: 500;
-                font-size: 0.8rem;
+                font-size: 0.875rem;
             }
 
             .badge-active {
-                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+                background-color: #28a745;
                 color: white;
             }
 
             .badge-pending {
-                background: linear-gradient(135deg, #ffd89b 0%, #ffb347 100%);
-                color: white;
+                background-color: #ffc107;
+                color: #212529;
             }
 
             .badge-approved {
-                background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+                background-color: #28a745;
                 color: white;
             }
 
             /* Buttons */
             .btn-modern {
-                border-radius: 10px;
-                padding: 0.5rem 1.5rem;
-                font-weight: 600;
-                transition: all 0.3s;
-                border: none;
-            }
-
-            .btn-modern:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                padding: 0.375rem 1rem;
+                font-weight: 500;
+                border-radius: 0.25rem;
             }
 
             .btn-primary-modern {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background-color: #007bff;
+                border-color: #007bff;
                 color: white;
             }
 
+            .btn-primary-modern:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
             .btn-outline-modern {
-                border: 2px solid #667eea;
-                color: #667eea;
-                background: transparent;
+                border: 1px solid #007bff;
+                color: #007bff;
+                background-color: transparent;
             }
 
             .btn-outline-modern:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background-color: #007bff;
                 color: white;
             }
 
@@ -319,51 +353,42 @@
         </style>
     </head>
     <body>
-        <!-- Top Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/faculty/dashboard">
-                    <i class="fas fa-graduation-cap me-2"></i>Faculty Portal
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item">
-                            <a class="nav-link active px-3" href="${pageContext.request.contextPath}/faculty/dashboard">
-                                <i class="fas fa-home me-1"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" href="${pageContext.request.contextPath}/faculty/members">
-                                <i class="fas fa-users me-1"></i> Members
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" href="${pageContext.request.contextPath}/faculty/events">
-                                <i class="fas fa-calendar me-1"></i> Events
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" href="${pageContext.request.contextPath}/faculty/news">
-                                <i class="fas fa-newspaper me-1"></i> News
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown ms-3">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-1"></i> ${sessionScope.user.userName}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                    </a></li>
-                            </ul>
-                        </li>
-                    </ul>
+        
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="bi bi-person-badge"></i> Faculty Portal</h2>
+                <p>${sessionScope.user.userName}</p>
+                <div class="d-flex mt-3">
+                    <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
+                    </a>
                 </div>
             </div>
-        </nav>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="${pageContext.request.contextPath}/faculty/dashboard" <c:if test="${fn:contains(pageContext.request.requestURI, '/faculty/dashboard')}">class="active"</c:if>>
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/faculty/members" <c:if test="${fn:contains(pageContext.request.requestURI, '/faculty/members')}">class="active"</c:if>>
+                        <i class="bi bi-people"></i> Members
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/faculty/events" <c:if test="${fn:contains(pageContext.request.requestURI, '/faculty/events')}">class="active"</c:if>>
+                        <i class="bi bi-calendar3"></i> Events
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/faculty/news" <c:if test="${fn:contains(pageContext.request.requestURI, '/faculty/news')}">class="active"</c:if>>
+                        <i class="bi bi-newspaper"></i> News
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-content">
 
         <div class="container-fluid px-4 py-4">
             <!-- Alert Messages -->
@@ -618,6 +643,7 @@
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

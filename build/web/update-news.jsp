@@ -1,207 +1,99 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Update News - ${club.clubName}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+            :root{--bg:#f7fafc;--surface:#ffffff;--muted:#6b7280;--primary:#2563eb;--sidebar-w:250px}
 
-            body {
-                font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                min-height: 100vh;
-                padding: 40px 20px;
-            }
+            *{box-sizing:border-box;margin:0;padding:0}
 
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-            }
+            body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh}
 
-            .form-card {
-                background: white;
-                border-radius: 20px;
-                padding: 40px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-                position: relative;
-                overflow: hidden;
-            }
+            /* Sidebar (kept consistent) */
+            .sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid #e6edf3;position:fixed;height:100vh;overflow:auto}
+            .sidebar-header{padding:18px 20px;border-bottom:1px solid #f1f5f9}
+            .sidebar-header h2{font-size:1.05rem;font-weight:600}
+            .sidebar-header p{color:var(--muted);font-size:0.875rem;margin-top:4px}
+            .sidebar-menu{list-style:none;padding:10px 0}
+            .sidebar-menu li{margin:6px 8px}
+            .sidebar-menu a{display:block;padding:10px 14px;color:var(--muted);text-decoration:none;border-radius:6px;font-weight:500}
+            .sidebar-menu a:hover{background:#f1f5f9;color:var(--primary)}
+            .sidebar-menu a.active{background:#eef2ff;color:var(--primary);font-weight:600}
 
-            .form-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
-            }
+            .main-content{margin-left:var(--sidebar-w);padding:28px}
 
-            h1 {
-                font-size: 28px;
-                font-weight: 700;
-                background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 10px;
-            }
+            .container{max-width:900px;margin:0 auto}
+            .form-card{background:var(--surface);border:1px solid #eef2f6;border-radius:10px;padding:20px}
+            h1{font-size:20px;font-weight:700;color:#0f172a;margin-bottom:6px}
+            .subtitle{color:var(--muted);margin-bottom:12px}
 
-            .subtitle {
-                color: #718096;
-                font-size: 14px;
-                margin-bottom: 30px;
-            }
+            .form-group{margin-bottom:14px}
+            label{display:block;font-weight:600;color:#0f172a;margin-bottom:6px;font-size:14px}
+            input[type="text"],textarea,select{width:100%;padding:10px 12px;border:1px solid #e6edf3;border-radius:8px;font-size:14px}
+            textarea{min-height:160px}
+            input[type="text"]:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,0.06)}
 
-            .form-group {
-                margin-bottom: 25px;
-            }
+            .button-group{display:flex;gap:12px;margin-top:18px}
+            .btn{flex:1;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+            .btn-primary{background:var(--primary);color:#fff}
+            .btn-secondary{background:#f7fafc;color:#0f172a;border:1px solid #eef2f6}
 
-            label {
-                display: block;
-                font-weight: 600;
-                color: #2d3748;
-                margin-bottom: 8px;
-                font-size: 14px;
-            }
-
-            input[type="text"],
-            textarea,
-            select {
-                width: 100%;
-                padding: 14px 16px;
-                border: 2px solid #e2e8f0;
-                border-radius: 12px;
-                font-family: 'Inter', sans-serif;
-                font-size: 14px;
-                transition: all 0.3s ease;
-            }
-
-            input[type="text"]:focus,
-            textarea:focus,
-            select:focus {
-                outline: none;
-                border-color: #f39c12;
-                box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
-            }
-
-            textarea {
-                min-height: 200px;
-                resize: vertical;
-            }
-
-            .button-group {
-                display: flex;
-                gap: 15px;
-                margin-top: 30px;
-            }
-
-            .btn {
-                flex: 1;
-                padding: 14px 24px;
-                border: none;
-                border-radius: 12px;
-                font-weight: 600;
-                font-size: 14px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                text-decoration: none;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .btn-warning {
-                background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-                color: white;
-                box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-            }
-
-            .btn-warning:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(243, 156, 18, 0.5);
-            }
-
-            .btn-secondary {
-                background: #f7fafc;
-                color: #2d3748;
-                border: 2px solid #e2e8f0;
-            }
-
-            .btn-secondary:hover {
-                background: #edf2f7;
-                transform: translateY(-2px);
-            }
-
-            .alert {
-                padding: 14px 18px;
-                border-radius: 12px;
-                margin-bottom: 25px;
-                font-size: 14px;
-                font-weight: 500;
-            }
-
-            .alert-error {
-                background: #fee;
-                color: #c53030;
-                border-left: 4px solid #f56565;
-            }
-
-            .char-count {
-                text-align: right;
-                font-size: 12px;
-                color: #718096;
-                margin-top: 5px;
-            }
-
-            @media (max-width: 768px) {
-                .form-card {
-                    padding: 25px;
-                }
-
-                .button-group {
-                    flex-direction: column;
-                }
-
-                h1 {
-                    font-size: 24px;
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .form-card {
-                animation: fadeIn 0.5s ease;
-            }
+            @media(max-width:768px){.main-content{margin-left:0;padding:16px}.button-group{flex-direction:column}}
         </style>
     </head>
     <body>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="bi bi-person-badge"></i> Leader Dashboard</h2>
+                <p>${club.clubName}</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/dashboard?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/dashboard')}">class="active"</c:if>>
+                        <i class="bi bi-speedometer2"></i> Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/club/members?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/club/members')}">class="active"</c:if>>
+                        <i class="bi bi-people"></i> Members
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/events?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/events')}">class="active"</c:if>>
+                        <i class="bi bi-calendar3"></i> Events
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/rules?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/rules')}">class="active"</c:if>>
+                        <i class="bi bi-file-text"></i> Rules
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/news?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/news')}">class="active"</c:if>>
+                        <i class="bi bi-newspaper"></i> News
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-content">
         <div class="container">
             <div class="form-card">
-                <h1>✏️ Update News</h1>
+                <h1><i class="bi bi-pencil"></i> Update News</h1>
                 <p class="subtitle">${club.clubName}</p>
 
                 <c:if test="${not empty error}">
                     <div class="alert alert-error">
-                        ⚠️ ${error}
+                        <i class="bi bi-exclamation-triangle-fill"></i> ${error}
                     </div>
                 </c:if>
 
@@ -240,11 +132,11 @@
 
                     <div class="button-group">
                         <button type="submit" class="btn btn-warning">
-                            ✓ Update News
+                            <i class="bi bi-check-lg"></i> Update News
                         </button>
                         <a href="${pageContext.request.contextPath}/leader/news?clubId=${club.clubID}" 
                            class="btn btn-secondary">
-                            ✗ Cancel
+                            <i class="bi bi-x-lg"></i> Cancel
                         </a>
                     </div>
                 </form>

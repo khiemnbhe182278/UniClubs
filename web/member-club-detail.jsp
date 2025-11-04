@@ -1,57 +1,57 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${club.clubName} - Club Details</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
         <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
             body {
-                font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background-color: #f8f9fa;
                 min-height: 100vh;
-                padding: 40px 20px;
             }
 
             .container {
                 max-width: 1200px;
                 margin: 0 auto;
+                padding: 2rem;
             }
 
             .back-link {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                color: white;
+                color: var(--text);
                 text-decoration: none;
                 font-weight: 600;
-                font-size: 14px;
-                margin-bottom: 25px;
-                transition: all 0.3s ease;
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+                transition: all 0.2s ease;
+                opacity: 0.8;
             }
 
             .back-link:hover {
                 gap: 12px;
+                opacity: 1;
+                color: var(--primary);
             }
 
             /* Club Header */
             .club-header {
-                background: white;
-                border-radius: 20px;
-                padding: 40px;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                background: var(--panel-bg);
+                border-radius: var(--border-radius-lg);
+                padding: 2.5rem 2rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--shadow-lg);
                 position: relative;
                 overflow: hidden;
+                border: 1px solid var(--border-color);
             }
 
             .club-header::before {
@@ -60,25 +60,24 @@
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 6px;
-                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+                height: 4px;
+                background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
             }
 
             .club-title {
-                font-size: 36px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 15px;
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: var(--heading);
+                margin-bottom: 1rem;
+                letter-spacing: -0.02em;
             }
 
             .club-description {
-                color: #4a5568;
-                font-size: 16px;
+                color: var(--text);
+                font-size: 1.05rem;
                 line-height: 1.7;
-                margin-bottom: 25px;
+                margin-bottom: 1.5rem;
+                opacity: 0.9;
             }
 
             .club-meta {
@@ -91,33 +90,37 @@
             .meta-item {
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                color: #718096;
-                font-size: 14px;
+                gap: 0.625rem;
+                color: var(--text-muted);
+                font-size: 0.95rem;
                 font-weight: 500;
+                padding: 0.5rem 1rem;
+                background: var(--bg-light);
+                border-radius: var(--border-radius);
             }
 
             .meta-item strong {
-                color: #2d3748;
+                color: var(--text);
                 font-weight: 600;
+                margin-left: 0.25rem;
             }
 
             .join-button {
-                padding: 14px 32px;
-                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+                padding: 0.875rem 2rem;
+                background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
                 color: white;
                 border: none;
-                border-radius: 12px;
+                border-radius: var(--border-radius);
                 font-weight: 600;
-                font-size: 15px;
+                font-size: 1rem;
                 cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+                transition: all 0.2s ease;
+                box-shadow: var(--shadow-sm);
             }
 
             .join-button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(72, 187, 120, 0.5);
+                box-shadow: var(--shadow-md);
             }
 
             .joined-button {
@@ -132,23 +135,25 @@
             /* Stats Grid */
             .stats-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-                margin-bottom: 30px;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 1.25rem;
+                margin-bottom: 2rem;
             }
 
             .stat-card {
-                background: white;
-                padding: 25px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                background: var(--panel-bg);
+                padding: 1.75rem;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-sm);
                 text-align: center;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
+                border: 1px solid var(--border-color);
             }
 
             .stat-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+                border-color: var(--border-hover);
             }
 
             .stat-icon {
@@ -173,26 +178,28 @@
 
             /* Section */
             .section {
-                background: white;
-                border-radius: 20px;
-                padding: 35px;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+                background: var(--panel-bg);
+                border-radius: var(--border-radius);
+                padding: 2rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--shadow-sm);
+                border: 1px solid var(--border-color);
             }
 
             .section-header {
                 display: flex;
                 align-items: center;
-                gap: 12px;
-                margin-bottom: 25px;
-                padding-bottom: 20px;
-                border-bottom: 2px solid #e2e8f0;
+                gap: 1rem;
+                margin-bottom: 1.75rem;
+                padding-bottom: 1.25rem;
+                border-bottom: 1px solid var(--border-color);
             }
 
             .section-title {
-                font-size: 24px;
-                font-weight: 700;
-                color: #2d3748;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--heading);
+                letter-spacing: -0.01em;
             }
 
             /* Leadership */
@@ -249,32 +256,37 @@
             }
 
             .news-card {
-                background: #f7fafc;
-                padding: 20px;
-                border-radius: 16px;
-                border-left: 4px solid #667eea;
-                transition: all 0.3s ease;
+                background: var(--bg-light);
+                padding: 1.25rem;
+                border-radius: var(--border-radius);
+                border-left: 3px solid var(--primary);
+                transition: all 0.2s ease;
+                border: 1px solid var(--border-color);
+                border-left-width: 3px;
             }
 
             .news-card:hover {
-                background: #edf2f7;
-                transform: translateX(5px);
+                background: var(--bg);
+                transform: translateX(4px);
+                border-color: var(--border-hover);
+                border-left-color: var(--accent);
             }
 
             .news-title {
-                font-size: 16px;
-                font-weight: 700;
-                color: #2d3748;
-                margin-bottom: 8px;
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: var(--heading);
+                margin-bottom: 0.75rem;
             }
 
             .news-content {
-                color: #4a5568;
-                font-size: 14px;
+                color: var(--text);
+                font-size: 0.95rem;
                 line-height: 1.6;
-                margin-bottom: 10px;
+                margin-bottom: 0.75rem;
                 display: -webkit-box;
                 -webkit-line-clamp: 3;
+                line-clamp: 3;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
             }
@@ -293,23 +305,31 @@
             }
 
             .rule-item {
-                background: #f7fafc;
-                padding: 20px;
-                border-radius: 16px;
-                border-left: 4px solid #764ba2;
+                background: var(--bg-light);
+                padding: 1.25rem;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border-color);
+                border-left: 3px solid var(--accent);
+                transition: all 0.2s ease;
+            }
+
+            .rule-item:hover {
+                background: var(--bg);
+                border-color: var(--border-hover);
             }
 
             .rule-title {
-                font-size: 16px;
-                font-weight: 700;
-                color: #2d3748;
-                margin-bottom: 8px;
+                font-size: 1.05rem;
+                font-weight: 600;
+                color: var(--heading);
+                margin-bottom: 0.75rem;
             }
 
             .rule-text {
-                color: #4a5568;
-                font-size: 14px;
+                color: var(--text);
+                font-size: 0.95rem;
                 line-height: 1.6;
+                opacity: 0.9;
             }
 
             /* Events List */
@@ -320,70 +340,121 @@
             }
 
             .event-card {
-                background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-                padding: 20px;
-                border-radius: 16px;
-                display: flex;
-                gap: 20px;
+                background: #ffffff;
+                padding: 1.5rem;
+                border-radius: 12px;
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                gap: 1.5rem;
                 align-items: center;
-                transition: all 0.3s ease;
+                position: relative;
+                border: 1px solid #e2e8f0;
+                margin-bottom: 1rem;
+                transition: all 0.2s ease-in-out;
             }
 
             .event-card:hover {
-                transform: translateX(5px);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                border-color: #cbd5e0;
             }
 
             .event-date-box {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 15px;
-                border-radius: 12px;
+                background: #f8fafc;
+                color: #1a202c;
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
                 text-align: center;
-                min-width: 80px;
+                min-width: 4.5rem;
+                border: 2px solid #e2e8f0;
             }
 
             .event-day {
-                font-size: 28px;
-                font-weight: 800;
+                font-size: 1.75rem;
+                font-weight: 700;
                 line-height: 1;
+                color: #2563eb;
+                margin-bottom: 0.25rem;
             }
 
             .event-month {
-                font-size: 12px;
+                font-size: 0.875rem;
                 font-weight: 600;
                 text-transform: uppercase;
+                color: #64748b;
             }
 
             .event-info {
-                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
             .event-name {
-                font-size: 18px;
-                font-weight: 700;
-                color: #2d3748;
-                margin-bottom: 5px;
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: #1a202c;
+                line-height: 1.4;
             }
 
             .event-location {
-                color: #718096;
-                font-size: 14px;
+                color: #64748b;
+                font-size: 0.875rem;
                 display: flex;
                 align-items: center;
-                gap: 5px;
+                gap: 1rem;
+            }
+
+            .event-location i {
+                font-size: 1rem;
+            }
+
+            .event-actions {
+                display: flex;
+                gap: 0.75rem;
+                align-items: center;
             }
 
             .event-badge {
-                padding: 6px 12px;
-                background: #d4f4dd;
-                color: #22543d;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                letter-spacing: 0.025em;
             }
 
-            .no-data {
+            .event-badge {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.5rem;
+                font-size: 0.75rem;
+                font-weight: 500;
+                background: #e9ecef;
+                color: #495057;
+            }
+            
+            .open-badge {
+                background-color: #dcfce7;
+                color: #166534;
+                border: 1px solid #86efac;
+            }
+            
+            .full-badge {
+                background-color: #fee2e2;
+                color: #991b1b;
+                border: 1px solid #fca5a5;
+            }
+            
+            .closed-badge {
+                background-color: #f1f5f9;
+                color: #475569;
+                border: 1px solid #cbd5e0;
+            }            .no-data {
                 text-align: center;
                 padding: 40px;
                 color: #718096;
@@ -434,6 +505,7 @@
         </style>
     </head>
     <body>
+        <jsp:include page="header.jsp"/>
         <div class="container">
             <a href="${pageContext.request.contextPath}/dashboard" class="back-link">
                 ← Back to Dashboard
@@ -444,14 +516,7 @@
                 <h1 class="club-title">🎓 ${club.clubName}</h1>
                 <p class="club-description">${club.description}</p>
 
-                <div class="club-meta">
-                    <div class="meta-item">
-                        📅 <strong>Founded:</strong> <fmt:formatDate value="${club.createdAt}" pattern="MMM yyyy"/>
-                    </div>
-                    <div class="meta-item">
-                        ✅ <strong>Status:</strong> ${club.status}
-                    </div>
-                </div>
+
 
                 <c:choose>
                     <c:when test="${sessionScope.user != null}">
@@ -547,10 +612,24 @@
                                     <div class="event-info">
                                         <div class="event-name">${event.eventName}</div>
                                         <div class="event-location">
-                                            📍 ${event.location} • 🕐 <fmt:formatDate value="${event.eventDate}" pattern="HH:mm"/>
+                                            <span><i class="bi bi-geo-alt-fill text-danger"></i> ${event.location}</span>
+                                            <span><i class="bi bi-clock-fill text-primary"></i> <fmt:formatDate value="${event.eventDate}" pattern="HH:mm"/></span>
+                                            <span><i class="bi bi-people-fill text-success"></i> ${event.maxParticipants} slots</span>
                                         </div>
                                     </div>
-                                    <span class="event-badge">${event.status}</span>
+                                    <div class="event-actions">
+                                        <form action="${pageContext.request.contextPath}/event/register" method="POST">
+                                            <input type="hidden" name="eventID" value="${event.eventID}">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="bi bi-calendar-plus"></i> Register
+                                            </button>
+                                        </form>
+                                        <a href="${pageContext.request.contextPath}/event-details?eventID=${event.eventID}" 
+                                           class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-info-circle"></i> Details
+                                        </a>
+                                    </div>
+                                    <span class="event-badge ${fn:toLowerCase(event.status)}-badge">${event.status}</span>
                                 </div>
                             </c:forEach>
                         </div>
@@ -608,5 +687,15 @@
                 </c:choose>
             </div>
         </div>
+        <script>
+            document.querySelectorAll('form[action*="/event/register"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Are you sure you want to register for this event?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+        <jsp:include page="footer.jsp"/>
     </body>
 </html>

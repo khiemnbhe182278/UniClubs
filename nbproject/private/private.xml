@@ -3,15 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ManageNewsServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateNewsServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/CreateRuleServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/DeleteRuleServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/dal/RuleDAO.java</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/UpdateRuleServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/update-news.jsp</file>
-            <file>file:/C:/Users/admin/UniClubs/src/java/controller/ManageRulesServlet.java</file>
-            <file>file:/C:/Users/admin/UniClubs/web/leader-news.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/web/header.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/dal/DBContext.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/DeleteEventServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/EventDetailServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/src/java/controller/DashboardServlet.java</file>
+            <file>file:/D:/UniClubs/UniClubs/web/about.jsp</file>
+            <file>file:/D:/UniClubs/UniClubs/web/admin-announcements.jsp</file>
         </group>
     </open-files>
 </project-private>

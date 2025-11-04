@@ -40,12 +40,6 @@ public class LoginServlet extends HttpServlet {
      * - init(): khởi tạo DAO dùng để truy vấn người dùng
      * - doGet(): hiển thị trang đăng nhập, hoặc chuyển hướng nếu đã đăng nhập
      * - doPost(): nhận email/password, xác thực, tạo session và chuyển hướng theo vai trò
-     *
-     * EN: Handles user login.
-     * - init(): initialize UserDAO used to verify credentials.
-     * - doGet(): show login page or redirect already-logged-in users to dashboard.
-     * - doPost(): validate input, attempt authentication, create session attributes and redirect by role.
-     *
      * Important notes / Lưu ý:
      * - Session attributes created: "user", "userId", "userName", "userRole".
      * - No password hashing is performed here; the DAO should verify securely (hash+salt).

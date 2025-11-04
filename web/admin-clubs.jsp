@@ -16,9 +16,10 @@
 
             body {
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #f6f8fb; /* nhẹ, trung tính */
                 min-height: 100vh;
                 display: flex;
+                color: #1f2937;
             }
 
             .sidebar {
@@ -32,8 +33,8 @@
             }
 
             .sidebar-header {
-                padding: 2rem 1.5rem;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 1.5rem 1rem;
+                background: #2b6cb0; /* nhẹ nhàng, tối giản */
                 text-align: center;
                 color: white;
             }
@@ -69,14 +70,14 @@
             }
 
             .sidebar-menu a:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(5px);
+                background: #eef2ff;
+                color: #2b6cb0;
+                transform: translateX(4px);
             }
 
             .sidebar-menu a.active {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
+                background: #eef2ff;
+                color: #2b6cb0;
             }
 
             .main-content {
@@ -86,12 +87,11 @@
             }
 
             .page-header {
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 2rem 2.5rem;
-                border-radius: 20px;
-                margin-bottom: 2rem;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                background: #ffffff;
+                padding: 1.5rem 1.75rem;
+                border-radius: 12px;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.06);
             }
 
             .page-header h1 {
@@ -114,25 +114,25 @@
             }
 
             .stat-card {
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 1.5rem;
-                border-radius: 16px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                background: #ffffff;
+                padding: 1.25rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(16,24,40,0.04);
                 display: flex;
                 align-items: center;
                 gap: 1rem;
             }
 
             .stat-icon {
-                width: 50px;
-                height: 50px;
-                border-radius: 12px;
+                width: 46px;
+                height: 46px;
+                border-radius: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.5rem;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-size: 1.2rem;
+                background: #eef2ff;
+                color: #2b6cb0;
             }
 
             .stat-info h3 {
@@ -253,42 +253,38 @@
             }
 
             .btn {
-                padding: 0.6rem 1.5rem;
+                padding: 0.55rem 1.15rem;
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
                 cursor: pointer;
                 text-decoration: none;
                 display: inline-flex;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 0.4rem;
                 margin-right: 0.5rem;
                 font-size: 0.9rem;
                 font-weight: 600;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.15s ease;
+                background: #f8fafc;
+                color: #1f2937;
             }
 
             .btn:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             }
 
             .btn-approve {
-                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+                background: #10b981;
                 color: white;
-            }
-
-            .btn-approve:hover {
-                background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+                padding: 0.5rem 0.9rem;
+                border-radius: 8px;
             }
 
             .btn-reject {
-                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+                background: #ef4444;
                 color: white;
-            }
-
-            .btn-reject:hover {
-                background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+                padding: 0.5rem 0.9rem;
+                border-radius: 8px;
             }
 
             .no-data {
@@ -342,9 +338,8 @@
                 }
             }
 
-            .table-container, .page-header, .stat-card {
-                animation: fadeIn 0.6s ease-out;
-            }
+            /* Giảm animation để UI đơn giản, hiện đại */
+
         </style>
     </head>
     <body>
@@ -355,7 +350,6 @@
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admin/dashboard">📊 Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clubs" class="active">🏛️ Manage Clubs</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/members">👥 Manage Members</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/events">📅 Manage Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/users">👤 Manage Users</a></li>
             </ul>
