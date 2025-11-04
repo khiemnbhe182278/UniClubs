@@ -1,14 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Club Leader Dashboard - UniClubs</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
         <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #34495e;
+                --accent-color: #3498db;
+                --background-color: #f5f6fa;
+                --surface-color: #ffffff;
+                --text-primary: #2c3e50;
+                --text-secondary: #666666;
+                --border-color: #e1e4e8;
+                --sidebar-width: 250px;
+                --success-color: #2ecc71;
+                --warning-color: #f1c40f;
+                --danger-color: #e74c3c;
+            }
+
             * {
                 margin: 0;
                 padding: 0;
@@ -16,18 +34,18 @@
             }
 
             body {
-                font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                background: var(--background-color);
+                color: var(--text-primary);
                 min-height: 100vh;
                 display: flex;
             }
 
             /* Sidebar */
             .sidebar {
-                width: 280px;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+                width: var(--sidebar-width);
+                background: var(--surface-color);
+                border-right: 1px solid var(--border-color);
                 position: fixed;
                 height: 100vh;
                 overflow-y: auto;
@@ -36,107 +54,105 @@
             }
 
             .sidebar-header {
-                padding: 30px 20px;
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                color: white;
+                padding: 24px 20px;
+                background: var(--surface-color);
+                border-bottom: 1px solid var(--border-color);
             }
 
             .sidebar-header h2 {
-                font-size: 22px;
-                font-weight: 700;
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 4px;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                margin-bottom: 8px;
+                gap: 8px;
             }
 
             .sidebar-header p {
-                font-size: 13px;
-                opacity: 0.95;
-                font-weight: 500;
+                font-size: 0.875rem;
+                color: var(--text-secondary);
             }
 
             .sidebar-menu {
                 list-style: none;
-                padding: 20px 0;
+                padding: 12px 0;
             }
 
             .sidebar-menu li {
-                margin: 5px 15px;
+                margin: 2px 12px;
             }
 
             .sidebar-menu a {
                 display: flex;
                 align-items: center;
-                gap: 12px;
-                padding: 14px 18px;
-                color: #4a5568;
+                gap: 10px;
+                padding: 12px 16px;
+                color: var(--text-secondary);
                 text-decoration: none;
-                border-radius: 12px;
-                transition: all 0.3s ease;
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                font-size: 0.875rem;
                 font-weight: 500;
-                font-size: 15px;
             }
 
-            .sidebar-menu a:hover,
+            .sidebar-menu a:hover {
+                background: var(--background-color);
+                color: var(--text-primary);
+            }
+
             .sidebar-menu a.active {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                color: white;
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(33, 147, 176, 0.4);
+                background: var(--background-color);
+                color: var(--accent-color);
+                font-weight: 600;
             }
 
             /* Main Content */
             .main-content {
                 flex: 1;
-                margin-left: 280px;
-                padding: 40px;
-                min-height: 100vh;
+                margin-left: var(--sidebar-width);
+                padding: 32px;
+                max-width: 1400px;
             }
 
             /* Top Bar */
             .top-bar {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                background: var(--surface-color);
+                padding: 24px;
+                border-radius: 8px;
+                margin-bottom: 32px;
+                border: 1px solid var(--border-color);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .top-bar::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
             }
 
             .welcome-section h1 {
-                font-size: 28px;
-                font-weight: 700;
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--text-primary);
             }
 
             .club-selector {
-                padding: 12px 16px;
-                border: 2px solid #e2e8f0;
-                border-radius: 12px;
-                font-size: 14px;
-                font-family: 'Inter', sans-serif;
-                font-weight: 500;
+                padding: 8px 16px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                font-size: 0.875rem;
+                font-family: inherit;
+                color: var(--text-primary);
+                background: var(--surface-color);
                 cursor: pointer;
-                background: white;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
+            }
+
+            .club-selector:hover {
+                border-color: var(--accent-color);
+            }
+
+            .club-selector:focus {
+                outline: none;
+                border-color: var(--accent-color);
+                box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
             }
 
             .club-selector:focus {
@@ -149,90 +165,56 @@
             .stats-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                gap: 20px;
-                margin-bottom: 30px;
+                gap: 24px;
+                margin-bottom: 32px;
             }
 
             .stat-card {
-                background: white;
-                padding: 28px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
+                background: var(--surface-color);
+                padding: 24px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+                transition: all 0.2s ease;
             }
 
             .stat-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-            }
-
-            .stat-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-            }
-
-            .stat-card:nth-child(1)::before {
-                background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
-            }
-
-            .stat-card:nth-child(2)::before {
-                background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
-            }
-
-            .stat-card:nth-child(3)::before {
-                background: linear-gradient(90deg, #9b59b6 0%, #8e44ad 100%);
-            }
-
-            .stat-card:nth-child(4)::before {
-                background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+                border-color: var(--accent-color);
+                transform: translateY(-2px);
             }
 
             .stat-icon {
-                width: 56px;
-                height: 56px;
-                border-radius: 14px;
+                width: 48px;
+                height: 48px;
+                border-radius: 8px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 28px;
-                margin-bottom: 15px;
-            }
-
-            .stat-card:nth-child(1) .stat-icon {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-            }
-
-            .stat-card:nth-child(2) .stat-icon {
-                background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            }
-
-            .stat-card:nth-child(3) .stat-icon {
-                background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-            }
-
-            .stat-card:nth-child(4) .stat-icon {
-                background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+                font-size: 24px;
+                margin-bottom: 16px;
+                background: var(--background-color);
+                color: var(--accent-color);
             }
 
             .stat-content h3 {
-                font-size: 36px;
-                font-weight: 800;
-                color: #2d3748;
-                margin-bottom: 8px;
+                font-size: 1.75rem;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 4px;
             }
 
             .stat-content p {
-                color: #718096;
-                font-size: 14px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+
+            /* Section Styles */
+            .section {
+                background: var(--surface-color);
+                padding: 24px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+                margin-bottom: 24px;
             }
 
             /* Section */
@@ -266,110 +248,100 @@
             /* Table */
             table {
                 width: 100%;
-                border-collapse: collapse;
-            }
-
-            thead {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+                border-collapse: separate;
+                border-spacing: 0;
             }
 
             thead th {
-                padding: 16px 18px;
+                padding: 12px 24px;
                 text-align: left;
-                color: white;
-                font-weight: 600;
-                font-size: 13px;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
+                color: var(--text-secondary);
+                font-weight: 500;
+                font-size: 0.875rem;
+                background: var(--background-color);
+                border-bottom: 1px solid var(--border-color);
             }
 
             tbody tr {
-                border-bottom: 1px solid #e2e8f0;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
             }
 
             tbody tr:hover {
-                background: linear-gradient(90deg, rgba(33, 147, 176, 0.03) 0%, rgba(109, 213, 237, 0.03) 100%);
+                background: var(--background-color);
             }
 
-            tbody tr:last-child {
+            tbody tr:last-child td {
                 border-bottom: none;
             }
 
             tbody td {
-                padding: 18px;
-                color: #4a5568;
-                font-size: 14px;
+                padding: 12px 24px;
+                color: var(--text-primary);
+                font-size: 0.875rem;
+                border-bottom: 1px solid var(--border-color);
                 vertical-align: middle;
             }
 
             tbody td strong {
-                color: #2d3748;
-                font-weight: 600;
+                color: var(--text-primary);
+                font-weight: 500;
             }
 
             /* Buttons */
             .btn {
-                padding: 10px 18px;
-                border: none;
-                border-radius: 10px;
-                font-weight: 600;
-                font-size: 13px;
+                padding: 8px 16px;
+                border: 1px solid transparent;
+                border-radius: 6px;
+                font-weight: 500;
+                font-size: 0.875rem;
                 cursor: pointer;
-                transition: all 0.3s ease;
+                transition: all 0.2s ease;
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
                 text-decoration: none;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
             }
 
             .btn-primary {
-                background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+                background: var(--accent-color);
                 color: white;
-                box-shadow: 0 4px 15px rgba(33, 147, 176, 0.3);
+                border-color: var(--accent-color);
             }
 
             .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 25px rgba(33, 147, 176, 0.5);
+                opacity: 0.9;
             }
 
             .btn-success {
-                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-                color: white;
+                background: #e8f5e9;
+                color: #2e7d32;
+                border-color: #a5d6a7;
                 margin-right: 8px;
             }
 
             .btn-success:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+                background: #c8e6c9;
             }
 
             .btn-danger {
-                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-                color: white;
+                background: #ffebee;
+                color: #c62828;
+                border-color: #ef9a9a;
             }
 
             .btn-danger:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
+                background: #ffcdd2;
             }
 
             .btn-warning {
-                background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-                color: white;
+                background: #fff3e0;
+                color: #f57c00;
+                border-color: #ffe0b2;
                 margin-right: 8px;
             }
 
             .btn-warning:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
-            }
-
-            .btn:active {
-                transform: translateY(0);
+                background: #ffe0b2;
             }
 
             /* Badge */
@@ -518,15 +490,40 @@
     <body>
         <div class="sidebar">
             <div class="sidebar-header">
-                <h2>🎓 Leader Dashboard</h2>
+                <h2><i class="bi bi-person-badge"></i> Leader Dashboard</h2>
                 <p>${club.clubName}</p>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="${pageContext.request.contextPath}/leader/dashboard?clubId=${club.clubID}&amp;clubID=${club.clubID}" class="active">📊 Overview</a></li>
-                <li><a href="${pageContext.request.contextPath}/club/members?clubId=${club.clubID}&amp;clubID=${club.clubID}">👥 Members</a></li>
-                <li><a href="${pageContext.request.contextPath}/leader/events?clubId=${club.clubID}&amp;clubID=${club.clubID}">📅 Events</a></li>
-                <li><a href="${pageContext.request.contextPath}/leader/rules?clubId=${club.clubID}&amp;clubID=${club.clubID}">📜 Rules</a></li>
-                <li><a href="${pageContext.request.contextPath}/leader/news?clubId=${club.clubID}&amp;clubID=${club.clubID}">📰 News</a></li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/dashboard?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/dashboard')}">class="active"</c:if>>
+                        <i class="bi bi-speedometer2"></i> Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/club/members?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/members')}">class="active"</c:if>>
+                        <i class="bi bi-people"></i> Members
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/events?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/events')}">class="active"</c:if>>
+                        <i class="bi bi-calendar3"></i> Events
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/rules?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/rules')}">class="active"</c:if>>
+                        <i class="bi bi-file-text"></i> Rules
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/leader/news?clubId=${club.clubID}&amp;clubID=${club.clubID}"
+                       <c:if test="${fn:contains(pageContext.request.requestURI, '/leader/news')}">class="active"</c:if>>
+                        <i class="bi bi-newspaper"></i> News
+                    </a>
+                </li>
             </ul>
         </div>
 

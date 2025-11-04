@@ -1,86 +1,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - UniClubs</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding-top: 80px;
-            color: #1a1a1a;
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.2rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        nav a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        nav a:hover {
-            color: #667eea;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact - UniClubs</title>
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
+        <style>
+            body {
+                background: var(--bg-light);
+                color: var(--text);
+            }
 
         .container {
             max-width: 1000px;
@@ -112,30 +48,33 @@
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
             background: white;
-            border-radius: 25px;
+            border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
 
         .contact-info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-light);
             padding: 3rem;
-            color: white;
+            color: var(--text);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border-right: 1px solid var(--border-color);
         }
 
         .contact-info h2 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
-            font-weight: 800;
+            font-weight: 600;
+            color: var(--heading);
         }
 
         .contact-info p {
             font-size: 1.1rem;
             line-height: 1.7;
-            opacity: 0.95;
+            color: var(--text-muted);
             margin-bottom: 2rem;
         }
 
@@ -146,15 +85,12 @@
         }
 
         .info-item::before {
-            content: '';
+            font-family: "bootstrap-icons";
             position: absolute;
             left: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
+            color: var(--primary);
         }
 
         .info-label {
@@ -191,12 +127,19 @@
         .form-group textarea {
             width: 100%;
             padding: 1rem;
-            border: 2px solid #e8ecf1;
-            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 1rem;
             font-family: inherit;
-            transition: all 0.3s;
-            background: #f8f9fa;
+            transition: var(--transition);
+            background: var(--bg-light);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: var(--shadow-sm);
         }
 
         .form-group input:focus,
@@ -288,18 +231,9 @@
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">UniClubs</div>
-            <ul>
-                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-                <li><a href="${pageContext.request.contextPath}/about">About</a></li>
-                <li><a href="${pageContext.request.contextPath}/feedback">Feedback</a></li>
-            </ul>
-        </nav>
-    </header>
+    <%@ include file="header.jsp" %>
 
-    <div class="container">
+    <div class="container mt-4">
         <div class="page-hero">
             <h1>Get in Touch</h1>
             <p>We'd love to hear from you. Send us a message!</p>
@@ -352,5 +286,10 @@
             <a href="${pageContext.request.contextPath}/home">← Back to Home</a>
         </div>
     </div>
+
+    <%@ include file="footer.jsp" %>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

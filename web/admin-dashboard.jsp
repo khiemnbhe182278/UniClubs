@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Dashboard - UniClubs</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
         <style>
             * {
                 margin: 0;
@@ -16,7 +17,7 @@
 
             body {
                 font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #f6f8fb;
                 min-height: 100vh;
                 display: flex;
             }
@@ -35,8 +36,8 @@
             }
 
             .sidebar-header {
-                padding: 30px 20px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                background: #2b6cb0;
                 color: white;
             }
 
@@ -72,10 +73,9 @@
 
             .sidebar-menu a:hover,
             .sidebar-menu a.active {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                background: #eef2ff;
+                color: #2b6cb0;
+                transform: translateX(4px);
             }
 
             /* Main Content */
@@ -88,36 +88,21 @@
 
             /* Top Bar */
             .top-bar {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                margin-bottom: 30px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.06);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .top-bar::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 4px;
-                background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             }
 
             .welcome-section h1 {
-                font-size: 32px;
+                font-size: 28px;
                 font-weight: 700;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 5px;
+                color: #1f2937;
+                margin-bottom: 6px;
             }
 
             .welcome-section p {
@@ -125,19 +110,7 @@
                 font-size: 14px;
             }
 
-            .btn-logout {
-                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-                color: white;
-                padding: 12px 24px;
-                border-radius: 12px;
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 14px;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
+            /* Use shared .btn / .btn-primary from admin.css */
 
             .btn-logout:hover {
                 transform: translateY(-2px);
@@ -414,10 +387,8 @@
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admin/dashboard" class="active">📊 Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clubs">🏛️ Manage Clubs</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/members">👥 Manage Members</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/events">📅 Manage Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/users">👤 Manage Users</a></li>
-                <li><a href="${pageContext.request.contextPath}/home">🏠 Back to Site</a></li>
             </ul>
         </div>
 

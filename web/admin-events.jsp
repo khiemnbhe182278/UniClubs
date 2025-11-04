@@ -17,9 +17,10 @@
 
             body {
                 font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: #f6f8fb;
                 min-height: 100vh;
                 display: flex;
+                color: #1f2937;
             }
 
             /* Sidebar Styles */
@@ -35,8 +36,8 @@
             }
 
             .sidebar-header {
-                padding: 30px 20px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                background: #2b6cb0;
                 color: white;
             }
 
@@ -71,10 +72,9 @@
             }
 
             .sidebar-menu a:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                background: #eef2ff;
+                color: #2b6cb0;
+                transform: translateX(4px);
             }
 
             /* Main Content */
@@ -86,11 +86,11 @@
             }
 
             .page-header {
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-                margin-bottom: 30px;
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+                margin-bottom: 20px;
             }
 
             .page-header h1 {
@@ -122,16 +122,14 @@
                 border-collapse: collapse;
             }
 
-            thead {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            }
+            thead { background: #f1f5f9; }
 
             thead th {
-                padding: 20px;
+                padding: 16px 18px;
                 text-align: left;
-                color: white;
+                color: #334155;
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 13px;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
@@ -164,34 +162,31 @@
 
             /* Buttons */
             .btn {
-                padding: 10px 20px;
+                padding: 8px 14px;
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
                 font-weight: 600;
                 font-size: 13px;
                 cursor: pointer;
-                transition: all 0.3s ease;
+                transition: transform 0.15s ease;
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
 
             .btn-approve {
-                background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+                background: #10b981;
                 color: white;
                 margin-right: 8px;
-            }
-
-            .btn-approve:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+                padding: 8px 12px;
+                border-radius: 8px;
             }
 
             .btn-reject {
-                background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+                background: #ef4444;
                 color: white;
+                padding: 8px 12px;
+                border-radius: 8px;
             }
 
             .btn-reject:hover {
@@ -334,7 +329,6 @@
             <ul class="sidebar-menu">
                 <li><a href="${pageContext.request.contextPath}/admin/dashboard">📊 Dashboard</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clubs">🏛️ Manage Clubs</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/members">👥 Manage Members</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/events">📅 Manage Events</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/users">👤 Manage Users</a></li>
             </ul>
